@@ -55,7 +55,8 @@ shows the current settings next to each item:
 - **Settings** - polling interval, 10 s by default.
 
 Nothing is stored until **Save and close**; closing the dialog discards the
-changes.
+changes. Home Assistant forms have no back button: submitting a form without
+changes - or an empty *add* form - goes back to the menu.
 
 ### Connection status
 

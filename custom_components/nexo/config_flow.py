@@ -19,7 +19,6 @@ from homeassistant.config_entries import (
 )
 from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.translation import async_get_translations
 from homeassistant.helpers.selector import (
     BooleanSelector,
     NumberSelector,
@@ -88,10 +87,12 @@ REAUTH_SCHEMA = vol.Schema({vol.Required(CONF_PASSWORD): PASSWORD_SELECTOR})
 
 COVER_DEVICE_CLASSES = ["gate", "garage", "door"]
 
-# Words placed into the menu through placeholders, which Home Assistant does
-# not translate: they are looked up in the integration's own translations
-# (selector.menu_text), in the system language.
-MENU_TEXT_KEY = f"component.{DOMAIN}.selector.menu_text.options."
+# The frontend formats translations as ICU messages, where <...> is a tag
+# without attributes - so an ha-alert written into a translation fails with
+# INVALID_TAG. Its opening and closing tags are passed in as placeholder
+# values instead, which are not parsed. The words stay in the translation and
+# pick the state with ICU "select", so they follow the user's language.
+NONE = "__none__"
 
 
 def _check_login(host: str, port: int, password: str) -> None:
@@ -136,6 +137,10 @@ def _title_for(entry: ConfigEntry, connection: dict[str, Any]) -> str:
     return entry.title
 
 
+def _is_empty(user_input: dict[str, Any], *keys: str) -> bool:
+    return not any(str(user_input.get(key, "")).strip() for key in keys)
+
+
 def _check_command(value: str) -> str | None:
     if not value:
         return "command_empty"
@@ -158,12 +163,10 @@ def _pick_one(names: list[str]) -> SelectSelector:
     )
 
 
-def _cover_summary(item: dict[str, Any], text: Callable[[str], str]) -> str:
+def _cover_summary(item: dict[str, Any]) -> str:
     parts = [f"{item[COVER_OPEN_COMMAND]} / {item[COVER_CLOSE_COMMAND]}"]
     if item.get(COVER_REED_SENSOR):
         parts.append(item[COVER_REED_SENSOR])
-    if item[COVER_OPEN_ONLY_WHEN_CLOSED]:
-        parts.append(text("guarded"))
     return " · ".join(parts)
 
 
@@ -271,10 +274,6 @@ class NexoOptionsFlow(OptionsFlowWithReload):
     def __init__(self) -> None:
         self._options: dict[str, Any] = {}
         self._connection: dict[str, Any] | None = None
-        self._menu_text: dict[str, str] = {}
-
-    def _text(self, key: str) -> str:
-        return self._menu_text.get(MENU_TEXT_KEY + key, key)
 
     async def _resources(self, resource_type: ImportTypes) -> list[str]:
         return await self.config_entry.runtime_data.hub.async_resources(resource_type)
@@ -291,9 +290,6 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         if self.config_entry.state is not ConfigEntryState.LOADED:
             return self.async_abort(reason="not_loaded")
         self._options = copy.deepcopy(dict(self.config_entry.options))
-        self._menu_text = await async_get_translations(
-            self.hass, self.hass.config.language, "selector", [DOMAIN]
-        )
         return await self.async_step_menu()
 
     async def async_step_menu(
@@ -314,15 +310,16 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             menu_options=["connection", "sensors", "covers", "buttons", "settings", "save"],
             description_placeholders={
                 "address": f"{connection[CONF_HOST]}:{connection.get(CONF_PORT, DEFAULT_PORT)}",
-                "alert": alert,
-                "status": self._text(status),
+                "alert_open": f'<ha-alert alert-type="{alert}">',
+                "alert_close": "</ha-alert>",
+                "status": status,
                 OPT_BINARY_SENSORS: str(len(options.get(OPT_BINARY_SENSORS, []))),
                 OPT_THERMOMETERS: str(len(options.get(OPT_THERMOMETERS, []))),
                 OPT_ANALOG_SENSORS: str(len(options.get(OPT_ANALOG_SENSORS, []))),
                 OPT_COVERS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_COVERS, []))
-                or self._text("none"),
+                or NONE,
                 OPT_BUTTONS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_BUTTONS, []))
-                or self._text("none"),
+                or NONE,
                 OPT_SCAN_INTERVAL: str(
                     options.get(OPT_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
                 ),
@@ -345,7 +342,10 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         placeholders: dict[str, str] = {}
         for i, item in enumerate(covers):
             placeholders[f"cover_{i}"] = item[ITEM_NAME]
-            placeholders[f"cover_{i}_info"] = _cover_summary(item, self._text)
+            placeholders[f"cover_{i}_info"] = _cover_summary(item)
+            placeholders[f"cover_{i}_guard"] = (
+                "yes" if item[COVER_OPEN_ONLY_WHEN_CLOSED] else "no"
+            )
         return self.async_show_menu(
             step_id="covers", menu_options=menu, description_placeholders=placeholders
         )
@@ -393,6 +393,10 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         errors: dict[str, str] = {}
         if user_input is not None:
             connection = _connection_from_input(entry, user_input)
+            if all(entry.data.get(k) == v for k, v in connection.items()):
+                # Nothing changed: back to the menu, dropping any unsaved edit
+                self._connection = None
+                return await self.async_step_menu()
             if _host_taken(self.hass, entry, connection[CONF_HOST]):
                 errors["base"] = "already_configured"
             else:
@@ -403,8 +407,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                     connection[CONF_PASSWORD],
                 )
             if not errors:
-                unchanged = all(entry.data.get(k) == v for k, v in connection.items())
-                self._connection = None if unchanged else connection
+                self._connection = connection
                 return await self.async_step_menu()
 
         current = self._connection or entry.data
@@ -477,8 +480,15 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             if user_input.pop("delete", False) and index is not None:
                 del covers[index]
                 return await self.async_step_covers()
+            if index is None and _is_empty(
+                user_input, ITEM_NAME, COVER_OPEN_COMMAND, COVER_CLOSE_COMMAND
+            ):
+                return await self.async_step_covers()
+            user_input[ITEM_NAME] = user_input.get(ITEM_NAME, "").strip()
+            if not user_input[ITEM_NAME]:
+                errors[ITEM_NAME] = "required"
             for key in (COVER_OPEN_COMMAND, COVER_CLOSE_COMMAND):
-                user_input[key] = user_input[key].strip()
+                user_input[key] = user_input.get(key, "").strip()
                 if error := _check_command(user_input[key]):
                     errors[key] = error
             if user_input[COVER_OPEN_ONLY_WHEN_CLOSED] and not user_input.get(
@@ -492,8 +502,10 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                     covers[index] = {ITEM_ID: covers[index][ITEM_ID], **user_input}
                 return await self.async_step_covers()
 
+        # Optional in the schema so that an empty form can mean "back";
+        # required fields are checked above.
         fields: dict[Any, Any] = {
-            vol.Required(ITEM_NAME): TextSelector(),
+            vol.Optional(ITEM_NAME): TextSelector(),
             vol.Required(COVER_DEVICE_CLASS, default="gate"): SelectSelector(
                 SelectSelectorConfig(
                     options=COVER_DEVICE_CLASSES,
@@ -501,8 +513,8 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                     mode=SelectSelectorMode.DROPDOWN,
                 )
             ),
-            vol.Required(COVER_OPEN_COMMAND): TextSelector(),
-            vol.Required(COVER_CLOSE_COMMAND): TextSelector(),
+            vol.Optional(COVER_OPEN_COMMAND): TextSelector(),
+            vol.Optional(COVER_CLOSE_COMMAND): TextSelector(),
             vol.Optional(COVER_REED_SENSOR): _pick_one(sensors),
             vol.Required(COVER_OPEN_ONLY_WHEN_CLOSED, default=False): BooleanSelector(),
         }
@@ -541,10 +553,15 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             if user_input.pop("delete", False) and index is not None:
                 del buttons[index]
                 return await self.async_step_buttons()
-            user_input[ITEM_COMMAND] = user_input[ITEM_COMMAND].strip()
+            if index is None and _is_empty(user_input, ITEM_NAME, ITEM_COMMAND):
+                return await self.async_step_buttons()
+            user_input[ITEM_NAME] = user_input.get(ITEM_NAME, "").strip()
+            if not user_input[ITEM_NAME]:
+                errors[ITEM_NAME] = "required"
+            user_input[ITEM_COMMAND] = user_input.get(ITEM_COMMAND, "").strip()
             if error := _check_command(user_input[ITEM_COMMAND]):
                 errors[ITEM_COMMAND] = error
-            else:
+            if not errors:
                 if index is None:
                     buttons.append({ITEM_ID: uuid.uuid4().hex, **user_input})
                 else:
@@ -552,8 +569,8 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 return await self.async_step_buttons()
 
         fields: dict[Any, Any] = {
-            vol.Required(ITEM_NAME): TextSelector(),
-            vol.Required(ITEM_COMMAND): TextSelector(),
+            vol.Optional(ITEM_NAME): TextSelector(),
+            vol.Optional(ITEM_COMMAND): TextSelector(),
         }
         if index is not None:
             fields[vol.Optional("delete", default=False)] = BooleanSelector()

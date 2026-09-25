@@ -60,12 +60,12 @@
         "menu_option_descriptions": {
           "connection": "{address}",
           "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
-          "covers": "{covers}",
-          "buttons": "{buttons}",
+          "covers": "{covers, select, __none__ {none} other {{covers}}}",
+          "buttons": "{buttons, select, __none__ {none} other {{buttons}}}",
           "settings": "Polling every {scan_interval} s",
           "save": "Closing the window with ✕ discards the changes"
         },
-        "description": "<ha-alert alert-type=\"{alert}\">{status}</ha-alert>"
+        "description": "{alert_open}{status, select, connected {Connected to the central unit} not_answering {The central unit is not answering} other {Connection changed – choose Save and close to apply it}}{alert_close}"
       },
       "covers": {
         "title": "Gates and doors",
@@ -94,26 +94,26 @@
           "back": "Back"
         },
         "menu_option_descriptions": {
-          "cover_0": "{cover_0_info}",
-          "cover_1": "{cover_1_info}",
-          "cover_2": "{cover_2_info}",
-          "cover_3": "{cover_3_info}",
-          "cover_4": "{cover_4_info}",
-          "cover_5": "{cover_5_info}",
-          "cover_6": "{cover_6_info}",
-          "cover_7": "{cover_7_info}",
-          "cover_8": "{cover_8_info}",
-          "cover_9": "{cover_9_info}",
-          "cover_10": "{cover_10_info}",
-          "cover_11": "{cover_11_info}",
-          "cover_12": "{cover_12_info}",
-          "cover_13": "{cover_13_info}",
-          "cover_14": "{cover_14_info}",
-          "cover_15": "{cover_15_info}",
-          "cover_16": "{cover_16_info}",
-          "cover_17": "{cover_17_info}",
-          "cover_18": "{cover_18_info}",
-          "cover_19": "{cover_19_info}"
+          "cover_0": "{cover_0_info}{cover_0_guard, select, yes { · only when closed} other {}}",
+          "cover_1": "{cover_1_info}{cover_1_guard, select, yes { · only when closed} other {}}",
+          "cover_2": "{cover_2_info}{cover_2_guard, select, yes { · only when closed} other {}}",
+          "cover_3": "{cover_3_info}{cover_3_guard, select, yes { · only when closed} other {}}",
+          "cover_4": "{cover_4_info}{cover_4_guard, select, yes { · only when closed} other {}}",
+          "cover_5": "{cover_5_info}{cover_5_guard, select, yes { · only when closed} other {}}",
+          "cover_6": "{cover_6_info}{cover_6_guard, select, yes { · only when closed} other {}}",
+          "cover_7": "{cover_7_info}{cover_7_guard, select, yes { · only when closed} other {}}",
+          "cover_8": "{cover_8_info}{cover_8_guard, select, yes { · only when closed} other {}}",
+          "cover_9": "{cover_9_info}{cover_9_guard, select, yes { · only when closed} other {}}",
+          "cover_10": "{cover_10_info}{cover_10_guard, select, yes { · only when closed} other {}}",
+          "cover_11": "{cover_11_info}{cover_11_guard, select, yes { · only when closed} other {}}",
+          "cover_12": "{cover_12_info}{cover_12_guard, select, yes { · only when closed} other {}}",
+          "cover_13": "{cover_13_info}{cover_13_guard, select, yes { · only when closed} other {}}",
+          "cover_14": "{cover_14_info}{cover_14_guard, select, yes { · only when closed} other {}}",
+          "cover_15": "{cover_15_info}{cover_15_guard, select, yes { · only when closed} other {}}",
+          "cover_16": "{cover_16_info}{cover_16_guard, select, yes { · only when closed} other {}}",
+          "cover_17": "{cover_17_info}{cover_17_guard, select, yes { · only when closed} other {}}",
+          "cover_18": "{cover_18_info}{cover_18_guard, select, yes { · only when closed} other {}}",
+          "cover_19": "{cover_19_info}{cover_19_guard, select, yes { · only when closed} other {}}"
         }
       },
       "buttons": {
@@ -167,7 +167,7 @@
       },
       "connection": {
         "title": "Connection",
-        "description": "Leave the password empty to keep the current one. The connection is checked before it is accepted.",
+        "description": "Leave the password empty to keep the current one. The connection is checked before it is accepted. Submit without changes to go back.",
         "data": {
           "host": "Host",
           "port": "Port",
@@ -193,7 +193,7 @@
       },
       "add_cover": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition. Submit an empty form to go back.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -570,7 +570,7 @@
       },
       "add_button": {
         "title": "Button",
-        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result. Submit an empty form to go back.",
         "data": {
           "name": "Name",
           "command": "Command"
@@ -835,7 +835,8 @@
       "already_configured": "Another entry already uses this address.",
       "command_empty": "The command must not be empty.",
       "command_too_long": "Logic commands are at most 7 characters.",
-      "guard_needs_reed_sensor": "Needs a reed switch to check."
+      "guard_needs_reed_sensor": "Needs a reed switch to check.",
+      "required": "Required."
     },
     "abort": {
       "cannot_list": "Cannot read the resource list from the central unit.",
@@ -848,15 +849,6 @@
         "gate": "Gate",
         "garage": "Garage door",
         "door": "Door"
-      }
-    },
-    "menu_text": {
-      "options": {
-        "connected": "Connected to the central unit",
-        "not_answering": "The central unit is not answering",
-        "unsaved": "Connection changed – choose Save and close to apply it",
-        "none": "none",
-        "guarded": "only when closed"
       }
     }
   },

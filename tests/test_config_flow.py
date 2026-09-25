@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from unittest.mock import patch
+
 from homeassistant.config_entries import SOURCE_USER
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
@@ -65,8 +67,8 @@ async def test_menu_summary(hass: HomeAssistant, fake_nexo) -> None:
     ]
     placeholders = result["description_placeholders"]
     assert placeholders["address"] == "192.0.2.10:1024"
-    assert placeholders["alert"] == "success"
-    assert placeholders["status"] == "Connected to the central unit"
+    assert placeholders["alert_open"] == '<ha-alert alert-type="success">'
+    assert placeholders["status"] == "connected"
     assert placeholders["binary_sensors"] == "2"
     assert placeholders["covers"] == "Entry gate, Garage, Shed"
 
@@ -86,13 +88,14 @@ async def test_add_edit_and_delete_cover(hass: HomeAssistant, fake_nexo) -> None
     result = await _submit(hass, flow_id, GATE)
     assert result["type"] is FlowResultType.MENU
     assert result["menu_options"] == ["cover_0", "add_cover", "back"]
-    assert result["description_placeholders"]["cover_0_info"] == "GO / GC · KON GATE · only when closed"
+    assert result["description_placeholders"]["cover_0_info"] == "GO / GC · KON GATE"
+    assert result["description_placeholders"]["cover_0_guard"] == "yes"
 
     # Edit: the form comes prefilled, the change keeps the entity's id
     result = await _pick(hass, flow_id, "cover_0")
     assert result["step_id"] == "cover_0"
     result = await _submit(hass, flow_id, {**GATE, "close_command": "GZ"})
-    assert result["description_placeholders"]["cover_0_info"] == "GO / GZ · KON GATE · only when closed"
+    assert result["description_placeholders"]["cover_0_info"] == "GO / GZ · KON GATE"
 
     result = await _pick(hass, flow_id, "back")
     assert result["step_id"] == "menu"
@@ -156,7 +159,7 @@ async def test_connection_from_options(hass: HomeAssistant, fake_nexo) -> None:
     await _pick(hass, flow_id, "connection")
     result = await _submit(hass, flow_id, {"host": "192.0.2.20", "port": 1024})
     assert result["description_placeholders"]["address"] == "192.0.2.20:1024"
-    assert result["description_placeholders"]["alert"] == "info"
+    assert result["description_placeholders"]["status"] == "unsaved"
     assert entry.data["host"] == "192.0.2.10"  # not before saving
 
     await _pick(hass, flow_id, "save")
@@ -201,10 +204,39 @@ async def test_reconfigure_keeps_entities(hass: HomeAssistant, fake_nexo) -> Non
     assert hass.states.get("sensor.nexo_tmp_hall").state == "23.3"
 
 
-async def test_menu_words_follow_the_system_language(hass: HomeAssistant, fake_nexo) -> None:
-    hass.config.language = "pl"
+async def test_empty_menu_lists(hass: HomeAssistant, fake_nexo) -> None:
     entry = await _setup(hass, options={})
     result = await hass.config_entries.options.async_init(entry.entry_id)
-    placeholders = result["description_placeholders"]
-    assert placeholders["status"] == "Połączono z centralą"
-    assert placeholders["covers"] == "brak"
+    assert result["description_placeholders"]["covers"] == "__none__"
+    assert result["description_placeholders"]["buttons"] == "__none__"
+
+
+async def test_forms_lead_back(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass, options={})
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+
+    # Connection submitted unchanged: back to the menu, no connection test
+    await _pick(hass, flow_id, "connection")
+    with patch("custom_components.nexo.config_flow._validate") as validate:
+        result = await _submit(hass, flow_id, {"host": "192.0.2.10", "port": 1024})
+    validate.assert_not_called()
+    assert result["step_id"] == "menu"
+    assert result["description_placeholders"]["status"] == "connected"
+
+    # An empty add form: back to the submenu, nothing added
+    await _pick(hass, flow_id, "covers")
+    await _pick(hass, flow_id, "add_cover")
+    result = await _submit(hass, flow_id, {"device_class": "gate", "open_only_when_closed": False})
+    assert result["step_id"] == "covers"
+    assert result["menu_options"] == ["add_cover", "back"]
+
+    await _pick(hass, flow_id, "back")
+    await _pick(hass, flow_id, "buttons")
+    await _pick(hass, flow_id, "add_button")
+    result = await _submit(hass, flow_id, {})
+    assert result["step_id"] == "buttons"
+
+    # Partly filled: the missing fields are reported, not taken as "back"
+    await _pick(hass, flow_id, "add_button")
+    result = await _submit(hass, flow_id, {"command": "WK"})
+    assert result["errors"] == {"name": "required"}
