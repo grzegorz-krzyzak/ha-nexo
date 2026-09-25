@@ -81,15 +81,19 @@ class NexoLogicCover(NexoEntity, CoverEntity):
         super().__init__(coordinator, f"cover_{item[ITEM_ID]}", item[ITEM_NAME])
         self._open_command: str = item[COVER_OPEN_COMMAND]
         self._close_command: str = item[COVER_CLOSE_COMMAND]
-        self._reed_sensor: str = item[COVER_REED_SENSOR]
-        self._guarded: bool = item[COVER_OPEN_ONLY_WHEN_CLOSED]
+        # Optional: without a reed switch the state is simply unknown.
+        self._reed_sensor: str | None = item.get(COVER_REED_SENSOR)
+        self._guarded: bool = item[COVER_OPEN_ONLY_WHEN_CLOSED] and bool(self._reed_sensor)
         self._attr_device_class = CoverDeviceClass(item[COVER_DEVICE_CLASS])
         # Without the guard, an open command sent mid-travel is how the door
         # is stopped part-way, so both buttons must stay usable in every state.
+        # Without a reed switch there is no state to disable either by.
         self._attr_assumed_state = not self._guarded
 
     @property
     def is_closed(self) -> bool | None:
+        if self._reed_sensor is None:
+            return None
         state = (self.coordinator.data or {}).get(self._reed_sensor)
         if state == SENSOR_INTACT:
             return True

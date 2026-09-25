@@ -320,6 +320,10 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 user_input[key] = user_input[key].strip()
                 if error := _check_command(user_input[key]):
                     errors[key] = error
+            if user_input[COVER_OPEN_ONLY_WHEN_CLOSED] and not user_input.get(
+                COVER_REED_SENSOR
+            ):
+                errors[COVER_OPEN_ONLY_WHEN_CLOSED] = "guard_needs_reed_sensor"
             if not errors:
                 self._options.setdefault(OPT_COVERS, []).append(
                     {ITEM_ID: uuid.uuid4().hex, **user_input}
@@ -338,7 +342,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 ),
                 vol.Required(COVER_OPEN_COMMAND): TextSelector(),
                 vol.Required(COVER_CLOSE_COMMAND): TextSelector(),
-                vol.Required(COVER_REED_SENSOR): _pick_one(sensors),
+                vol.Optional(COVER_REED_SENSOR): _pick_one(sensors),
                 vol.Required(COVER_OPEN_ONLY_WHEN_CLOSED, default=False): BooleanSelector(),
             }
         )

@@ -48,7 +48,11 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
             *options.get(OPT_BINARY_SENSORS, []),
             *options.get(OPT_THERMOMETERS, []),
             *options.get(OPT_ANALOG_SENSORS, []),
-            *(cover[COVER_REED_SENSOR] for cover in options.get(OPT_COVERS, [])),
+            *(
+                cover[COVER_REED_SENSOR]
+                for cover in options.get(OPT_COVERS, [])
+                if cover.get(COVER_REED_SENSOR)
+            ),
         }
         self.resources = sorted(names)
 

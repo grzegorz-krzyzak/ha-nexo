@@ -81,7 +81,7 @@
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Reads closed or not closed - the only thing that confirms the gate moved.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
         }
       },
@@ -114,7 +114,8 @@
     },
     "error": {
       "command_empty": "The command must not be empty.",
-      "command_too_long": "Logic commands are at most 7 characters."
+      "command_too_long": "Logic commands are at most 7 characters.",
+      "guard_needs_reed_sensor": "Needs a reed switch to check."
     },
     "abort": {
       "cannot_list": "Cannot read the resource list from the central unit.",

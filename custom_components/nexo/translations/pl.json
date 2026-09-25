@@ -81,7 +81,7 @@
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła.",
+          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
           "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
         }
       },
@@ -114,7 +114,8 @@
     },
     "error": {
       "command_empty": "Komenda nie może być pusta.",
-      "command_too_long": "Komendy logiki mają najwyżej 7 znaków."
+      "command_too_long": "Komendy logiki mają najwyżej 7 znaków.",
+      "guard_needs_reed_sensor": "Wymaga kontaktronu, żeby było co sprawdzić."
     },
     "abort": {
       "cannot_list": "Nie można pobrać listy zasobów z centrali.",

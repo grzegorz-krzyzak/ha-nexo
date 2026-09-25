@@ -54,6 +54,11 @@ async def test_options_menu_loop(hass: HomeAssistant, fake_nexo) -> None:
     }
     result = await hass.config_entries.options.async_configure(flow_id, too_long)
     assert result["errors"] == {"open_command": "command_too_long"}
+    no_reed = {k: v for k, v in too_long.items() if k != "reed_sensor"}
+    result = await hass.config_entries.options.async_configure(
+        flow_id, {**no_reed, "open_command": "GO"}
+    )
+    assert result["errors"] == {"open_only_when_closed": "guard_needs_reed_sensor"}
     result = await hass.config_entries.options.async_configure(
         flow_id, {**too_long, "open_command": "GO"}
     )

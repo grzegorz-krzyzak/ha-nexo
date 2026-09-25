@@ -35,6 +35,14 @@ OPTIONS = {
             "reed_sensor": "KON DOOR",
             "open_only_when_closed": False,
         },
+        {
+            "id": "shed",
+            "name": "Shed",
+            "device_class": "door",
+            "open_command": "SO",
+            "close_command": "SC",
+            "open_only_when_closed": False,
+        },
     ],
     "buttons": [{"id": "wicket", "name": "Wicket", "command": "WK"}],
 }
@@ -118,3 +126,13 @@ async def test_deselected_entities_are_removed(hass: HomeAssistant, fake_nexo) -
     await hass.config_entries.async_reload(entry.entry_id)
     await hass.async_block_till_done()
     assert registry.async_get("sensor.nexo_humidity") is None
+
+
+async def test_cover_without_reed_switch(hass: HomeAssistant, fake_nexo) -> None:
+    await _setup(hass)
+    assert hass.states.get("cover.nexo_shed").state == "unknown"
+    for service, command in (("open_cover", "SO"), ("close_cover", "SC")):
+        await hass.services.async_call(
+            "cover", service, {"entity_id": "cover.nexo_shed"}, blocking=True
+        )
+        fake_nexo.trigger_logic.assert_called_with(command)

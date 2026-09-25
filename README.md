@@ -62,10 +62,13 @@ The sequence runs inside the central unit, so a client dying mid-command
 cannot leave an output energised.
 
 Create the rules in the Nexo configurator first, then add the gate here with
-its open command, close command and reed switch.
+its open command, close command and - optionally - its reed switch. Without
+one the gate still works, but its state shows as unknown and nothing can
+confirm that it moved.
 
-**Open only when confirmed closed** reads the reed switch immediately before
-opening and refuses - visibly, as an error - if the gate is not closed. On a
+**Open only when confirmed closed** needs the reed switch: it reads it
+immediately before opening and refuses - visibly, as an error - if the gate is
+not closed. On a
 gate whose drive treats a second command during travel as *stop*, this
 prevents an accidental halt. Leave it off where stopping part-way is exactly
 what you want, such as a garage door you often leave half-open. Closing is
