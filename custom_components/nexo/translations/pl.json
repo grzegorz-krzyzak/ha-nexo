@@ -58,7 +58,7 @@
           "save": "Zapisz i zamknij"
         },
         "menu_option_descriptions": {
-          "connection": "{address} {status}",
+          "connection": "{address} · {status}",
           "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
@@ -68,7 +68,6 @@
       },
       "covers": {
         "title": "Bramy i drzwi",
-        "description": "🔒 otwiera tylko przy potwierdzonym zamknięciu",
         "menu_options": {
           "cover_0": "{cover_0}",
           "cover_1": "{cover_1}",
@@ -848,6 +847,15 @@
         "gate": "Brama",
         "garage": "Brama garażowa",
         "door": "Drzwi"
+      }
+    },
+    "menu_text": {
+      "options": {
+        "connected": "połączono",
+        "not_answering": "brak odpowiedzi",
+        "unsaved": "zmiana niezapisana",
+        "none": "brak",
+        "guarded": "tylko gdy zamknięta"
       }
     }
   },

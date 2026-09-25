@@ -65,7 +65,7 @@ async def test_menu_summary(hass: HomeAssistant, fake_nexo) -> None:
     ]
     placeholders = result["description_placeholders"]
     assert placeholders["address"] == "192.0.2.10:1024"
-    assert placeholders["status"] == "✅"
+    assert placeholders["status"] == "connected"
     assert placeholders["binary_sensors"] == "2"
     assert placeholders["covers"] == "Entry gate, Garage, Shed"
 
@@ -85,13 +85,13 @@ async def test_add_edit_and_delete_cover(hass: HomeAssistant, fake_nexo) -> None
     result = await _submit(hass, flow_id, GATE)
     assert result["type"] is FlowResultType.MENU
     assert result["menu_options"] == ["cover_0", "add_cover", "back"]
-    assert result["description_placeholders"]["cover_0_info"] == "GO / GC · KON GATE · 🔒"
+    assert result["description_placeholders"]["cover_0_info"] == "GO / GC · KON GATE · only when closed"
 
     # Edit: the form comes prefilled, the change keeps the entity's id
     result = await _pick(hass, flow_id, "cover_0")
     assert result["step_id"] == "cover_0"
     result = await _submit(hass, flow_id, {**GATE, "close_command": "GZ"})
-    assert result["description_placeholders"]["cover_0_info"] == "GO / GZ · KON GATE · 🔒"
+    assert result["description_placeholders"]["cover_0_info"] == "GO / GZ · KON GATE · only when closed"
 
     result = await _pick(hass, flow_id, "back")
     assert result["step_id"] == "menu"
@@ -155,7 +155,7 @@ async def test_connection_from_options(hass: HomeAssistant, fake_nexo) -> None:
     await _pick(hass, flow_id, "connection")
     result = await _submit(hass, flow_id, {"host": "192.0.2.20", "port": 1024})
     assert result["description_placeholders"]["address"] == "192.0.2.20:1024"
-    assert result["description_placeholders"]["status"] == "✏️"
+    assert result["description_placeholders"]["status"] == "change not saved"
     assert entry.data["host"] == "192.0.2.10"  # not before saving
 
     await _pick(hass, flow_id, "save")
@@ -198,3 +198,12 @@ async def test_reconfigure_keeps_entities(hass: HomeAssistant, fake_nexo) -> Non
     assert entry.title == "Nexo · 192.0.2.20:1024"
     assert registry.async_get("sensor.nexo_tmp_hall").unique_id == before
     assert hass.states.get("sensor.nexo_tmp_hall").state == "23.3"
+
+
+async def test_menu_words_follow_the_system_language(hass: HomeAssistant, fake_nexo) -> None:
+    hass.config.language = "pl"
+    entry = await _setup(hass, options={})
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    placeholders = result["description_placeholders"]
+    assert placeholders["status"] == "połączono"
+    assert placeholders["covers"] == "brak"

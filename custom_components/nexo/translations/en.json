@@ -58,7 +58,7 @@
           "save": "Save and close"
         },
         "menu_option_descriptions": {
-          "connection": "{address} {status}",
+          "connection": "{address} · {status}",
           "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
@@ -68,7 +68,6 @@
       },
       "covers": {
         "title": "Gates and doors",
-        "description": "🔒 opens only when confirmed closed",
         "menu_options": {
           "cover_0": "{cover_0}",
           "cover_1": "{cover_1}",
@@ -848,6 +847,15 @@
         "gate": "Gate",
         "garage": "Garage door",
         "door": "Door"
+      }
+    },
+    "menu_text": {
+      "options": {
+        "connected": "connected",
+        "not_answering": "not answering",
+        "unsaved": "change not saved",
+        "none": "none",
+        "guarded": "only when closed"
       }
     }
   },

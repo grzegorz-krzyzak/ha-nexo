@@ -19,6 +19,7 @@ from homeassistant.config_entries import (
 )
 from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.translation import async_get_translations
 from homeassistant.helpers.selector import (
     BooleanSelector,
     NumberSelector,
@@ -87,8 +88,10 @@ REAUTH_SCHEMA = vol.Schema({vol.Required(CONF_PASSWORD): PASSWORD_SELECTOR})
 
 COVER_DEVICE_CLASSES = ["gate", "garage", "door"]
 
-# Shown in the menu for an empty list
-NONE = "—"
+# Words placed into the menu through placeholders, which Home Assistant does
+# not translate: they are looked up in the integration's own translations
+# (selector.menu_text), in the system language.
+MENU_TEXT_KEY = f"component.{DOMAIN}.selector.menu_text.options."
 
 
 def _check_login(host: str, port: int, password: str) -> None:
@@ -155,12 +158,12 @@ def _pick_one(names: list[str]) -> SelectSelector:
     )
 
 
-def _cover_summary(item: dict[str, Any]) -> str:
+def _cover_summary(item: dict[str, Any], text: Callable[[str], str]) -> str:
     parts = [f"{item[COVER_OPEN_COMMAND]} / {item[COVER_CLOSE_COMMAND]}"]
     if item.get(COVER_REED_SENSOR):
         parts.append(item[COVER_REED_SENSOR])
     if item[COVER_OPEN_ONLY_WHEN_CLOSED]:
-        parts.append("🔒")
+        parts.append(text("guarded"))
     return " · ".join(parts)
 
 
@@ -268,6 +271,10 @@ class NexoOptionsFlow(OptionsFlowWithReload):
     def __init__(self) -> None:
         self._options: dict[str, Any] = {}
         self._connection: dict[str, Any] | None = None
+        self._menu_text: dict[str, str] = {}
+
+    def _text(self, key: str) -> str:
+        return self._menu_text.get(MENU_TEXT_KEY + key, key)
 
     async def _resources(self, resource_type: ImportTypes) -> list[str]:
         return await self.config_entry.runtime_data.hub.async_resources(resource_type)
@@ -284,6 +291,9 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         if self.config_entry.state is not ConfigEntryState.LOADED:
             return self.async_abort(reason="not_loaded")
         self._options = copy.deepcopy(dict(self.config_entry.options))
+        self._menu_text = await async_get_translations(
+            self.hass, self.hass.config.language, "selector", [DOMAIN]
+        )
         return await self.async_step_menu()
 
     async def async_step_menu(
@@ -292,11 +302,11 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         options = self._options
         connection = self._connection or self.config_entry.data
         if self._connection is not None:
-            status = "✏️"  # changed, not saved yet
+            status = self._text("unsaved")
         elif self.config_entry.runtime_data.coordinator.last_update_success:
-            status = "✅"
+            status = self._text("connected")
         else:
-            status = "⚠️"
+            status = self._text("not_answering")
         return self.async_show_menu(
             step_id="menu",
             menu_options=["connection", "sensors", "covers", "buttons", "settings", "save"],
@@ -307,9 +317,9 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 OPT_THERMOMETERS: str(len(options.get(OPT_THERMOMETERS, []))),
                 OPT_ANALOG_SENSORS: str(len(options.get(OPT_ANALOG_SENSORS, []))),
                 OPT_COVERS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_COVERS, []))
-                or NONE,
+                or self._text("none"),
                 OPT_BUTTONS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_BUTTONS, []))
-                or NONE,
+                or self._text("none"),
                 OPT_SCAN_INTERVAL: str(
                     options.get(OPT_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
                 ),
@@ -332,7 +342,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         placeholders: dict[str, str] = {}
         for i, item in enumerate(covers):
             placeholders[f"cover_{i}"] = item[ITEM_NAME]
-            placeholders[f"cover_{i}_info"] = _cover_summary(item)
+            placeholders[f"cover_{i}_info"] = _cover_summary(item, self._text)
         return self.async_show_menu(
             step_id="covers", menu_options=menu, description_placeholders=placeholders
         )
