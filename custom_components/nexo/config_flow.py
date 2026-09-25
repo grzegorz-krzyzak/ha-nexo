@@ -74,7 +74,12 @@ USER_SCHEMA = vol.Schema(
     }
 )
 
-# The password may be left empty to keep the stored one.
+# The stored PIN is never sent back to the browser. The field shows this mask
+# instead, so it does not look empty; submitting the mask - or nothing -
+# keeps the stored PIN. The bullets cannot be encoded in ISO-8859-1, which
+# the central unit's password must be, so the mask is never a real PIN.
+PIN_MASK = "••••••••"
+
 CONNECTION_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_HOST): TextSelector(),
@@ -117,8 +122,13 @@ def _connection_from_input(entry: ConfigEntry, user_input: dict[str, Any]) -> di
     return {
         CONF_HOST: user_input[CONF_HOST].strip(),
         CONF_PORT: int(user_input[CONF_PORT]),
-        CONF_PASSWORD: user_input.get(CONF_PASSWORD) or entry.data[CONF_PASSWORD],
+        CONF_PASSWORD: _new_pin(user_input) or entry.data[CONF_PASSWORD],
     }
+
+
+def _new_pin(user_input: dict[str, Any]) -> str | None:
+    pin = user_input.get(CONF_PASSWORD)
+    return None if not pin or pin == PIN_MASK else pin
 
 
 def _host_taken(hass: HomeAssistant, entry: ConfigEntry, host: str) -> bool:
@@ -223,6 +233,7 @@ class NexoConfigFlow(ConfigFlow, domain=DOMAIN):
         suggested = user_input or {
             CONF_HOST: entry.data[CONF_HOST],
             CONF_PORT: entry.data.get(CONF_PORT, DEFAULT_PORT),
+            CONF_PASSWORD: PIN_MASK,
         }
         return self.async_show_form(
             step_id="reconfigure",
@@ -414,6 +425,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         suggested = user_input or {
             CONF_HOST: current[CONF_HOST],
             CONF_PORT: current.get(CONF_PORT, DEFAULT_PORT),
+            CONF_PASSWORD: PIN_MASK,
         }
         return self.async_show_form(
             step_id="connection",

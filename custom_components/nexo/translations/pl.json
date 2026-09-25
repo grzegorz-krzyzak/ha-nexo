@@ -23,7 +23,7 @@
       },
       "reconfigure": {
         "title": "Połączenie",
-        "description": "Zostaw hasło puste, żeby zachować obecne. Połączenie jest sprawdzane przed przyjęciem zmian.",
+        "description": "Połączenie jest sprawdzane przed przyjęciem zmian. Zatwierdź bez zmian, żeby wrócić.",
         "data": {
           "host": "Adres",
           "port": "Port",
@@ -31,7 +31,8 @@
         },
         "data_description": {
           "host": "Adres IP karty LAN.",
-          "port": "Port usługi NexoVision, zwykle 1024."
+          "port": "Port usługi NexoVision, zwykle 1024.",
+          "password": "Zapisany. Wpisz nowy tylko, jeśli chcesz go zmienić."
         }
       }
     },
@@ -167,7 +168,7 @@
       },
       "connection": {
         "title": "Połączenie",
-        "description": "Zostaw hasło puste, żeby zachować obecne. Połączenie jest sprawdzane przed przyjęciem zmian. Zatwierdź bez zmian, żeby wrócić.",
+        "description": "Połączenie jest sprawdzane przed przyjęciem zmian. Zatwierdź bez zmian, żeby wrócić.",
         "data": {
           "host": "Adres",
           "port": "Port",
@@ -175,7 +176,8 @@
         },
         "data_description": {
           "host": "Adres IP karty LAN.",
-          "port": "Port usługi NexoVision, zwykle 1024."
+          "port": "Port usługi NexoVision, zwykle 1024.",
+          "password": "Zapisany. Wpisz nowy tylko, jeśli chcesz go zmienić."
         }
       },
       "sensors": {

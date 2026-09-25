@@ -9,6 +9,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers import entity_registry as er
 
+from custom_components.nexo.config_flow import PIN_MASK
 from custom_components.nexo.const import DOMAIN
 from custom_components.nexo.nexo_client import NexoAuthError
 
@@ -218,7 +219,9 @@ async def test_forms_lead_back(hass: HomeAssistant, fake_nexo) -> None:
     # Connection submitted unchanged: back to the menu, no connection test
     await _pick(hass, flow_id, "connection")
     with patch("custom_components.nexo.config_flow._validate") as validate:
-        result = await _submit(hass, flow_id, {"host": "192.0.2.10", "port": 1024})
+        result = await _submit(
+            hass, flow_id, {"host": "192.0.2.10", "port": 1024, "password": PIN_MASK}
+        )
     validate.assert_not_called()
     assert result["step_id"] == "menu"
     assert result["description_placeholders"]["status"] == "connected"
@@ -240,3 +243,22 @@ async def test_forms_lead_back(hass: HomeAssistant, fake_nexo) -> None:
     await _pick(hass, flow_id, "add_button")
     result = await _submit(hass, flow_id, {"command": "WK"})
     assert result["errors"] == {"name": "required"}
+
+
+async def test_pin_is_masked_not_sent(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass)
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    result = await _pick(hass, flow_id, "connection")
+    suggested = {
+        str(key): key.description["suggested_value"]
+        for key in result["data_schema"].schema
+        if key.description
+    }
+    assert suggested["password"] == PIN_MASK
+    assert "pw" not in suggested.values()
+
+    # A new PIN replaces the stored one
+    await _submit(hass, flow_id, {"host": "192.0.2.10", "port": 1024, "password": "new"})
+    await _pick(hass, flow_id, "save")
+    await hass.async_block_till_done()
+    assert entry.data["password"] == "new"
