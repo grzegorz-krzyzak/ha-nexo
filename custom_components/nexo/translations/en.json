@@ -1,0 +1,121 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Nexo",
+        "description": "The central unit's LAN card, as used by NexoVision.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "password": "Password"
+        },
+        "data_description": {
+          "host": "IP address of the LAN card.",
+          "port": "NexoVision service port, usually 1024. Port 1025 speaks a different protocol and will not work.",
+          "password": "The same password NexoVision logs in with."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Nexo password changed",
+        "data": {
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to the central unit.",
+      "invalid_auth": "The central unit rejected the password."
+    },
+    "abort": {
+      "already_configured": "This central unit is already configured.",
+      "reauth_successful": "Password updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Nexo",
+        "menu_options": {
+          "resources": "Choose sensors to import",
+          "add_cover": "Add a gate or door",
+          "add_button": "Add a logic command button",
+          "remove": "Remove a gate, door or button",
+          "settings": "Settings"
+        }
+      },
+      "resources": {
+        "title": "Sensors to import",
+        "description": "The list is read from the central unit.",
+        "data": {
+          "binary_sensors": "Inputs (reed switches, motion detectors)",
+          "thermometers": "Thermometers",
+          "analog_sensors": "Analogue inputs"
+        },
+        "data_description": {
+          "binary_sensors": "On when violated: a door open, motion detected. Set what each one is under \"Show as\" in its entity settings.",
+          "analog_sensors": "Raw values without a unit - the central unit does not say what is wired in."
+        }
+      },
+      "add_cover": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Reads closed or not closed - the only thing that confirms the gate moved.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "add_button": {
+        "title": "Logic command button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "remove": {
+        "title": "Remove",
+        "data": {
+          "items": "Remove these"
+        }
+      },
+      "settings": {
+        "title": "Settings",
+        "data": {
+          "scan_interval": "Polling interval"
+        },
+        "data_description": {
+          "scan_interval": "Each imported sensor is one query of roughly 50 ms, so a full sweep takes longer the more you import."
+        }
+      }
+    },
+    "error": {
+      "command_empty": "The command must not be empty.",
+      "command_too_long": "Logic commands are at most 7 characters."
+    },
+    "abort": {
+      "cannot_list": "Cannot read the resource list from the central unit.",
+      "not_loaded": "The integration is not running. Fix the connection first."
+    }
+  },
+  "selector": {
+    "cover_device_class": {
+      "options": {
+        "gate": "Gate",
+        "garage": "Garage door",
+        "door": "Door"
+      }
+    }
+  }
+}

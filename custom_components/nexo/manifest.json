@@ -1,0 +1,12 @@
+{
+  "domain": "nexo",
+  "name": "Nexwell Nexo",
+  "codeowners": ["@grzegorz-krzyzak"],
+  "config_flow": true,
+  "documentation": "https://github.com/grzegorz-krzyzak/ha-nexo",
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/grzegorz-krzyzak/ha-nexo/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

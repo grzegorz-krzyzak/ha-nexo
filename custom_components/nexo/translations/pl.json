@@ -1,0 +1,121 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Połączenie z Nexo",
+        "description": "Karta LAN centrali, ta sama, z której korzysta NexoVision.",
+        "data": {
+          "host": "Adres",
+          "port": "Port",
+          "password": "Hasło"
+        },
+        "data_description": {
+          "host": "Adres IP karty LAN.",
+          "port": "Port usługi NexoVision, zwykle 1024. Port 1025 mówi innym protokołem i nie zadziała.",
+          "password": "To samo hasło, którym loguje się NexoVision."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Zmieniło się hasło do Nexo",
+        "data": {
+          "password": "Hasło"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Nie można połączyć się z centralą.",
+      "invalid_auth": "Centrala odrzuciła hasło."
+    },
+    "abort": {
+      "already_configured": "Ta centrala jest już skonfigurowana.",
+      "reauth_successful": "Hasło zaktualizowane."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Nexo",
+        "menu_options": {
+          "resources": "Wybierz czujniki do importu",
+          "add_cover": "Dodaj bramę lub drzwi",
+          "add_button": "Dodaj przycisk komendy logiki",
+          "remove": "Usuń bramę, drzwi lub przycisk",
+          "settings": "Ustawienia"
+        }
+      },
+      "resources": {
+        "title": "Czujniki do importu",
+        "description": "Lista jest pobierana z centrali.",
+        "data": {
+          "binary_sensors": "Wejścia (kontaktrony, czujki ruchu)",
+          "thermometers": "Termometry",
+          "analog_sensors": "Wejścia analogowe"
+        },
+        "data_description": {
+          "binary_sensors": "Włączone, gdy naruszone: drzwi otwarte, wykryty ruch. Co to za czujnik, ustawisz w opcji „Pokaż jako” w ustawieniach encji.",
+          "analog_sensors": "Surowe wartości bez jednostki - centrala nie podaje, co jest podłączone."
+        }
+      },
+      "add_cover": {
+        "title": "Brama lub drzwi",
+        "description": "Sterowane komendami logiki: regułami w centrali z warunkiem „Komenda zewnętrzna”.",
+        "data": {
+          "name": "Nazwa",
+          "device_class": "Rodzaj",
+          "open_command": "Komenda otwarcia",
+          "close_command": "Komenda zamknięcia",
+          "reed_sensor": "Kontaktron",
+          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "reed_sensor": "Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła.",
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+        }
+      },
+      "add_button": {
+        "title": "Przycisk komendy logiki",
+        "description": "Wysyła jedną komendę logiki, np. zwolnienie elektrozaczepu. Nic nie potwierdza skutku.",
+        "data": {
+          "name": "Nazwa",
+          "command": "Komenda"
+        },
+        "data_description": {
+          "command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi."
+        }
+      },
+      "remove": {
+        "title": "Usuń",
+        "data": {
+          "items": "Do usunięcia"
+        }
+      },
+      "settings": {
+        "title": "Ustawienia",
+        "data": {
+          "scan_interval": "Interwał odpytywania"
+        },
+        "data_description": {
+          "scan_interval": "Każdy zaimportowany czujnik to jedno zapytanie trwające ok. 50 ms, więc pełny obieg trwa tym dłużej, im więcej importujesz."
+        }
+      }
+    },
+    "error": {
+      "command_empty": "Komenda nie może być pusta.",
+      "command_too_long": "Komendy logiki mają najwyżej 7 znaków."
+    },
+    "abort": {
+      "cannot_list": "Nie można pobrać listy zasobów z centrali.",
+      "not_loaded": "Integracja nie działa. Najpierw napraw połączenie."
+    }
+  },
+  "selector": {
+    "cover_device_class": {
+      "options": {
+        "gate": "Brama",
+        "garage": "Brama garażowa",
+        "door": "Drzwi"
+      }
+    }
+  }
+}
