@@ -13,6 +13,7 @@ from .const import (
     COVER_REED_SENSOR,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
+    FAILED_CYCLES_BEFORE_RELOAD,
     OPT_ANALOG_SENSORS,
     OPT_BINARY_SENSORS,
     OPT_COVERS,
@@ -55,19 +56,38 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
             ),
         }
         self.resources = sorted(names)
+        self._failed_cycles = 0
 
     async def _async_update_data(self) -> dict[str, int]:
+        try:
+            data = await self._async_poll()
+        except UpdateFailed:
+            self._failed_cycles += 1
+            if self._failed_cycles == FAILED_CYCLES_BEFORE_RELOAD:
+                # Setting up again fails while the central unit is away, and
+                # Home Assistant then shows the entry as retrying - visible on
+                # the integrations page, and it keeps retrying on its own.
+                _LOGGER.warning(
+                    "No answer from the central unit in %d polling cycles; reloading",
+                    self._failed_cycles,
+                )
+                self.hass.config_entries.async_schedule_reload(self.config_entry.entry_id)
+            raise
+        self._failed_cycles = 0
+        return data
+
+    async def _async_poll(self) -> dict[str, int]:
+        if not self.resources:
+            # The LAN card drops a connection idle for about 20 s. Keep it
+            # open, so a button press does not pay for a reconnect - and so
+            # the connection sensor has something to report.
+            if not await self.hub.async_call(self.hub.client.ping):
+                raise UpdateFailed("The central unit did not answer a ping")
+            return {}
+
         # A single failed read is dropped and the previous value kept - it is
         # an unanswered or out-of-step reply, not a change of state. Only a
         # sweep in which nothing could be read counts as a failure.
-        if not self.resources:
-            # The LAN card drops a connection idle for about 20 s. Keep it
-            # open, so a button press does not pay for a reconnect. (With no
-            # entities at all there are no listeners and no polling, and the
-            # client simply reconnects on the next command.)
-            await self.hub.async_call(self.hub.client.ping)
-            return {}
-
         data = dict(self.data or {})
         failures = 0
         for name in self.resources:

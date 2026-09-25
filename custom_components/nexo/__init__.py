@@ -15,6 +15,8 @@ from .const import (
     DOMAIN,
     ITEM_ID,
     MANUFACTURER,
+    entry_title,
+    is_default_title,
     OPT_ANALOG_SENSORS,
     OPT_BINARY_SENSORS,
     OPT_BUTTONS,
@@ -38,12 +40,12 @@ NexoConfigEntry = ConfigEntry[NexoData]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: NexoConfigEntry) -> bool:
-    hub = NexoHub(
-        hass,
-        entry.data[CONF_HOST],
-        entry.data.get(CONF_PORT, DEFAULT_PORT),
-        entry.data[CONF_PASSWORD],
-    )
+    host = entry.data[CONF_HOST]
+    port = entry.data.get(CONF_PORT, DEFAULT_PORT)
+    if is_default_title(entry.title, host, port) and entry.title != entry_title(host, port):
+        hass.config_entries.async_update_entry(entry, title=entry_title(host, port))
+
+    hub = NexoHub(hass, host, port, entry.data[CONF_PASSWORD])
     try:
         await hub.async_connect()
     except NexoAuthError as err:
@@ -113,6 +115,7 @@ def _remove_deselected_entities(hass: HomeAssistant, entry: NexoConfigEntry) -> 
     """
     options = entry.options
     keys = {
+        "connection",
         *(f"binary_sensor_{name}" for name in options.get(OPT_BINARY_SENSORS, [])),
         *(f"thermometer_{name}" for name in options.get(OPT_THERMOMETERS, [])),
         *(f"analog_{name}" for name in options.get(OPT_ANALOG_SENSORS, [])),

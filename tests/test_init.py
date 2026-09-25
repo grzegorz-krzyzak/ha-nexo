@@ -53,7 +53,7 @@ async def _setup(hass: HomeAssistant, options=OPTIONS) -> MockConfigEntry:
     entry = MockConfigEntry(
         domain=DOMAIN,
         unique_id="192.0.2.10",
-        title="Nexo 192.0.2.10",
+        title="Nexo 192.0.2.10",  # the 0.1.x default, migrated at setup
         data={CONF_HOST: "192.0.2.10", CONF_PORT: 1024, CONF_PASSWORD: "pw"},
         options=options,
     )
@@ -159,3 +159,54 @@ async def test_device_shows_firmware(hass: HomeAssistant, fake_nexo) -> None:
 )
 def test_firmware_version_parsing(info: str, version: str | None) -> None:
     assert _firmware_version(info) == version
+
+
+async def test_legacy_title_migrated(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass)
+    assert entry.title == "Nexo · 192.0.2.10:1024"
+
+
+async def test_connection_sensor(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    from datetime import timedelta
+
+    from pytest_homeassistant_custom_component.common import async_fire_time_changed
+
+    entry = await _setup(hass)
+    entity_id = "binary_sensor.nexo_connection_to_central_unit"
+    assert hass.states.get(entity_id).state == "on"
+
+    from custom_components.nexo.nexo_client import NexoConnectionError
+
+    def down(name):
+        raise NexoConnectionError("gone")
+
+    fake_nexo.get_state = down
+    freezer.tick(timedelta(seconds=11))
+    async_fire_time_changed(hass)
+    await hass.async_block_till_done()
+    state = hass.states.get(entity_id)
+    assert state.state == "off"  # still available, reporting the loss
+    assert hass.states.get("sensor.nexo_tmp_hall").state == "unavailable"
+    assert entry.state.name == "LOADED"
+
+
+async def test_reload_after_failed_cycles(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    from datetime import timedelta
+    from unittest.mock import patch
+
+    from pytest_homeassistant_custom_component.common import async_fire_time_changed
+
+    from custom_components.nexo.nexo_client import NexoConnectionError
+
+    entry = await _setup(hass)
+
+    def down(name):
+        raise NexoConnectionError("gone")
+
+    fake_nexo.get_state = down
+    with patch.object(hass.config_entries, "async_schedule_reload") as reload:
+        for _ in range(3):
+            freezer.tick(timedelta(seconds=11))
+            async_fire_time_changed(hass)
+            await hass.async_block_till_done()
+    reload.assert_called_once_with(entry.entry_id)

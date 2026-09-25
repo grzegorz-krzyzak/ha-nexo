@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Callable, Coroutine, Mapping
 import copy
 import logging
 from typing import Any
@@ -11,6 +11,7 @@ import uuid
 import voluptuous as vol
 
 from homeassistant.config_entries import (
+    ConfigEntry,
     ConfigEntryState,
     ConfigFlow,
     ConfigFlowResult,
@@ -43,6 +44,7 @@ from .const import (
     ITEM_COMMAND,
     ITEM_ID,
     ITEM_NAME,
+    MAX_ITEMS,
     MAX_LOGIC_COMMAND,
     MAX_SCAN_INTERVAL,
     MIN_SCAN_INTERVAL,
@@ -52,45 +54,41 @@ from .const import (
     OPT_COVERS,
     OPT_SCAN_INTERVAL,
     OPT_THERMOMETERS,
+    entry_title,
+    is_default_title,
 )
 from .nexo_client import ImportTypes, NexoAuthError, NexoClient, NexoError
 
 _LOGGER = logging.getLogger(__name__)
 
+PORT_SELECTOR = NumberSelector(
+    NumberSelectorConfig(min=1, max=65535, mode=NumberSelectorMode.BOX)
+)
+PASSWORD_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))
+
 USER_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_HOST): TextSelector(),
-        vol.Required(CONF_PORT, default=DEFAULT_PORT): NumberSelector(
-            NumberSelectorConfig(min=1, max=65535, mode=NumberSelectorMode.BOX)
-        ),
-        vol.Required(CONF_PASSWORD): TextSelector(
-            TextSelectorConfig(type=TextSelectorType.PASSWORD)
-        ),
+        vol.Required(CONF_PORT, default=DEFAULT_PORT): PORT_SELECTOR,
+        vol.Required(CONF_PASSWORD): PASSWORD_SELECTOR,
     }
 )
 
 # The password may be left empty to keep the stored one.
-RECONFIGURE_SCHEMA = vol.Schema(
+CONNECTION_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_HOST): TextSelector(),
-        vol.Required(CONF_PORT, default=DEFAULT_PORT): NumberSelector(
-            NumberSelectorConfig(min=1, max=65535, mode=NumberSelectorMode.BOX)
-        ),
-        vol.Optional(CONF_PASSWORD): TextSelector(
-            TextSelectorConfig(type=TextSelectorType.PASSWORD)
-        ),
+        vol.Required(CONF_PORT, default=DEFAULT_PORT): PORT_SELECTOR,
+        vol.Optional(CONF_PASSWORD): PASSWORD_SELECTOR,
     }
 )
 
-REAUTH_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_PASSWORD): TextSelector(
-            TextSelectorConfig(type=TextSelectorType.PASSWORD)
-        ),
-    }
-)
+REAUTH_SCHEMA = vol.Schema({vol.Required(CONF_PASSWORD): PASSWORD_SELECTOR})
 
 COVER_DEVICE_CLASSES = ["gate", "garage", "door"]
+
+# Shown in the menu for an empty list
+NONE = "—"
 
 
 def _check_login(host: str, port: int, password: str) -> None:
@@ -109,6 +107,30 @@ async def _validate(hass: HomeAssistant, host: str, port: int, password: str) ->
     except (NexoError, OSError):
         return {"base": "cannot_connect"}
     return {}
+
+
+def _connection_from_input(entry: ConfigEntry, user_input: dict[str, Any]) -> dict[str, Any]:
+    return {
+        CONF_HOST: user_input[CONF_HOST].strip(),
+        CONF_PORT: int(user_input[CONF_PORT]),
+        CONF_PASSWORD: user_input.get(CONF_PASSWORD) or entry.data[CONF_PASSWORD],
+    }
+
+
+def _host_taken(hass: HomeAssistant, entry: ConfigEntry, host: str) -> bool:
+    return any(
+        other.unique_id == host and other.entry_id != entry.entry_id
+        for other in hass.config_entries.async_entries(DOMAIN)
+    )
+
+
+def _title_for(entry: ConfigEntry, connection: dict[str, Any]) -> str:
+    """Follow the address in the title, unless the user renamed the entry."""
+    old_host = entry.data[CONF_HOST]
+    old_port = entry.data.get(CONF_PORT, DEFAULT_PORT)
+    if is_default_title(entry.title, old_host, old_port):
+        return entry_title(connection[CONF_HOST], connection[CONF_PORT])
+    return entry.title
 
 
 def _check_command(value: str) -> str | None:
@@ -133,6 +155,15 @@ def _pick_one(names: list[str]) -> SelectSelector:
     )
 
 
+def _cover_summary(item: dict[str, Any]) -> str:
+    parts = [f"{item[COVER_OPEN_COMMAND]} / {item[COVER_CLOSE_COMMAND]}"]
+    if item.get(COVER_REED_SENSOR):
+        parts.append(item[COVER_REED_SENSOR])
+    if item[COVER_OPEN_ONLY_WHEN_CLOSED]:
+        parts.append("🔒")
+    return " · ".join(parts)
+
+
 class NexoConfigFlow(ConfigFlow, domain=DOMAIN):
     """Connect to a central unit through its LAN card."""
 
@@ -150,7 +181,7 @@ class NexoConfigFlow(ConfigFlow, domain=DOMAIN):
             errors = await _validate(self.hass, host, port, user_input[CONF_PASSWORD])
             if not errors:
                 return self.async_create_entry(
-                    title="Nexo",
+                    title=entry_title(host, port),
                     data={
                         CONF_HOST: host,
                         CONF_PORT: port,
@@ -169,18 +200,19 @@ class NexoConfigFlow(ConfigFlow, domain=DOMAIN):
         entry = self._get_reconfigure_entry()
         errors: dict[str, str] = {}
         if user_input is not None:
-            host = user_input[CONF_HOST].strip()
-            port = int(user_input[CONF_PORT])
-            password = user_input.get(CONF_PASSWORD) or entry.data[CONF_PASSWORD]
-            if host != entry.unique_id:
-                await self.async_set_unique_id(host)
-                self._abort_if_unique_id_configured()
-            errors = await _validate(self.hass, host, port, password)
+            connection = _connection_from_input(entry, user_input)
+            host = connection[CONF_HOST]
+            if _host_taken(self.hass, entry, host):
+                return self.async_abort(reason="already_configured")
+            errors = await _validate(
+                self.hass, host, connection[CONF_PORT], connection[CONF_PASSWORD]
+            )
             if not errors:
                 return self.async_update_reload_and_abort(
                     entry,
                     unique_id=host,
-                    data_updates={CONF_HOST: host, CONF_PORT: port, CONF_PASSWORD: password},
+                    title=_title_for(entry, connection),
+                    data_updates=connection,
                 )
         suggested = user_input or {
             CONF_HOST: entry.data[CONF_HOST],
@@ -188,7 +220,7 @@ class NexoConfigFlow(ConfigFlow, domain=DOMAIN):
         }
         return self.async_show_form(
             step_id="reconfigure",
-            data_schema=self.add_suggested_values_to_schema(RECONFIGURE_SCHEMA, suggested),
+            data_schema=self.add_suggested_values_to_schema(CONNECTION_SCHEMA, suggested),
             errors=errors,
         )
 
@@ -217,20 +249,25 @@ class NexoConfigFlow(ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     @callback
-    def async_get_options_flow(config_entry) -> NexoOptionsFlow:
+    def async_get_options_flow(config_entry: ConfigEntry) -> NexoOptionsFlow:
         return NexoOptionsFlow()
 
 
 class NexoOptionsFlow(OptionsFlowWithReload):
-    """Choose which resources to import and define logic-driven entities.
+    """Everything configurable after setup, as a menu.
 
-    Every step returns to the menu, and nothing is stored until "Save and
+    Every step returns to a menu, and nothing is stored until "Save and
     close" - closing the dialog discards the changes. Home Assistant forms
-    have no back button, so the menu is the way back.
+    have no back button, so menus carry a "Back" entry instead.
+
+    Each gate and button gets its own menu entry, which needs a step per
+    entry: cover_0 ... cover_19 and button_0 ... button_19 are generated
+    below the class.
     """
 
     def __init__(self) -> None:
         self._options: dict[str, Any] = {}
+        self._connection: dict[str, Any] | None = None
 
     async def _resources(self, resource_type: ImportTypes) -> list[str]:
         return await self.config_entry.runtime_data.hub.async_resources(resource_type)
@@ -238,6 +275,8 @@ class NexoOptionsFlow(OptionsFlowWithReload):
     def _cannot_list(self, err: NexoError) -> ConfigFlowResult:
         _LOGGER.warning("Cannot read the resource list from the central unit: %s", err)
         return self.async_abort(reason="cannot_list")
+
+    # ------------------------------------------------------------------ menus
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
@@ -251,33 +290,124 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         options = self._options
-        menu = ["resources", "add_cover", "add_button"]
-        if options.get(OPT_COVERS) or options.get(OPT_BUTTONS):
-            menu.append("remove")
-        menu += ["settings", "save"]
+        connection = self._connection or self.config_entry.data
+        if self._connection is not None:
+            status = "✏️"  # changed, not saved yet
+        elif self.config_entry.runtime_data.coordinator.last_update_success:
+            status = "✅"
+        else:
+            status = "⚠️"
         return self.async_show_menu(
             step_id="menu",
-            menu_options=menu,
+            menu_options=["connection", "sensors", "covers", "buttons", "settings", "save"],
             description_placeholders={
+                "address": f"{connection[CONF_HOST]}:{connection.get(CONF_PORT, DEFAULT_PORT)}",
+                "status": status,
                 OPT_BINARY_SENSORS: str(len(options.get(OPT_BINARY_SENSORS, []))),
                 OPT_THERMOMETERS: str(len(options.get(OPT_THERMOMETERS, []))),
                 OPT_ANALOG_SENSORS: str(len(options.get(OPT_ANALOG_SENSORS, []))),
                 OPT_COVERS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_COVERS, []))
-                or "-",
+                or NONE,
                 OPT_BUTTONS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_BUTTONS, []))
-                or "-",
+                or NONE,
                 OPT_SCAN_INTERVAL: str(
                     options.get(OPT_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
                 ),
             },
         )
 
+    async def async_step_back(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        return await self.async_step_menu()
+
+    async def async_step_covers(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        covers = self._options.get(OPT_COVERS, [])
+        menu = [f"cover_{i}" for i in range(len(covers))]
+        if len(covers) < MAX_ITEMS:
+            menu.append("add_cover")
+        menu.append("back")
+        placeholders: dict[str, str] = {}
+        for i, item in enumerate(covers):
+            placeholders[f"cover_{i}"] = item[ITEM_NAME]
+            placeholders[f"cover_{i}_info"] = _cover_summary(item)
+        return self.async_show_menu(
+            step_id="covers", menu_options=menu, description_placeholders=placeholders
+        )
+
+    async def async_step_buttons(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        buttons = self._options.get(OPT_BUTTONS, [])
+        menu = [f"button_{i}" for i in range(len(buttons))]
+        if len(buttons) < MAX_ITEMS:
+            menu.append("add_button")
+        menu.append("back")
+        placeholders: dict[str, str] = {}
+        for i, item in enumerate(buttons):
+            placeholders[f"button_{i}"] = item[ITEM_NAME]
+            placeholders[f"button_{i}_info"] = item[ITEM_COMMAND]
+        return self.async_show_menu(
+            step_id="buttons", menu_options=menu, description_placeholders=placeholders
+        )
+
     async def async_step_save(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
+        if self._connection is not None:
+            # Connection settings live in the entry's data, not its options.
+            # Store both at once and reload here; the options then compare
+            # equal, so the automatic reload does not run a second time.
+            entry = self.config_entry
+            self.hass.config_entries.async_update_entry(
+                entry,
+                unique_id=self._connection[CONF_HOST],
+                title=_title_for(entry, self._connection),
+                data={**entry.data, **self._connection},
+                options=self._options,
+            )
+            self.hass.config_entries.async_schedule_reload(entry.entry_id)
         return self.async_create_entry(data=self._options)
 
-    async def async_step_resources(
+    # ------------------------------------------------------------ connection
+
+    async def async_step_connection(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        entry = self.config_entry
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            connection = _connection_from_input(entry, user_input)
+            if _host_taken(self.hass, entry, connection[CONF_HOST]):
+                errors["base"] = "already_configured"
+            else:
+                errors = await _validate(
+                    self.hass,
+                    connection[CONF_HOST],
+                    connection[CONF_PORT],
+                    connection[CONF_PASSWORD],
+                )
+            if not errors:
+                unchanged = all(entry.data.get(k) == v for k, v in connection.items())
+                self._connection = None if unchanged else connection
+                return await self.async_step_menu()
+
+        current = self._connection or entry.data
+        suggested = user_input or {
+            CONF_HOST: current[CONF_HOST],
+            CONF_PORT: current.get(CONF_PORT, DEFAULT_PORT),
+        }
+        return self.async_show_form(
+            step_id="connection",
+            data_schema=self.add_suggested_values_to_schema(CONNECTION_SCHEMA, suggested),
+            errors=errors,
+        )
+
+    # --------------------------------------------------------------- sensors
+
+    async def async_step_sensors(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         try:
@@ -304,18 +434,36 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 for key, names in available.items()
             }
         )
-        return self.async_show_form(step_id="resources", data_schema=schema)
+        return self.async_show_form(step_id="sensors", data_schema=schema)
+
+    # ---------------------------------------------------------------- covers
 
     async def async_step_add_cover(
         self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        return await self._cover_form("add_cover", None, user_input)
+
+    async def _async_step_edit_cover(
+        self, index: int, user_input: dict[str, Any] | None
+    ) -> ConfigFlowResult:
+        if index >= len(self._options.get(OPT_COVERS, [])):
+            return await self.async_step_covers()
+        return await self._cover_form(f"cover_{index}", index, user_input)
+
+    async def _cover_form(
+        self, step_id: str, index: int | None, user_input: dict[str, Any] | None
     ) -> ConfigFlowResult:
         try:
             sensors = await self._resources(ImportTypes.SENSOR)
         except NexoError as err:
             return self._cannot_list(err)
 
+        covers = self._options.setdefault(OPT_COVERS, [])
         errors: dict[str, str] = {}
         if user_input is not None:
+            if user_input.pop("delete", False) and index is not None:
+                del covers[index]
+                return await self.async_step_covers()
             for key in (COVER_OPEN_COMMAND, COVER_CLOSE_COMMAND):
                 user_input[key] = user_input[key].strip()
                 if error := _check_command(user_input[key]):
@@ -325,84 +473,88 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             ):
                 errors[COVER_OPEN_ONLY_WHEN_CLOSED] = "guard_needs_reed_sensor"
             if not errors:
-                self._options.setdefault(OPT_COVERS, []).append(
-                    {ITEM_ID: uuid.uuid4().hex, **user_input}
-                )
-                return await self.async_step_menu()
+                if index is None:
+                    covers.append({ITEM_ID: uuid.uuid4().hex, **user_input})
+                else:
+                    covers[index] = {ITEM_ID: covers[index][ITEM_ID], **user_input}
+                return await self.async_step_covers()
 
-        schema = vol.Schema(
-            {
-                vol.Required(ITEM_NAME): TextSelector(),
-                vol.Required(COVER_DEVICE_CLASS, default="gate"): SelectSelector(
-                    SelectSelectorConfig(
-                        options=COVER_DEVICE_CLASSES,
-                        translation_key="cover_device_class",
-                        mode=SelectSelectorMode.DROPDOWN,
-                    )
-                ),
-                vol.Required(COVER_OPEN_COMMAND): TextSelector(),
-                vol.Required(COVER_CLOSE_COMMAND): TextSelector(),
-                vol.Optional(COVER_REED_SENSOR): _pick_one(sensors),
-                vol.Required(COVER_OPEN_ONLY_WHEN_CLOSED, default=False): BooleanSelector(),
-            }
-        )
+        fields: dict[Any, Any] = {
+            vol.Required(ITEM_NAME): TextSelector(),
+            vol.Required(COVER_DEVICE_CLASS, default="gate"): SelectSelector(
+                SelectSelectorConfig(
+                    options=COVER_DEVICE_CLASSES,
+                    translation_key="cover_device_class",
+                    mode=SelectSelectorMode.DROPDOWN,
+                )
+            ),
+            vol.Required(COVER_OPEN_COMMAND): TextSelector(),
+            vol.Required(COVER_CLOSE_COMMAND): TextSelector(),
+            vol.Optional(COVER_REED_SENSOR): _pick_one(sensors),
+            vol.Required(COVER_OPEN_ONLY_WHEN_CLOSED, default=False): BooleanSelector(),
+        }
+        if index is not None:
+            fields[vol.Optional("delete", default=False)] = BooleanSelector()
+        if user_input is not None:
+            suggested = user_input
+        else:
+            suggested = covers[index] if index is not None else None
         return self.async_show_form(
-            step_id="add_cover",
-            data_schema=self.add_suggested_values_to_schema(schema, user_input),
+            step_id=step_id,
+            data_schema=self.add_suggested_values_to_schema(vol.Schema(fields), suggested),
             errors=errors,
         )
+
+    # --------------------------------------------------------------- buttons
 
     async def async_step_add_button(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
+        return await self._button_form("add_button", None, user_input)
+
+    async def _async_step_edit_button(
+        self, index: int, user_input: dict[str, Any] | None
+    ) -> ConfigFlowResult:
+        if index >= len(self._options.get(OPT_BUTTONS, [])):
+            return await self.async_step_buttons()
+        return await self._button_form(f"button_{index}", index, user_input)
+
+    async def _button_form(
+        self, step_id: str, index: int | None, user_input: dict[str, Any] | None
+    ) -> ConfigFlowResult:
+        buttons = self._options.setdefault(OPT_BUTTONS, [])
         errors: dict[str, str] = {}
         if user_input is not None:
+            if user_input.pop("delete", False) and index is not None:
+                del buttons[index]
+                return await self.async_step_buttons()
             user_input[ITEM_COMMAND] = user_input[ITEM_COMMAND].strip()
             if error := _check_command(user_input[ITEM_COMMAND]):
                 errors[ITEM_COMMAND] = error
             else:
-                self._options.setdefault(OPT_BUTTONS, []).append(
-                    {ITEM_ID: uuid.uuid4().hex, **user_input}
-                )
-                return await self.async_step_menu()
+                if index is None:
+                    buttons.append({ITEM_ID: uuid.uuid4().hex, **user_input})
+                else:
+                    buttons[index] = {ITEM_ID: buttons[index][ITEM_ID], **user_input}
+                return await self.async_step_buttons()
 
-        schema = vol.Schema(
-            {
-                vol.Required(ITEM_NAME): TextSelector(),
-                vol.Required(ITEM_COMMAND): TextSelector(),
-            }
-        )
+        fields: dict[Any, Any] = {
+            vol.Required(ITEM_NAME): TextSelector(),
+            vol.Required(ITEM_COMMAND): TextSelector(),
+        }
+        if index is not None:
+            fields[vol.Optional("delete", default=False)] = BooleanSelector()
+        if user_input is not None:
+            suggested = user_input
+        else:
+            suggested = buttons[index] if index is not None else None
         return self.async_show_form(
-            step_id="add_button",
-            data_schema=self.add_suggested_values_to_schema(schema, user_input),
+            step_id=step_id,
+            data_schema=self.add_suggested_values_to_schema(vol.Schema(fields), suggested),
             errors=errors,
         )
 
-    async def async_step_remove(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
-        options = self._options
-        if user_input is not None:
-            doomed = set(user_input["items"])
-            for key in (OPT_COVERS, OPT_BUTTONS):
-                options[key] = [i for i in options.get(key, []) if i[ITEM_ID] not in doomed]
-            return await self.async_step_menu()
-
-        items = [
-            {"value": item[ITEM_ID], "label": f"{item[ITEM_NAME]} ({kind})"}
-            for key, kind in ((OPT_COVERS, "cover"), (OPT_BUTTONS, "button"))
-            for item in options.get(key, [])
-        ]
-        schema = vol.Schema(
-            {
-                vol.Optional("items", default=[]): SelectSelector(
-                    SelectSelectorConfig(
-                        options=items, multiple=True, mode=SelectSelectorMode.LIST
-                    )
-                )
-            }
-        )
-        return self.async_show_form(step_id="remove", data_schema=schema)
+    # -------------------------------------------------------------- settings
 
     async def async_step_settings(
         self, user_input: dict[str, Any] | None = None
@@ -428,3 +580,24 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             }
         )
         return self.async_show_form(step_id="settings", data_schema=schema)
+
+
+_Step = Callable[
+    [NexoOptionsFlow, dict[str, Any] | None], Coroutine[Any, Any, ConfigFlowResult]
+]
+
+
+def _edit_step(kind: str, index: int) -> _Step:
+    async def step(
+        self: NexoOptionsFlow, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        handler = getattr(self, f"_async_step_edit_{kind}")
+        return await handler(index, user_input)
+
+    step.__name__ = f"async_step_{kind}_{index}"
+    return step
+
+
+for _index in range(MAX_ITEMS):
+    for _kind in ("cover", "button"):
+        setattr(NexoOptionsFlow, f"async_step_{_kind}_{_index}", _edit_step(_kind, _index))

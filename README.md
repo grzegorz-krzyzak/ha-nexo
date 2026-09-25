@@ -37,21 +37,34 @@ and restart.
 ## Configuration
 
 **Connection:** the LAN card's IP address, port `1024` and the NexoVision
-password. Port `1025` serves the remote panel with a different protocol and
-will not work.
+password (PIN). Port `1025` serves the remote panel with a different protocol
+and will not work. The entry is named after the address, e.g.
+*Nexo · 192.168.0.100:1024*, and follows it when the address changes - unless
+you rename it.
 
-To change the address, port or password later, use *Reconfigure* in the
-integration's ⋮ menu. Entities are kept.
+**Everything else is in the integration's options** (*Configure*), a menu that
+shows the current settings next to each item:
 
-**Everything else is in the integration's options** (*Configure*). Each step
-returns to the menu, and nothing is stored until *Save and close*; closing the
-dialog discards the changes.
+- **Connection** - address and status (✅ connected, ⚠️ not answering, ✏️
+  changed but not saved). Also available as *Reconfigure* in the ⋮ menu.
+  Entities are kept when the address changes.
+- **Sensors** - the lists come from the central unit. Each imported resource
+  costs one query of about 50 ms per polling cycle.
+- **Gates and doors** and **Buttons** - one entry each; pick one to edit or
+  delete it. Up to 20 of each.
+- **Settings** - polling interval, 10 s by default.
 
-- **Choose sensors to import.** The lists come from the central unit. Each
-  imported resource costs one query of about 50 ms per polling cycle.
-- **Add a gate or door.** See below.
-- **Add a logic command button.**
-- **Settings:** polling interval, 10 s by default.
+Nothing is stored until **Save and close**; closing the dialog discards the
+changes.
+
+### Connection status
+
+The device has a diagnostic **Connection to central unit** sensor, on while
+the central unit answers - usable in automations, with its history recorded.
+After three polling cycles in a row without an answer the integration reloads,
+so the integrations page shows it as retrying setup, and it keeps retrying
+until the central unit is back. The central unit's firmware version is shown
+in the device info.
 
 ## Gates and doors
 

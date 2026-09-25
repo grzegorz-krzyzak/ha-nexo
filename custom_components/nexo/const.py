@@ -39,3 +39,21 @@ SENSOR_VIOLATED: Final = 102
 # Logic commands ("Komenda zewnetrzna") are limited to 7 characters by the
 # NexoTalk specification.
 MAX_LOGIC_COMMAND: Final = 7
+
+# Gates, doors and buttons each; the options menu has one entry per item.
+MAX_ITEMS: Final = 20
+
+# After this many polling cycles in a row without an answer the entry
+# reloads, so Home Assistant shows it as retrying setup - the one place the
+# integrations page can show a connection problem.
+FAILED_CYCLES_BEFORE_RELOAD: Final = 3
+
+
+def entry_title(host: str, port: int) -> str:
+    return f"Nexo · {host}:{port}"
+
+
+def is_default_title(title: str, host: str, port: int) -> bool:
+    """True unless the user renamed the entry; earlier versions used the
+    first two forms."""
+    return title in ("Nexo", f"Nexo {host}", entry_title(host, port))

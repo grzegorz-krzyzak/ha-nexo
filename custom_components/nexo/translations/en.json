@@ -22,12 +22,16 @@
         }
       },
       "reconfigure": {
-        "title": "Change the connection",
-        "description": "Leave the password empty to keep the current one.",
+        "title": "Connection",
+        "description": "Leave the password empty to keep the current one. The connection is checked before it is accepted.",
         "data": {
           "host": "Host",
           "port": "Port",
           "password": "Password (PIN)"
+        },
+        "data_description": {
+          "host": "IP address of the LAN card.",
+          "port": "NexoVision service port, usually 1024."
         }
       }
     },
@@ -45,19 +49,138 @@
     "step": {
       "menu": {
         "title": "Nexo",
-        "description": "Inputs: {binary_sensors}, thermometers: {thermometers}, analogue inputs: {analog_sensors}\nGates and doors: {covers}\nButtons: {buttons}\nPolling every {scan_interval} s\n\nChanges take effect after **Save and close**. Closing this dialog discards them.",
         "menu_options": {
-          "resources": "Choose sensors to import",
-          "add_cover": "Add a gate or door",
-          "add_button": "Add a logic command button",
-          "remove": "Remove a gate, door or button",
+          "connection": "Connection",
+          "sensors": "Sensors",
+          "covers": "Gates and doors",
+          "buttons": "Buttons",
           "settings": "Settings",
           "save": "Save and close"
+        },
+        "menu_option_descriptions": {
+          "connection": "{address} {status}",
+          "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
+          "covers": "{covers}",
+          "buttons": "{buttons}",
+          "settings": "Polling every {scan_interval} s",
+          "save": "Closing the window with ✕ discards the changes"
         }
       },
-      "resources": {
-        "title": "Sensors to import",
-        "description": "The list is read from the central unit.",
+      "covers": {
+        "title": "Gates and doors",
+        "description": "🔒 opens only when confirmed closed",
+        "menu_options": {
+          "cover_0": "{cover_0}",
+          "cover_1": "{cover_1}",
+          "cover_2": "{cover_2}",
+          "cover_3": "{cover_3}",
+          "cover_4": "{cover_4}",
+          "cover_5": "{cover_5}",
+          "cover_6": "{cover_6}",
+          "cover_7": "{cover_7}",
+          "cover_8": "{cover_8}",
+          "cover_9": "{cover_9}",
+          "cover_10": "{cover_10}",
+          "cover_11": "{cover_11}",
+          "cover_12": "{cover_12}",
+          "cover_13": "{cover_13}",
+          "cover_14": "{cover_14}",
+          "cover_15": "{cover_15}",
+          "cover_16": "{cover_16}",
+          "cover_17": "{cover_17}",
+          "cover_18": "{cover_18}",
+          "cover_19": "{cover_19}",
+          "add_cover": "Add a gate or door",
+          "back": "Back"
+        },
+        "menu_option_descriptions": {
+          "cover_0": "{cover_0_info}",
+          "cover_1": "{cover_1_info}",
+          "cover_2": "{cover_2_info}",
+          "cover_3": "{cover_3_info}",
+          "cover_4": "{cover_4_info}",
+          "cover_5": "{cover_5_info}",
+          "cover_6": "{cover_6_info}",
+          "cover_7": "{cover_7_info}",
+          "cover_8": "{cover_8_info}",
+          "cover_9": "{cover_9_info}",
+          "cover_10": "{cover_10_info}",
+          "cover_11": "{cover_11_info}",
+          "cover_12": "{cover_12_info}",
+          "cover_13": "{cover_13_info}",
+          "cover_14": "{cover_14_info}",
+          "cover_15": "{cover_15_info}",
+          "cover_16": "{cover_16_info}",
+          "cover_17": "{cover_17_info}",
+          "cover_18": "{cover_18_info}",
+          "cover_19": "{cover_19_info}"
+        }
+      },
+      "buttons": {
+        "title": "Buttons",
+        "menu_options": {
+          "button_0": "{button_0}",
+          "button_1": "{button_1}",
+          "button_2": "{button_2}",
+          "button_3": "{button_3}",
+          "button_4": "{button_4}",
+          "button_5": "{button_5}",
+          "button_6": "{button_6}",
+          "button_7": "{button_7}",
+          "button_8": "{button_8}",
+          "button_9": "{button_9}",
+          "button_10": "{button_10}",
+          "button_11": "{button_11}",
+          "button_12": "{button_12}",
+          "button_13": "{button_13}",
+          "button_14": "{button_14}",
+          "button_15": "{button_15}",
+          "button_16": "{button_16}",
+          "button_17": "{button_17}",
+          "button_18": "{button_18}",
+          "button_19": "{button_19}",
+          "add_button": "Add a button",
+          "back": "Back"
+        },
+        "menu_option_descriptions": {
+          "button_0": "{button_0_info}",
+          "button_1": "{button_1_info}",
+          "button_2": "{button_2_info}",
+          "button_3": "{button_3_info}",
+          "button_4": "{button_4_info}",
+          "button_5": "{button_5_info}",
+          "button_6": "{button_6_info}",
+          "button_7": "{button_7_info}",
+          "button_8": "{button_8_info}",
+          "button_9": "{button_9_info}",
+          "button_10": "{button_10_info}",
+          "button_11": "{button_11_info}",
+          "button_12": "{button_12_info}",
+          "button_13": "{button_13_info}",
+          "button_14": "{button_14_info}",
+          "button_15": "{button_15_info}",
+          "button_16": "{button_16_info}",
+          "button_17": "{button_17_info}",
+          "button_18": "{button_18_info}",
+          "button_19": "{button_19_info}"
+        }
+      },
+      "connection": {
+        "title": "Connection",
+        "description": "Leave the password empty to keep the current one. The connection is checked before it is accepted.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "password": "Password (PIN)"
+        },
+        "data_description": {
+          "host": "IP address of the LAN card.",
+          "port": "NexoVision service port, usually 1024."
+        }
+      },
+      "sensors": {
+        "title": "Sensors",
+        "description": "The lists are read from the central unit.",
         "data": {
           "binary_sensors": "Inputs (reed switches, motion detectors)",
           "thermometers": "Thermometers",
@@ -85,8 +208,368 @@
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
         }
       },
+      "cover_0": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_1": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_2": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_3": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_4": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_5": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_6": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_7": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_8": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_9": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_10": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_11": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_12": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_13": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_14": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_15": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_16": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_17": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_18": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
+      "cover_19": {
+        "title": "Gate or door",
+        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "data": {
+          "name": "Name",
+          "device_class": "Type",
+          "open_command": "Open command",
+          "close_command": "Close command",
+          "reed_sensor": "Reed switch",
+          "open_only_when_closed": "Open only when confirmed closed",
+          "delete": "Delete this gate or door"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+        }
+      },
       "add_button": {
-        "title": "Logic command button",
+        "title": "Button",
         "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
         "data": {
           "name": "Name",
@@ -96,10 +579,244 @@
           "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
         }
       },
-      "remove": {
-        "title": "Remove",
+      "button_0": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
         "data": {
-          "items": "Remove these"
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_1": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_2": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_3": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_4": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_5": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_6": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_7": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_8": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_9": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_10": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_11": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_12": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_13": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_14": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_15": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_16": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_17": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_18": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
+        }
+      },
+      "button_19": {
+        "title": "Button",
+        "description": "Sends one logic command, for instance to release a door strike. Nothing confirms the result.",
+        "data": {
+          "name": "Name",
+          "command": "Command",
+          "delete": "Delete this button"
+        },
+        "data_description": {
+          "command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing."
         }
       },
       "settings": {
@@ -113,6 +830,9 @@
       }
     },
     "error": {
+      "cannot_connect": "Cannot connect to the central unit.",
+      "invalid_auth": "The central unit rejected the password.",
+      "already_configured": "Another entry already uses this address.",
       "command_empty": "The command must not be empty.",
       "command_too_long": "Logic commands are at most 7 characters.",
       "guard_needs_reed_sensor": "Needs a reed switch to check."
@@ -128,6 +848,13 @@
         "gate": "Gate",
         "garage": "Garage door",
         "door": "Door"
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "connection": {
+        "name": "Connection to central unit"
       }
     }
   }
