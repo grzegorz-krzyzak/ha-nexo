@@ -23,7 +23,7 @@
       },
       "reconfigure": {
         "title": "Connection",
-        "description": "The connection is checked before it is accepted. Submit without changes to go back.",
+        "description": "The connection is checked before it is accepted.",
         "data": {
           "host": "Host",
           "port": "Port",

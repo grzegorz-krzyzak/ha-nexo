@@ -23,7 +23,7 @@
       },
       "reconfigure": {
         "title": "Połączenie",
-        "description": "Połączenie jest sprawdzane przed przyjęciem zmian. Zatwierdź bez zmian, żeby wrócić.",
+        "description": "Połączenie jest sprawdzane przed przyjęciem zmian.",
         "data": {
           "host": "Adres",
           "port": "Port",
