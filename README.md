@@ -4,6 +4,10 @@ A Home Assistant integration for the Nexwell Nexo home
 automation system, talking to the central unit over its LAN card - the same
 connection the NexoVision app uses. Local polling, no cloud.
 
+> **Unofficial.** This project is not affiliated with, endorsed by or supported
+> by Nexwell. Please do not contact Nexwell support about it - open an issue
+> here instead. Nexwell and Nexo are trademarks of their respective owner.
+
 ## What it provides
 
 | Nexo | Home Assistant | Notes |
