@@ -17,13 +17,15 @@ class NexoEntity(CoordinatorEntity[NexoCoordinator]):
     def __init__(self, coordinator: NexoCoordinator, key: str, name: str) -> None:
         super().__init__(coordinator)
         entry = coordinator.config_entry
-        self._attr_unique_id = f"{entry.unique_id}_{key}"
+        # The entry id, not the host: the address can change through
+        # reconfiguration, and the entities must survive it.
+        self._attr_unique_id = f"{entry.entry_id}_{key}"
         self._attr_name = name
         self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, entry.unique_id)},
+            identifiers={(DOMAIN, entry.entry_id)},
             manufacturer=MANUFACTURER,
             model="Nexo",
-            name=entry.title,
+            name="Nexo",
         )
 
 

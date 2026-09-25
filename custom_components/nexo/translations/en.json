@@ -7,7 +7,7 @@
         "data": {
           "host": "Host",
           "port": "Port",
-          "password": "Password"
+          "password": "Password (PIN)"
         },
         "data_description": {
           "host": "IP address of the LAN card.",
@@ -18,7 +18,16 @@
       "reauth_confirm": {
         "title": "Nexo password changed",
         "data": {
-          "password": "Password"
+          "password": "Password (PIN)"
+        }
+      },
+      "reconfigure": {
+        "title": "Change the connection",
+        "description": "Leave the password empty to keep the current one.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "password": "Password (PIN)"
         }
       }
     },
@@ -28,19 +37,22 @@
     },
     "abort": {
       "already_configured": "This central unit is already configured.",
-      "reauth_successful": "Password updated."
+      "reauth_successful": "Password updated.",
+      "reconfigure_successful": "Connection updated."
     }
   },
   "options": {
     "step": {
-      "init": {
+      "menu": {
         "title": "Nexo",
+        "description": "Inputs: {binary_sensors}, thermometers: {thermometers}, analogue inputs: {analog_sensors}\nGates and doors: {covers}\nButtons: {buttons}\nPolling every {scan_interval} s\n\nChanges take effect after **Save and close**. Closing this dialog discards them.",
         "menu_options": {
           "resources": "Choose sensors to import",
           "add_cover": "Add a gate or door",
           "add_button": "Add a logic command button",
           "remove": "Remove a gate, door or button",
-          "settings": "Settings"
+          "settings": "Settings",
+          "save": "Save and close"
         }
       },
       "resources": {

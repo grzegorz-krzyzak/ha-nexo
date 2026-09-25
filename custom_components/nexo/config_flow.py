@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 import copy
+import logging
 from typing import Any
 import uuid
 
@@ -54,6 +55,8 @@ from .const import (
 )
 from .nexo_client import ImportTypes, NexoAuthError, NexoClient, NexoError
 
+_LOGGER = logging.getLogger(__name__)
+
 USER_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_HOST): TextSelector(),
@@ -61,6 +64,19 @@ USER_SCHEMA = vol.Schema(
             NumberSelectorConfig(min=1, max=65535, mode=NumberSelectorMode.BOX)
         ),
         vol.Required(CONF_PASSWORD): TextSelector(
+            TextSelectorConfig(type=TextSelectorType.PASSWORD)
+        ),
+    }
+)
+
+# The password may be left empty to keep the stored one.
+RECONFIGURE_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_HOST): TextSelector(),
+        vol.Required(CONF_PORT, default=DEFAULT_PORT): NumberSelector(
+            NumberSelectorConfig(min=1, max=65535, mode=NumberSelectorMode.BOX)
+        ),
+        vol.Optional(CONF_PASSWORD): TextSelector(
             TextSelectorConfig(type=TextSelectorType.PASSWORD)
         ),
     }
@@ -134,7 +150,7 @@ class NexoConfigFlow(ConfigFlow, domain=DOMAIN):
             errors = await _validate(self.hass, host, port, user_input[CONF_PASSWORD])
             if not errors:
                 return self.async_create_entry(
-                    title=f"Nexo {host}",
+                    title="Nexo",
                     data={
                         CONF_HOST: host,
                         CONF_PORT: port,
@@ -144,6 +160,35 @@ class NexoConfigFlow(ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="user",
             data_schema=self.add_suggested_values_to_schema(USER_SCHEMA, user_input),
+            errors=errors,
+        )
+
+    async def async_step_reconfigure(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        entry = self._get_reconfigure_entry()
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            host = user_input[CONF_HOST].strip()
+            port = int(user_input[CONF_PORT])
+            password = user_input.get(CONF_PASSWORD) or entry.data[CONF_PASSWORD]
+            if host != entry.unique_id:
+                await self.async_set_unique_id(host)
+                self._abort_if_unique_id_configured()
+            errors = await _validate(self.hass, host, port, password)
+            if not errors:
+                return self.async_update_reload_and_abort(
+                    entry,
+                    unique_id=host,
+                    data_updates={CONF_HOST: host, CONF_PORT: port, CONF_PASSWORD: password},
+                )
+        suggested = user_input or {
+            CONF_HOST: entry.data[CONF_HOST],
+            CONF_PORT: entry.data.get(CONF_PORT, DEFAULT_PORT),
+        }
+        return self.async_show_form(
+            step_id="reconfigure",
+            data_schema=self.add_suggested_values_to_schema(RECONFIGURE_SCHEMA, suggested),
             errors=errors,
         )
 
@@ -177,25 +222,60 @@ class NexoConfigFlow(ConfigFlow, domain=DOMAIN):
 
 
 class NexoOptionsFlow(OptionsFlow):
-    """Choose which resources to import and define logic-driven entities."""
+    """Choose which resources to import and define logic-driven entities.
 
-    def _options(self) -> dict[str, Any]:
-        return copy.deepcopy(dict(self.config_entry.options))
+    Every step returns to the menu, and nothing is stored until "Save and
+    close" - closing the dialog discards the changes. Home Assistant forms
+    have no back button, so the menu is the way back.
+    """
+
+    def __init__(self) -> None:
+        self._options: dict[str, Any] = {}
 
     async def _resources(self, resource_type: ImportTypes) -> list[str]:
         return await self.config_entry.runtime_data.hub.async_resources(resource_type)
+
+    def _cannot_list(self, err: NexoError) -> ConfigFlowResult:
+        _LOGGER.warning("Cannot read the resource list from the central unit: %s", err)
+        return self.async_abort(reason="cannot_list")
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         if self.config_entry.state is not ConfigEntryState.LOADED:
             return self.async_abort(reason="not_loaded")
+        self._options = copy.deepcopy(dict(self.config_entry.options))
+        return await self.async_step_menu()
+
+    async def async_step_menu(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        options = self._options
         menu = ["resources", "add_cover", "add_button"]
-        options = self.config_entry.options
         if options.get(OPT_COVERS) or options.get(OPT_BUTTONS):
             menu.append("remove")
-        menu.append("settings")
-        return self.async_show_menu(step_id="init", menu_options=menu)
+        menu += ["settings", "save"]
+        return self.async_show_menu(
+            step_id="menu",
+            menu_options=menu,
+            description_placeholders={
+                OPT_BINARY_SENSORS: str(len(options.get(OPT_BINARY_SENSORS, []))),
+                OPT_THERMOMETERS: str(len(options.get(OPT_THERMOMETERS, []))),
+                OPT_ANALOG_SENSORS: str(len(options.get(OPT_ANALOG_SENSORS, []))),
+                OPT_COVERS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_COVERS, []))
+                or "-",
+                OPT_BUTTONS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_BUTTONS, []))
+                or "-",
+                OPT_SCAN_INTERVAL: str(
+                    options.get(OPT_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
+                ),
+            },
+        )
+
+    async def async_step_save(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        return self.async_create_entry(data=self._options)
 
     async def async_step_resources(
         self, user_input: dict[str, Any] | None = None
@@ -206,20 +286,20 @@ class NexoOptionsFlow(OptionsFlow):
                 OPT_THERMOMETERS: await self._resources(ImportTypes.THERMOMETER),
                 OPT_ANALOG_SENSORS: await self._resources(ImportTypes.ANALOGSENSOR),
             }
-        except NexoError:
-            return self.async_abort(reason="cannot_list")
+        except NexoError as err:
+            return self._cannot_list(err)
 
         if user_input is not None:
-            return self.async_create_entry(data={**self._options(), **user_input})
+            self._options.update(user_input)
+            return await self.async_step_menu()
 
-        options = self.config_entry.options
         schema = vol.Schema(
             {
                 # A resource renamed or removed in the central unit drops out
                 # of the defaults rather than failing validation.
                 vol.Optional(
                     key,
-                    default=[n for n in options.get(key, []) if n in names],
+                    default=[n for n in self._options.get(key, []) if n in names],
                 ): _pick_many(names)
                 for key, names in available.items()
             }
@@ -231,8 +311,8 @@ class NexoOptionsFlow(OptionsFlow):
     ) -> ConfigFlowResult:
         try:
             sensors = await self._resources(ImportTypes.SENSOR)
-        except NexoError:
-            return self.async_abort(reason="cannot_list")
+        except NexoError as err:
+            return self._cannot_list(err)
 
         errors: dict[str, str] = {}
         if user_input is not None:
@@ -241,11 +321,10 @@ class NexoOptionsFlow(OptionsFlow):
                 if error := _check_command(user_input[key]):
                     errors[key] = error
             if not errors:
-                options = self._options()
-                options.setdefault(OPT_COVERS, []).append(
+                self._options.setdefault(OPT_COVERS, []).append(
                     {ITEM_ID: uuid.uuid4().hex, **user_input}
                 )
-                return self.async_create_entry(data=options)
+                return await self.async_step_menu()
 
         schema = vol.Schema(
             {
@@ -278,11 +357,10 @@ class NexoOptionsFlow(OptionsFlow):
             if error := _check_command(user_input[ITEM_COMMAND]):
                 errors[ITEM_COMMAND] = error
             else:
-                options = self._options()
-                options.setdefault(OPT_BUTTONS, []).append(
+                self._options.setdefault(OPT_BUTTONS, []).append(
                     {ITEM_ID: uuid.uuid4().hex, **user_input}
                 )
-                return self.async_create_entry(data=options)
+                return await self.async_step_menu()
 
         schema = vol.Schema(
             {
@@ -299,12 +377,12 @@ class NexoOptionsFlow(OptionsFlow):
     async def async_step_remove(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        options = self._options()
+        options = self._options
         if user_input is not None:
             doomed = set(user_input["items"])
             for key in (OPT_COVERS, OPT_BUTTONS):
                 options[key] = [i for i in options.get(key, []) if i[ITEM_ID] not in doomed]
-            return self.async_create_entry(data=options)
+            return await self.async_step_menu()
 
         items = [
             {"value": item[ITEM_ID], "label": f"{item[ITEM_NAME]} ({kind})"}
@@ -313,7 +391,7 @@ class NexoOptionsFlow(OptionsFlow):
         ]
         schema = vol.Schema(
             {
-                vol.Required("items", default=[]): SelectSelector(
+                vol.Optional("items", default=[]): SelectSelector(
                     SelectSelectorConfig(
                         options=items, multiple=True, mode=SelectSelectorMode.LIST
                     )
@@ -326,17 +404,14 @@ class NexoOptionsFlow(OptionsFlow):
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         if user_input is not None:
-            options = self._options()
-            options[OPT_SCAN_INTERVAL] = int(user_input[OPT_SCAN_INTERVAL])
-            return self.async_create_entry(data=options)
+            self._options[OPT_SCAN_INTERVAL] = int(user_input[OPT_SCAN_INTERVAL])
+            return await self.async_step_menu()
 
         schema = vol.Schema(
             {
                 vol.Required(
                     OPT_SCAN_INTERVAL,
-                    default=self.config_entry.options.get(
-                        OPT_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL
-                    ),
+                    default=self._options.get(OPT_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
                 ): NumberSelector(
                     NumberSelectorConfig(
                         min=MIN_SCAN_INTERVAL,

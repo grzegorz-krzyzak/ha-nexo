@@ -56,6 +56,13 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
         # A single failed read is dropped and the previous value kept - it is
         # an unanswered or out-of-step reply, not a change of state. Only a
         # sweep in which nothing could be read counts as a failure.
+        if not self.resources:
+            # The LAN card drops a connection left idle for about a minute. Keep it
+            # open, so the first command after a quiet spell does not pay for
+            # a reconnect.
+            await self.hub.async_call(self.hub.client.ping)
+            return {}
+
         data = dict(self.data or {})
         failures = 0
         for name in self.resources:
@@ -67,7 +74,7 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
                 failures += 1
                 _LOGGER.debug("Skipped a failed read of %r: %s", name, err)
 
-        if self.resources and failures == len(self.resources):
+        if failures == len(self.resources):
             raise UpdateFailed("The central unit did not answer any read")
         if failures:
             _LOGGER.debug("%d of %d reads failed this sweep", failures, len(self.resources))

@@ -35,7 +35,12 @@ and restart.
 password. Port `1025` serves the remote panel with a different protocol and
 will not work.
 
-**Everything else is in the integration's options** (*Configure*):
+To change the address, port or password later, use *Reconfigure* in the
+integration's ⋮ menu. Entities are kept.
+
+**Everything else is in the integration's options** (*Configure*). Each step
+returns to the menu, and nothing is stored until *Save and close*; closing the
+dialog discards the changes.
 
 - **Choose sensors to import.** The lists come from the central unit. Each
   imported resource costs one query of about 50 ms per polling cycle.

@@ -89,7 +89,7 @@ def _remove_deselected_entities(hass: HomeAssistant, entry: NexoConfigEntry) -> 
         *(f"cover_{item[ITEM_ID]}" for item in options.get(OPT_COVERS, [])),
         *(f"button_{item[ITEM_ID]}" for item in options.get(OPT_BUTTONS, [])),
     }
-    expected = {f"{entry.unique_id}_{key}" for key in keys}
+    expected = {f"{entry.entry_id}_{key}" for key in keys}
 
     registry = er.async_get(hass)
     for entity in er.async_entries_for_config_entry(registry, entry.entry_id):

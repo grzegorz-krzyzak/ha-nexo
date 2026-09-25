@@ -7,7 +7,7 @@
         "data": {
           "host": "Adres",
           "port": "Port",
-          "password": "Hasło"
+          "password": "Hasło (PIN)"
         },
         "data_description": {
           "host": "Adres IP karty LAN.",
@@ -18,7 +18,16 @@
       "reauth_confirm": {
         "title": "Zmieniło się hasło do Nexo",
         "data": {
-          "password": "Hasło"
+          "password": "Hasło (PIN)"
+        }
+      },
+      "reconfigure": {
+        "title": "Zmiana połączenia",
+        "description": "Zostaw hasło puste, żeby zachować obecne.",
+        "data": {
+          "host": "Adres",
+          "port": "Port",
+          "password": "Hasło (PIN)"
         }
       }
     },
@@ -28,19 +37,22 @@
     },
     "abort": {
       "already_configured": "Ta centrala jest już skonfigurowana.",
-      "reauth_successful": "Hasło zaktualizowane."
+      "reauth_successful": "Hasło zaktualizowane.",
+      "reconfigure_successful": "Połączenie zaktualizowane."
     }
   },
   "options": {
     "step": {
-      "init": {
+      "menu": {
         "title": "Nexo",
+        "description": "Wejścia: {binary_sensors}, termometry: {thermometers}, wejścia analogowe: {analog_sensors}\nBramy i drzwi: {covers}\nPrzyciski: {buttons}\nOdpytywanie co {scan_interval} s\n\nZmiany zadziałają po **Zapisz i zamknij**. Zamknięcie okna je odrzuca.",
         "menu_options": {
           "resources": "Wybierz czujniki do importu",
           "add_cover": "Dodaj bramę lub drzwi",
           "add_button": "Dodaj przycisk komendy logiki",
           "remove": "Usuń bramę, drzwi lub przycisk",
-          "settings": "Ustawienia"
+          "settings": "Ustawienia",
+          "save": "Zapisz i zamknij"
         }
       },
       "resources": {
