@@ -45,8 +45,8 @@ you rename it.
 **Everything else is in the integration's options** (*Configure*), a menu that
 shows the current settings next to each item:
 
-- **Connection** - address and status: connected, not answering, or changed
-  but not saved. Also available as *Reconfigure* in the ⋮ menu.
+- **Connection** - address, port and PIN. The connection status is shown at
+  the top of the menu. Also available as *Reconfigure* in the ⋮ menu.
   Entities are kept when the address changes.
 - **Sensors** - the lists come from the central unit. Each imported resource
   costs one query of about 50 ms per polling cycle.

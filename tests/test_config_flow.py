@@ -65,7 +65,8 @@ async def test_menu_summary(hass: HomeAssistant, fake_nexo) -> None:
     ]
     placeholders = result["description_placeholders"]
     assert placeholders["address"] == "192.0.2.10:1024"
-    assert placeholders["status"] == "connected"
+    assert placeholders["alert"] == "success"
+    assert placeholders["status"] == "Connected to the central unit"
     assert placeholders["binary_sensors"] == "2"
     assert placeholders["covers"] == "Entry gate, Garage, Shed"
 
@@ -155,7 +156,7 @@ async def test_connection_from_options(hass: HomeAssistant, fake_nexo) -> None:
     await _pick(hass, flow_id, "connection")
     result = await _submit(hass, flow_id, {"host": "192.0.2.20", "port": 1024})
     assert result["description_placeholders"]["address"] == "192.0.2.20:1024"
-    assert result["description_placeholders"]["status"] == "change not saved"
+    assert result["description_placeholders"]["alert"] == "info"
     assert entry.data["host"] == "192.0.2.10"  # not before saving
 
     await _pick(hass, flow_id, "save")
@@ -205,5 +206,5 @@ async def test_menu_words_follow_the_system_language(hass: HomeAssistant, fake_n
     entry = await _setup(hass, options={})
     result = await hass.config_entries.options.async_init(entry.entry_id)
     placeholders = result["description_placeholders"]
-    assert placeholders["status"] == "połączono"
+    assert placeholders["status"] == "Połączono z centralą"
     assert placeholders["covers"] == "brak"

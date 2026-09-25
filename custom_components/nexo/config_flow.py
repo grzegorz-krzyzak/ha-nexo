@@ -301,18 +301,21 @@ class NexoOptionsFlow(OptionsFlowWithReload):
     ) -> ConfigFlowResult:
         options = self._options
         connection = self._connection or self.config_entry.data
+        # Shown in an ha-alert above the menu, which brings Home Assistant's
+        # own icon and colour for each type.
         if self._connection is not None:
-            status = self._text("unsaved")
+            alert, status = "info", "unsaved"
         elif self.config_entry.runtime_data.coordinator.last_update_success:
-            status = self._text("connected")
+            alert, status = "success", "connected"
         else:
-            status = self._text("not_answering")
+            alert, status = "warning", "not_answering"
         return self.async_show_menu(
             step_id="menu",
             menu_options=["connection", "sensors", "covers", "buttons", "settings", "save"],
             description_placeholders={
                 "address": f"{connection[CONF_HOST]}:{connection.get(CONF_PORT, DEFAULT_PORT)}",
-                "status": status,
+                "alert": alert,
+                "status": self._text(status),
                 OPT_BINARY_SENSORS: str(len(options.get(OPT_BINARY_SENSORS, []))),
                 OPT_THERMOMETERS: str(len(options.get(OPT_THERMOMETERS, []))),
                 OPT_ANALOG_SENSORS: str(len(options.get(OPT_ANALOG_SENSORS, []))),

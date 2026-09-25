@@ -58,13 +58,14 @@
           "save": "Zapisz i zamknij"
         },
         "menu_option_descriptions": {
-          "connection": "{address} · {status}",
+          "connection": "{address}",
           "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
           "settings": "Odpytywanie co {scan_interval} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany"
-        }
+        },
+        "description": "<ha-alert alert-type=\"{alert}\">{status}</ha-alert>"
       },
       "covers": {
         "title": "Bramy i drzwi",
@@ -851,9 +852,9 @@
     },
     "menu_text": {
       "options": {
-        "connected": "połączono",
-        "not_answering": "brak odpowiedzi",
-        "unsaved": "zmiana niezapisana",
+        "connected": "Połączono z centralą",
+        "not_answering": "Centrala nie odpowiada",
+        "unsaved": "Zmieniono połączenie – wybierz Zapisz i zamknij, żeby je zastosować",
         "none": "brak",
         "guarded": "tylko gdy zamknięta"
       }

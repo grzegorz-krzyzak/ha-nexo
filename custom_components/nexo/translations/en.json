@@ -58,13 +58,14 @@
           "save": "Save and close"
         },
         "menu_option_descriptions": {
-          "connection": "{address} · {status}",
+          "connection": "{address}",
           "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
           "settings": "Polling every {scan_interval} s",
           "save": "Closing the window with ✕ discards the changes"
-        }
+        },
+        "description": "<ha-alert alert-type=\"{alert}\">{status}</ha-alert>"
       },
       "covers": {
         "title": "Gates and doors",
@@ -851,9 +852,9 @@
     },
     "menu_text": {
       "options": {
-        "connected": "connected",
-        "not_answering": "not answering",
-        "unsaved": "change not saved",
+        "connected": "Connected to the central unit",
+        "not_answering": "The central unit is not answering",
+        "unsaved": "Connection changed – choose Save and close to apply it",
         "none": "none",
         "guarded": "only when closed"
       }
