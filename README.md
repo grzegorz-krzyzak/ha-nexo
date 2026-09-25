@@ -70,10 +70,10 @@ in the device info.
 ## Gates and doors
 
 The integration does not pulse outputs itself. A gate is driven by **logic
-commands**: rules in the central unit whose condition is an external command
-(*Komenda zewnętrzna*), triggered with one atomic `system logic <command>`.
-The sequence runs inside the central unit, so a client dying mid-command
-cannot leave an output energised.
+commands**: rules in the central unit whose condition is an external
+command, triggered with one atomic `system logic <command>`. The sequence runs
+inside the central unit, so a client dying mid-command cannot leave an output
+energised.
 
 Create the rules in the Nexo configurator first, then add the gate here with
 its open command, close command and - optionally - its reed switch. Without

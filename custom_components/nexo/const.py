@@ -36,7 +36,7 @@ COVER_OPEN_ONLY_WHEN_CLOSED: Final = "open_only_when_closed"
 SENSOR_INTACT: Final = 101
 SENSOR_VIOLATED: Final = 102
 
-# Logic commands ("Komenda zewnetrzna") are limited to 7 characters by the
+# Logic commands (external commands) are limited to 7 characters by the
 # NexoTalk specification.
 MAX_LOGIC_COMMAND: Final = 7
 

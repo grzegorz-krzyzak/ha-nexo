@@ -195,7 +195,7 @@
       },
       "add_cover": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition. Submit an empty form to go back.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition. Submit an empty form to go back.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -212,7 +212,7 @@
       },
       "cover_0": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -230,7 +230,7 @@
       },
       "cover_1": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -248,7 +248,7 @@
       },
       "cover_2": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -266,7 +266,7 @@
       },
       "cover_3": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -284,7 +284,7 @@
       },
       "cover_4": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -302,7 +302,7 @@
       },
       "cover_5": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -320,7 +320,7 @@
       },
       "cover_6": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -338,7 +338,7 @@
       },
       "cover_7": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -356,7 +356,7 @@
       },
       "cover_8": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -374,7 +374,7 @@
       },
       "cover_9": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -392,7 +392,7 @@
       },
       "cover_10": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -410,7 +410,7 @@
       },
       "cover_11": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -428,7 +428,7 @@
       },
       "cover_12": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -446,7 +446,7 @@
       },
       "cover_13": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -464,7 +464,7 @@
       },
       "cover_14": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -482,7 +482,7 @@
       },
       "cover_15": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -500,7 +500,7 @@
       },
       "cover_16": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -518,7 +518,7 @@
       },
       "cover_17": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -536,7 +536,7 @@
       },
       "cover_18": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",
@@ -554,7 +554,7 @@
       },
       "cover_19": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command (\"Komenda zewnętrzna\") condition.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition.",
         "data": {
           "name": "Name",
           "device_class": "Type",

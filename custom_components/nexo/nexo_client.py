@@ -563,8 +563,8 @@ class NexoClient:
 
     def trigger_logic(self, command: str) -> str:
         """
-        Send an external text command that Nexo logic can match with a
-        "Komenda zewnetrzna" condition, running a sequence defined in the
+        Send an external text command that Nexo logic can match with an
+        external command condition, running a sequence defined in the
         system itself instead of driving resources from here.
 
         Returns whatever the logic sends back to the card, empty if nothing.
