@@ -14,7 +14,7 @@ from homeassistant.config_entries import (
     ConfigEntryState,
     ConfigFlow,
     ConfigFlowResult,
-    OptionsFlow,
+    OptionsFlowWithReload,
 )
 from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT
 from homeassistant.core import HomeAssistant, callback
@@ -221,7 +221,7 @@ class NexoConfigFlow(ConfigFlow, domain=DOMAIN):
         return NexoOptionsFlow()
 
 
-class NexoOptionsFlow(OptionsFlow):
+class NexoOptionsFlow(OptionsFlowWithReload):
     """Choose which resources to import and define logic-driven entities.
 
     Every step returns to the menu, and nothing is stored until "Save and

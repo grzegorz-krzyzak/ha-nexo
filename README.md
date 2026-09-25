@@ -105,8 +105,8 @@ Replies are not tagged with the query they answer. Under load a reply can
 arrive late and be taken for the next query's answer; the client detects this
 by the resource name echoed back and resynchronises, and the integration
 treats a failed read as "no news" rather than a change of state. Resource
-listings carry no such echo, so a listing is only trusted once two
-consecutive reads agree.
+listings are checked the same way, by the type and index each entry echoes
+back.
 
 ## Credits
 

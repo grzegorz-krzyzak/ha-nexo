@@ -5,21 +5,13 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Callable
 from functools import partial
-import logging
 from typing import Any, TypeVar
 
 from homeassistant.core import HomeAssistant
 
-from .nexo_client import ImportTypes, NexoClient, NexoError
-
-_LOGGER = logging.getLogger(__name__)
+from .nexo_client import ImportTypes, NexoClient
 
 _T = TypeVar("_T")
-
-# Listing replies are not tagged with the index they answer, so a reply that
-# arrives late shifts the whole list by one without any error. A listing is
-# only trusted once two consecutive reads agree.
-_LISTING_ATTEMPTS = 4
 
 
 class NexoHub:
@@ -72,19 +64,7 @@ class NexoHub:
         """Return the resource names of one type, read once and cached."""
         if resource_type not in self._resources:
             self._resources[resource_type] = await self.async_call(
-                _stable_listing, self.client, resource_type
+                self.client.list_resources, resource_type
             )
         return self._resources[resource_type]
 
-
-def _stable_listing(client: NexoClient, resource_type: ImportTypes) -> list[str]:
-    previous: list[str] | None = None
-    for _ in range(_LISTING_ATTEMPTS):
-        current = client.list_resources(resource_type)
-        if current == previous:
-            return current
-        previous = current
-    raise NexoError(
-        f"Listing {resource_type.name} gave a different answer every time; "
-        "the reply queue keeps drifting"
-    )

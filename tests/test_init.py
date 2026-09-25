@@ -115,5 +115,6 @@ async def test_deselected_entities_are_removed(hass: HomeAssistant, fake_nexo) -
     assert registry.async_get("sensor.nexo_humidity")
 
     hass.config_entries.async_update_entry(entry, options={**OPTIONS, "analog_sensors": []})
+    await hass.config_entries.async_reload(entry.entry_id)
     await hass.async_block_till_done()
     assert registry.async_get("sensor.nexo_humidity") is None

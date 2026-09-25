@@ -57,9 +57,10 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
         # an unanswered or out-of-step reply, not a change of state. Only a
         # sweep in which nothing could be read counts as a failure.
         if not self.resources:
-            # The LAN card drops a connection left idle for about a minute. Keep it
-            # open, so the first command after a quiet spell does not pay for
-            # a reconnect.
+            # The LAN card drops a connection idle for about 20 s. Keep it
+            # open, so a button press does not pay for a reconnect. (With no
+            # entities at all there are no listeners and no polling, and the
+            # client simply reconnects on the next command.)
             await self.hub.async_call(self.hub.client.ping)
             return {}
 

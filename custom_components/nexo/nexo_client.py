@@ -163,6 +163,9 @@ class NexoClient:
     QUERY_REPLY_TIMEOUT = 2.0
     CONTROL_REPLY_TIMEOUT = 0.5
 
+    # How many times to re-ask for one list entry whose answer went astray
+    LISTING_ATTEMPTS = 3
+
     def __init__(
         self,
         host: str,
@@ -702,19 +705,10 @@ class NexoClient:
         names: List[str] = []
 
         for index in range(self.MAX_RESOURCES_PER_TYPE):
-            ack = self._command_retrying(f"system T {rtype.value} {index} ?")
-            if ack != "CMD OK":
-                raise NexoCommandError(
-                    f"Central unit rejected listing {rtype.name} at index {index}: {ack!r}"
-                )
-
-            parts = self._command_retrying("get").split(" ")
-            if len(parts) <= 3:
+            name = self._list_entry(rtype, index)
+            if name is None:
                 break  # end of the list for this type
-            # THERMOSTAT entries carry the linked thermometer and the allowed
-            # temperature range on further lines; the name is the first line.
-            lines = " ".join(parts[3:]).splitlines()
-            names.append(lines[0].strip() if lines else "")
+            names.append(name)
         else:
             log.warning(
                 "Hit the %d-resource limit for type %s - the list may be truncated",
@@ -723,6 +717,44 @@ class NexoClient:
 
         log.debug("Type %s: %d resources", rtype.name, len(names))
         return names
+
+    def _list_entry(self, rtype: ImportTypes, index: int) -> Optional[str]:
+        """
+        Return the name at one index of a type's list, or None past its end.
+
+        The central unit echoes type and index back ('~T 1 0 PIR HALL', and a
+        bare '~T 1 28' past the end), so an answer to another query can be
+        told apart. Taking the first reply on trust used to truncate lists
+        (an answer not there yet read as the end) or shift them by one (a late
+        answer read as the next entry), without any error.
+        """
+        header = f"~T {rtype.value} {index}"
+        for _ in range(self.LISTING_ATTEMPTS):
+            ack = self._command_retrying(f"system T {rtype.value} {index} ?")
+            if ack != "CMD OK":
+                raise NexoCommandError(
+                    f"Central unit rejected listing {rtype.name} at index {index}: {ack!r}"
+                )
+
+            reply = self._strip_prefix(self._await_reply(self.QUERY_REPLY_TIMEOUT))
+            if reply == header:
+                return None
+            if reply.startswith(header + " "):
+                # THERMOSTAT entries carry the linked thermometer and the
+                # allowed temperature range on further lines.
+                lines = reply[len(header) + 1:].splitlines()
+                return lines[0].strip() if lines else ""
+
+            log.debug(
+                "Listing %s at index %d got %r - resynchronising and asking again",
+                rtype.name, index, reply,
+            )
+            self._drain_queue()
+
+        raise NexoProtocolError(
+            f"No answer for {rtype.name} entry {index} after "
+            f"{self.LISTING_ATTEMPTS} attempts"
+        )
 
     def list_all_resources(
         self, skip_errors: bool = True
