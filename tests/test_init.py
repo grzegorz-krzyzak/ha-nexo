@@ -8,8 +8,9 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers import device_registry as dr, entity_registry as er
 
+from custom_components.nexo import _firmware_version
 from custom_components.nexo.const import DOMAIN
 
 OPTIONS = {
@@ -136,3 +137,25 @@ async def test_cover_without_reed_switch(hass: HomeAssistant, fake_nexo) -> None
             "cover", service, {"entity_id": "cover.nexo_shed"}, blocking=True
         )
         fake_nexo.trigger_logic.assert_called_with(command)
+
+
+async def test_device_shows_firmware(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass)
+    [device] = dr.async_entries_for_config_entry(dr.async_get(hass), entry.entry_id)
+    assert device.identifiers == {(DOMAIN, entry.entry_id)}
+    assert device.sw_version == "5.53 R1PLX1H2"
+    assert device.manufacturer == "Nexwell"
+
+
+@pytest.mark.parametrize(
+    ("info", "version"),
+    [
+        ("Nexo 5.53 R1PLX1H2. Czas dzialania: 48 dn. 5 godz. 49 min", "5.53 R1PLX1H2"),
+        ("Nexo 5.53 R1PLX1H2.", "5.53 R1PLX1H2"),
+        ("Nexo 6.0", "6.0"),
+        ("", None),
+        ("something else", None),
+    ],
+)
+def test_firmware_version_parsing(info: str, version: str | None) -> None:
+    assert _firmware_version(info) == version

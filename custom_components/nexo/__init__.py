@@ -8,11 +8,13 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT, Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
-from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers import device_registry as dr, entity_registry as er
 
 from .const import (
     DEFAULT_PORT,
+    DOMAIN,
     ITEM_ID,
+    MANUFACTURER,
     OPT_ANALOG_SENSORS,
     OPT_BINARY_SENSORS,
     OPT_BUTTONS,
@@ -57,6 +59,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: NexoConfigEntry) -> bool
         raise
 
     entry.runtime_data = NexoData(hub, coordinator)
+    await _async_register_device(hass, entry, hub)
     _remove_deselected_entities(hass, entry)
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
@@ -68,6 +71,38 @@ async def async_unload_entry(hass: HomeAssistant, entry: NexoConfigEntry) -> boo
     if unloaded:
         await entry.runtime_data.hub.async_disconnect()
     return unloaded
+
+
+async def _async_register_device(
+    hass: HomeAssistant, entry: NexoConfigEntry, hub: NexoHub
+) -> None:
+    """Create the central unit's device with its firmware version.
+
+    The version comes from the 'system' command, e.g. 'Nexo 5.53 R1PLX1H2.
+    Czas dzialania: ...'. Failing to read it only leaves the field empty.
+    """
+    try:
+        info = await hub.async_call(hub.client.system_info)
+    except NexoError:
+        info = ""
+    sw_version = _firmware_version(info)
+
+    dr.async_get(hass).async_get_or_create(
+        config_entry_id=entry.entry_id,
+        identifiers={(DOMAIN, entry.entry_id)},
+        manufacturer=MANUFACTURER,
+        model="Nexo",
+        name="Nexo",
+        sw_version=sw_version,
+    )
+
+
+def _firmware_version(info: str) -> str | None:
+    """'Nexo 5.53 R1PLX1H2. Czas dzialania: ...' -> '5.53 R1PLX1H2'."""
+    first = info.split(". ", 1)[0].rstrip(".")
+    if not first.startswith("Nexo "):
+        return None
+    return first.removeprefix("Nexo ").strip() or None
 
 
 def _remove_deselected_entities(hass: HomeAssistant, entry: NexoConfigEntry) -> None:

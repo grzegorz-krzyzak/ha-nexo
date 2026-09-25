@@ -37,6 +37,9 @@ class FakeNexo:
     def ping(self) -> bool:
         return True
 
+    def system_info(self) -> str:
+        return "Nexo 5.53 R1PLX1H2. Czas dzialania: 48 dn. 5 godz. 49 min"
+
     def get_state(self, name: str) -> int:
         return self.states[name]
 
