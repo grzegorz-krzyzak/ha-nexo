@@ -202,12 +202,14 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
-          "open_only_when_closed": "Open only when confirmed closed"
+          "open_only_when_closed": "Open only when confirmed closed",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_0": {
@@ -220,12 +222,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_1": {
@@ -238,12 +242,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_2": {
@@ -256,12 +262,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_3": {
@@ -274,12 +282,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_4": {
@@ -292,12 +302,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_5": {
@@ -310,12 +322,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_6": {
@@ -328,12 +342,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_7": {
@@ -346,12 +362,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_8": {
@@ -364,12 +382,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_9": {
@@ -382,12 +402,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_10": {
@@ -400,12 +422,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_11": {
@@ -418,12 +442,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_12": {
@@ -436,12 +462,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_13": {
@@ -454,12 +482,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_14": {
@@ -472,12 +502,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_15": {
@@ -490,12 +522,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_16": {
@@ -508,12 +542,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_17": {
@@ -526,12 +562,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_18": {
@@ -544,12 +582,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "cover_19": {
@@ -562,12 +602,14 @@
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
           "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door"
+          "delete": "Delete this gate or door",
+          "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted."
+          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
+          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
       },
       "add_button": {
@@ -838,7 +880,8 @@
       "command_empty": "The command must not be empty.",
       "command_too_long": "Logic commands are at most 7 characters.",
       "guard_needs_reed_sensor": "Needs a reed switch to check.",
-      "required": "Required."
+      "required": "Required.",
+      "step_needs_unguarded": "The Step button needs \"Open only when confirmed closed\" off: it stops a moving gate with the opposite command."
     },
     "abort": {
       "cannot_list": "Cannot read the resource list from the central unit.",
@@ -858,6 +901,11 @@
     "binary_sensor": {
       "connection": {
         "name": "Connection to central unit"
+      }
+    },
+    "button": {
+      "step": {
+        "name": "{name} step"
       }
     }
   }

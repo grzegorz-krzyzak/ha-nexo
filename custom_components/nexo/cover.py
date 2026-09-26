@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import time
 from typing import Any
 
 from homeassistant.components.cover import (
@@ -29,6 +30,7 @@ from .const import (
 )
 from .coordinator import NexoCoordinator
 from .entity import NexoEntity
+from .motion import Motion, step
 from .nexo_client import NexoClient, NexoError
 
 _LOGGER = logging.getLogger(__name__)
@@ -39,9 +41,10 @@ async def async_setup_entry(
     entry: NexoConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    coordinator = entry.runtime_data.coordinator
+    data = entry.runtime_data
     async_add_entities(
-        NexoLogicCover(coordinator, item) for item in entry.options.get(OPT_COVERS, [])
+        NexoLogicCover(data.coordinator, item, data.motions.get(item[ITEM_ID]))
+        for item in entry.options.get(OPT_COVERS, [])
     )
 
 
@@ -77,8 +80,15 @@ class NexoLogicCover(NexoEntity, CoverEntity):
 
     _attr_supported_features = CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE
 
-    def __init__(self, coordinator: NexoCoordinator, item: dict[str, Any]) -> None:
+    def __init__(
+        self,
+        coordinator: NexoCoordinator,
+        item: dict[str, Any],
+        motion: Motion | None,
+    ) -> None:
         super().__init__(coordinator, f"cover_{item[ITEM_ID]}", item[ITEM_NAME])
+        self._item = item
+        self._motion = motion
         self._open_command: str = item[COVER_OPEN_COMMAND]
         self._close_command: str = item[COVER_CLOSE_COMMAND]
         # Optional: without a reed switch the state is simply unknown.
@@ -121,6 +131,8 @@ class NexoLogicCover(NexoEntity, CoverEntity):
             raise HomeAssistantError(
                 f"{self.name} was not opened: {err}"
             ) from err
+        if self._motion:
+            self._motion.record("up", time.monotonic())
         await self.coordinator.async_request_refresh()
 
     async def async_close_cover(self, **kwargs: Any) -> None:
@@ -132,4 +144,33 @@ class NexoLogicCover(NexoEntity, CoverEntity):
             await hub.async_call(hub.client.trigger_logic, self._close_command)
         except NexoError as err:
             raise HomeAssistantError(f"{self.name} was not closed: {err}") from err
+        if self._motion:
+            self._motion.record("down", time.monotonic())
         await self.coordinator.async_request_refresh()
+
+    async def async_toggle(self, **kwargs: Any) -> None:
+        # With a travel time set, toggle behaves like the remote: up, stop,
+        # down, stop. Home Assistant's own toggle always closes a gate that
+        # is not closed, so after stopping it on the way down no press could
+        # send it back up.
+        if self._motion is None:
+            await super().async_toggle(**kwargs)
+            return
+        await async_step(self, self._item, self._motion)
+
+
+async def async_step(entity: NexoEntity, item: dict[str, Any], motion: Motion) -> None:
+    """Run one remote-style step of the gate described by item."""
+    hub = entity.coordinator.hub
+    try:
+        await hub.async_call(
+            step,
+            hub.client,
+            motion,
+            item.get(COVER_REED_SENSOR),
+            item[COVER_OPEN_COMMAND],
+            item[COVER_CLOSE_COMMAND],
+        )
+    except NexoError as err:
+        raise HomeAssistantError(f"{entity.name}: command not sent: {err}") from err
+    await entity.coordinator.async_request_refresh()

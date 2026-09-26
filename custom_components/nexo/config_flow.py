@@ -38,6 +38,7 @@ from .const import (
     COVER_OPEN_COMMAND,
     COVER_OPEN_ONLY_WHEN_CLOSED,
     COVER_REED_SENSOR,
+    COVER_TRAVEL_TIME,
     DEFAULT_PORT,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
@@ -177,6 +178,8 @@ def _cover_summary(item: dict[str, Any]) -> str:
     parts = [f"{item[COVER_OPEN_COMMAND]} / {item[COVER_CLOSE_COMMAND]}"]
     if item.get(COVER_REED_SENSOR):
         parts.append(item[COVER_REED_SENSOR])
+    if item.get(COVER_TRAVEL_TIME):
+        parts.append(f"{item[COVER_TRAVEL_TIME]:g} s")
     return " · ".join(parts)
 
 
@@ -507,6 +510,12 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 COVER_REED_SENSOR
             ):
                 errors[COVER_OPEN_ONLY_WHEN_CLOSED] = "guard_needs_reed_sensor"
+            if not user_input.get(COVER_TRAVEL_TIME):
+                user_input.pop(COVER_TRAVEL_TIME, None)
+            elif user_input[COVER_OPEN_ONLY_WHEN_CLOSED]:
+                # Stepping stops a moving gate with the opposite command,
+                # which the guard would refuse on the way down.
+                errors[COVER_TRAVEL_TIME] = "step_needs_unguarded"
             if not errors:
                 if index is None:
                     covers.append({ITEM_ID: uuid.uuid4().hex, **user_input})
@@ -529,6 +538,12 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             vol.Optional(COVER_CLOSE_COMMAND): TextSelector(),
             vol.Optional(COVER_REED_SENSOR): _pick_one(sensors),
             vol.Required(COVER_OPEN_ONLY_WHEN_CLOSED, default=False): BooleanSelector(),
+            vol.Optional(COVER_TRAVEL_TIME): NumberSelector(
+                NumberSelectorConfig(
+                    min=1, max=600, step=1, unit_of_measurement="s",
+                    mode=NumberSelectorMode.BOX,
+                )
+            ),
         }
         if index is not None:
             fields[vol.Optional("delete", default=False)] = BooleanSelector()

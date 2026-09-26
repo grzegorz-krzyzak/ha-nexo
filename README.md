@@ -101,6 +101,22 @@ Things worth knowing:
   changing does - within a few seconds for opening, after the full travel time
   for closing.
 
+### Step button
+
+A drive with separate up and down inputs stops when it gets the opposite
+command while moving - that is how a remote does *up, stop, down, stop*. Home
+Assistant's toggle cannot do that: it always closes a gate that is not closed,
+and dashboard or car widgets often just alternate open and close.
+
+Set a **travel time** on the gate - its full travel time plus a margin for
+communication - and it gets a **Step** button that works like the remote,
+and its toggle does the same. The integration remembers the direction and
+start of the last movement; after the travel time it assumes the gate has
+stopped, and the reed switch reading closed resets the cycle. A remote or
+another app used in between is not seen, so one press may fall out of step;
+the next closed reading puts it right. Not available together with *Open only
+when confirmed closed*, which would refuse the stop on the way down.
+
 A door strike behind a logic rule is best added as a **button**: the strike
 pulse is over before the command returns, and the reed switch does not change
 until someone pushes the door, so there is nothing to report but "sent".

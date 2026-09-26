@@ -202,12 +202,14 @@
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu"
+          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_0": {
@@ -220,12 +222,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_1": {
@@ -238,12 +242,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_2": {
@@ -256,12 +262,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_3": {
@@ -274,12 +282,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_4": {
@@ -292,12 +302,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_5": {
@@ -310,12 +322,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_6": {
@@ -328,12 +342,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_7": {
@@ -346,12 +362,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_8": {
@@ -364,12 +382,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_9": {
@@ -382,12 +402,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_10": {
@@ -400,12 +422,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_11": {
@@ -418,12 +442,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_12": {
@@ -436,12 +462,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_13": {
@@ -454,12 +482,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_14": {
@@ -472,12 +502,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_15": {
@@ -490,12 +522,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_16": {
@@ -508,12 +542,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_17": {
@@ -526,12 +562,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_18": {
@@ -544,12 +582,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "cover_19": {
@@ -562,12 +602,14 @@
           "close_command": "Komenda zamknięcia",
           "reed_sensor": "Kontaktron",
           "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi"
+          "delete": "Usuń tę bramę lub drzwi",
+          "travel_time": "Czas przejazdu (przycisk Krok)"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane."
+          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
+          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
         }
       },
       "add_button": {
@@ -838,7 +880,8 @@
       "command_empty": "Komenda nie może być pusta.",
       "command_too_long": "Komendy logiki mają najwyżej 7 znaków.",
       "guard_needs_reed_sensor": "Wymaga kontaktronu, żeby było co sprawdzić.",
-      "required": "Pole wymagane."
+      "required": "Pole wymagane.",
+      "step_needs_unguarded": "Przycisk Krok wymaga wyłączenia „Otwieraj tylko przy potwierdzonym zamknięciu”: zatrzymuje jadącą bramę przeciwną komendą."
     },
     "abort": {
       "cannot_list": "Nie można pobrać listy zasobów z centrali.",
@@ -858,6 +901,11 @@
     "binary_sensor": {
       "connection": {
         "name": "Połączenie z centralą"
+      }
+    },
+    "button": {
+      "step": {
+        "name": "{name} – krok"
       }
     }
   }

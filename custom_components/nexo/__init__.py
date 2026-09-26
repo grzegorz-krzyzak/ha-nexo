@@ -13,6 +13,7 @@ from homeassistant.helpers import device_registry as dr, entity_registry as er
 from .const import (
     DEFAULT_PORT,
     DOMAIN,
+    COVER_TRAVEL_TIME,
     ITEM_ID,
     MANUFACTURER,
     entry_title,
@@ -24,6 +25,7 @@ from .const import (
     OPT_THERMOMETERS,
 )
 from .coordinator import NexoCoordinator
+from .motion import Motion
 from .hub import NexoHub
 from .nexo_client import NexoAuthError, NexoError
 
@@ -34,6 +36,8 @@ PLATFORMS = [Platform.BINARY_SENSOR, Platform.BUTTON, Platform.COVER, Platform.S
 class NexoData:
     hub: NexoHub
     coordinator: NexoCoordinator
+    # Per gate with a travel time: shared by its cover and its Step button
+    motions: dict[str, Motion]
 
 
 NexoConfigEntry = ConfigEntry[NexoData]
@@ -60,7 +64,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: NexoConfigEntry) -> bool
         await hub.async_disconnect()
         raise
 
-    entry.runtime_data = NexoData(hub, coordinator)
+    motions = {
+        item[ITEM_ID]: Motion(travel_time=item[COVER_TRAVEL_TIME])
+        for item in entry.options.get(OPT_COVERS, [])
+        if item.get(COVER_TRAVEL_TIME)
+    }
+    entry.runtime_data = NexoData(hub, coordinator, motions)
     await _async_register_device(hass, entry, hub)
     _remove_deselected_entities(hass, entry)
 
@@ -120,6 +129,11 @@ def _remove_deselected_entities(hass: HomeAssistant, entry: NexoConfigEntry) -> 
         *(f"thermometer_{name}" for name in options.get(OPT_THERMOMETERS, [])),
         *(f"analog_{name}" for name in options.get(OPT_ANALOG_SENSORS, [])),
         *(f"cover_{item[ITEM_ID]}" for item in options.get(OPT_COVERS, [])),
+        *(
+            f"step_{item[ITEM_ID]}"
+            for item in options.get(OPT_COVERS, [])
+            if item.get(COVER_TRAVEL_TIME)
+        ),
         *(f"button_{item[ITEM_ID]}" for item in options.get(OPT_BUTTONS, [])),
     }
     expected = {f"{entry.entry_id}_{key}" for key in keys}

@@ -29,6 +29,8 @@ COVER_OPEN_COMMAND: Final = "open_command"
 COVER_CLOSE_COMMAND: Final = "close_command"
 COVER_REED_SENSOR: Final = "reed_sensor"
 COVER_OPEN_ONLY_WHEN_CLOSED: Final = "open_only_when_closed"
+# Full travel time plus a margin, in seconds; set, it enables the Step button
+COVER_TRAVEL_TIME: Final = "travel_time"
 
 # A reed switch (SENSOR) reads 101 when intact - for a door or gate, closed -
 # and 102 when violated. Nothing else is distinguishable: open, ajar and in

@@ -35,6 +35,7 @@ OPTIONS = {
             "close_command": "GGC",
             "reed_sensor": "KON DOOR",
             "open_only_when_closed": False,
+            "travel_time": 27,
         },
         {
             "id": "shed",
@@ -210,3 +211,34 @@ async def test_reload_after_failed_cycles(hass: HomeAssistant, fake_nexo, freeze
             async_fire_time_changed(hass)
             await hass.async_block_till_done()
     reload.assert_called_once_with(entry.entry_id)
+
+
+async def test_step_button_cycles_like_a_remote(hass: HomeAssistant, fake_nexo) -> None:
+    from unittest.mock import patch
+
+    await _setup(hass)
+    clock = iter([0.0, 10.0, 15.0, 20.0])
+    entity_id = "button.nexo_garage_step"
+    assert hass.states.get(entity_id)
+    with patch("custom_components.nexo.motion.monotonic", side_effect=lambda: next(clock)):
+        for expected, reed in (("GGO", 101), ("GGC", 102), ("GGC", 102), ("GGO", 102)):
+            fake_nexo.states["KON DOOR"] = reed
+            await hass.services.async_call("button", "press", {"entity_id": entity_id}, blocking=True)
+            assert fake_nexo.trigger_logic.call_args.args == (expected,)
+
+
+async def test_toggle_steps_when_travel_time_is_set(hass: HomeAssistant, fake_nexo) -> None:
+    await _setup(hass)
+    fake_nexo.states["KON DOOR"] = 101
+    await hass.services.async_call("cover", "toggle", {"entity_id": "cover.nexo_garage"}, blocking=True)
+    fake_nexo.trigger_logic.assert_called_with("GGO")
+    fake_nexo.states["KON DOOR"] = 102
+    await hass.services.async_call("cover", "toggle", {"entity_id": "cover.nexo_garage"}, blocking=True)
+    fake_nexo.trigger_logic.assert_called_with("GGC")  # stop
+    await hass.services.async_call("cover", "toggle", {"entity_id": "cover.nexo_garage"}, blocking=True)
+    fake_nexo.trigger_logic.assert_called_with("GGC")  # down
+
+
+async def test_no_step_button_without_travel_time(hass: HomeAssistant, fake_nexo) -> None:
+    await _setup(hass)
+    assert hass.states.get("button.nexo_entry_gate_step") is None

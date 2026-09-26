@@ -86,6 +86,8 @@ async def test_add_edit_and_delete_cover(hass: HomeAssistant, fake_nexo) -> None
     no_reed = {k: v for k, v in GATE.items() if k != "reed_sensor"}
     result = await _submit(hass, flow_id, no_reed)
     assert result["errors"] == {"open_only_when_closed": "guard_needs_reed_sensor"}
+    result = await _submit(hass, flow_id, {**GATE, "travel_time": 27})
+    assert result["errors"] == {"travel_time": "step_needs_unguarded"}
     result = await _submit(hass, flow_id, GATE)
     assert result["type"] is FlowResultType.MENU
     assert result["menu_options"] == ["cover_0", "add_cover", "back"]
