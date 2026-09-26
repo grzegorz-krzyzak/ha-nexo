@@ -25,11 +25,17 @@ class FakeNexo:
             "TMP HALL": 233,
             "TMP OUTSIDE": 0xFFEC,  # -2.0 as a signed 16-bit value
             "HUMIDITY": 55,
+            "S1": 0,
+            "S2": 0,
+            "S7": 0,
+            "ZG": 0,
         }
         self.listing: dict[ImportTypes, list[str]] = {
             ImportTypes.SENSOR: ["KON DOOR", "KON GATE", "PIR HALL"],
             ImportTypes.THERMOMETER: ["TMP HALL", "TMP OUTSIDE"],
             ImportTypes.ANALOGSENSOR: ["HUMIDITY"],
+            ImportTypes.OUTPUT: ["S1", "S2", "S7"],
+            ImportTypes.LIGHT: ["ZG"],
         }
         self.trigger_logic = MagicMock(return_value="")
         self.disconnect = MagicMock()

@@ -55,6 +55,10 @@ from .const import (
     OPT_COVERS,
     OPT_SCAN_INTERVAL,
     OPT_THERMOMETERS,
+    OPT_VALVES,
+    VALVE_AUTO_CLOSE,
+    VALVE_MAIN,
+    VALVE_SECTIONS,
     entry_title,
     is_default_title,
 )
@@ -93,12 +97,18 @@ REAUTH_SCHEMA = vol.Schema({vol.Required(CONF_PASSWORD): PASSWORD_SELECTOR})
 
 COVER_DEVICE_CLASSES = ["gate", "garage", "door"]
 
-# The frontend formats translations as ICU messages, where <...> is a tag
-# without attributes - so an ha-alert written into a translation fails with
-# INVALID_TAG. Its opening and closing tags are passed in as placeholder
-# values instead, which are not parsed. The words stay in the translation and
-# pick the state with ICU "select", so they follow the user's language.
-NONE = "__none__"
+# Translations are read twice, and each reader rejects something:
+# - the frontend formats them as ICU messages, where <...> is a tag without
+#   attributes, so an ha-alert written into a translation fails with
+#   INVALID_TAG - its tags come in as placeholder values instead;
+# - the backend validates them with Python's string.Formatter, which rejects
+#   ICU select and plural - so a word that depends on the state cannot be
+#   picked inside a translation. The menu comes in one variant per
+#   connection state instead, each with plain text in the user's language.
+NONE = "—"
+
+MENU_STEPS = {"connected": "menu", "not_answering": "menu_offline", "unsaved": "menu_unsaved"}
+ALERT_TYPES = {"connected": "success", "not_answering": "warning", "unsaved": "info"}
 
 
 def _check_login(host: str, port: int, password: str) -> None:
@@ -172,6 +182,22 @@ def _pick_one(names: list[str]) -> SelectSelector:
     return SelectSelector(
         SelectSelectorConfig(options=names, sort=True, mode=SelectSelectorMode.DROPDOWN)
     )
+
+
+def _sections_summary(sections: list[str]) -> str:
+    """'NAWODNIENIE S1 … S6' rather than six full names, without words that
+    would need translating."""
+    if len(sections) <= 1:
+        return "".join(sections)
+    prefix = ""
+    first = sections[0]
+    if " " in first:
+        candidate = first.rsplit(" ", 1)[0] + " "
+        if all(s.startswith(candidate) for s in sections):
+            prefix = candidate
+    rest = [s[len(prefix):] for s in sections]
+    joined = f"{rest[0]} … {rest[-1]}" if len(rest) > 2 else ", ".join(rest)
+    return prefix + joined
 
 
 def _cover_summary(item: dict[str, Any]) -> str:
@@ -280,9 +306,9 @@ class NexoOptionsFlow(OptionsFlowWithReload):
     close" - closing the dialog discards the changes. Home Assistant forms
     have no back button, so menus carry a "Back" entry instead.
 
-    Each gate and button gets its own menu entry, which needs a step per
-    entry: cover_0 ... cover_19 and button_0 ... button_19 are generated
-    below the class.
+    Each gate, valve and button gets its own menu entry, which needs a step
+    per entry: cover_0 ... cover_19, valve_0 ... valve_19 and button_0 ...
+    button_19 are generated below the class.
     """
 
     def __init__(self) -> None:
@@ -314,19 +340,20 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         # Shown in an ha-alert above the menu, which brings Home Assistant's
         # own icon and colour for each type.
         if self._connection is not None:
-            alert, status = "info", "unsaved"
+            status = "unsaved"
         elif self.config_entry.runtime_data.coordinator.last_update_success:
-            alert, status = "success", "connected"
+            status = "connected"
         else:
-            alert, status = "warning", "not_answering"
+            status = "not_answering"
         return self.async_show_menu(
-            step_id="menu",
-            menu_options=["connection", "sensors", "covers", "buttons", "settings", "save"],
+            step_id=MENU_STEPS[status],
+            menu_options=[
+                "connection", "sensors", "covers", "valves", "buttons", "settings", "save"
+            ],
             description_placeholders={
                 "address": f"{connection[CONF_HOST]}:{connection.get(CONF_PORT, DEFAULT_PORT)}",
-                "alert_open": f'<ha-alert alert-type="{alert}">',
+                "alert_open": f'<ha-alert alert-type="{ALERT_TYPES[status]}">',
                 "alert_close": "</ha-alert>",
-                "status": status,
                 OPT_BINARY_SENSORS: str(len(options.get(OPT_BINARY_SENSORS, []))),
                 OPT_THERMOMETERS: str(len(options.get(OPT_THERMOMETERS, []))),
                 OPT_ANALOG_SENSORS: str(len(options.get(OPT_ANALOG_SENSORS, []))),
@@ -334,11 +361,18 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 or NONE,
                 OPT_BUTTONS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_BUTTONS, []))
                 or NONE,
+                OPT_VALVES: ", ".join(i[ITEM_NAME] for i in options.get(OPT_VALVES, []))
+                or NONE,
                 OPT_SCAN_INTERVAL: str(
                     options.get(OPT_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
                 ),
             },
         )
+
+    # The variants of the main menu - Home Assistant needs a step for every
+    # step id it shows.
+    async_step_menu_offline = async_step_menu
+    async_step_menu_unsaved = async_step_menu
 
     async def async_step_back(
         self, user_input: dict[str, Any] | None = None
@@ -357,9 +391,6 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         for i, item in enumerate(covers):
             placeholders[f"cover_{i}"] = item[ITEM_NAME]
             placeholders[f"cover_{i}_info"] = _cover_summary(item)
-            placeholders[f"cover_{i}_guard"] = (
-                "yes" if item[COVER_OPEN_ONLY_WHEN_CLOSED] else "no"
-            )
         return self.async_show_menu(
             step_id="covers", menu_options=menu, description_placeholders=placeholders
         )
@@ -378,6 +409,25 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             placeholders[f"button_{i}_info"] = item[ITEM_COMMAND]
         return self.async_show_menu(
             step_id="buttons", menu_options=menu, description_placeholders=placeholders
+        )
+
+    async def async_step_valves(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        valves = self._options.get(OPT_VALVES, [])
+        menu = [f"valve_{i}" for i in range(len(valves))]
+        if len(valves) < MAX_ITEMS:
+            menu.append("add_valve")
+        menu.append("back")
+        placeholders: dict[str, str] = {}
+        for i, item in enumerate(valves):
+            placeholders[f"valve_{i}"] = item[ITEM_NAME]
+            info = f"{item[COVER_OPEN_COMMAND]} / {item[COVER_CLOSE_COMMAND]}"
+            if item.get(VALVE_SECTIONS):
+                info += f" · {_sections_summary(item[VALVE_SECTIONS])}"
+            placeholders[f"valve_{i}_info"] = info
+        return self.async_show_menu(
+            step_id="valves", menu_options=menu, description_placeholders=placeholders
         )
 
     async def async_step_save(
@@ -557,6 +607,89 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             errors=errors,
         )
 
+    # ---------------------------------------------------------------- valves
+
+    async def async_step_add_valve(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        return await self._valve_form("add_valve", None, user_input)
+
+    async def _async_step_edit_valve(
+        self, index: int, user_input: dict[str, Any] | None
+    ) -> ConfigFlowResult:
+        if index >= len(self._options.get(OPT_VALVES, [])):
+            return await self.async_step_valves()
+        return await self._valve_form(f"valve_{index}", index, user_input)
+
+    async def _valve_form(
+        self, step_id: str, index: int | None, user_input: dict[str, Any] | None
+    ) -> ConfigFlowResult:
+        try:
+            outputs = sorted(
+                {
+                    *await self._resources(ImportTypes.OUTPUT),
+                    *await self._resources(ImportTypes.LIGHT),
+                }
+            )
+        except NexoError as err:
+            return self._cannot_list(err)
+
+        valves = self._options.setdefault(OPT_VALVES, [])
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            if user_input.pop("delete", False) and index is not None:
+                del valves[index]
+                return await self.async_step_valves()
+            if index is None and _is_empty(
+                user_input, ITEM_NAME, COVER_OPEN_COMMAND, COVER_CLOSE_COMMAND
+            ):
+                return await self.async_step_valves()
+            user_input[ITEM_NAME] = user_input.get(ITEM_NAME, "").strip()
+            if not user_input[ITEM_NAME]:
+                errors[ITEM_NAME] = "required"
+            for key in (COVER_OPEN_COMMAND, COVER_CLOSE_COMMAND):
+                user_input[key] = user_input.get(key, "").strip()
+                if error := _check_command(user_input[key]):
+                    errors[key] = error
+            if user_input.get(VALVE_MAIN) in user_input.get(VALVE_SECTIONS, []):
+                errors[VALVE_MAIN] = "main_valve_is_a_section"
+            for key in (VALVE_SECTIONS, VALVE_MAIN, VALVE_AUTO_CLOSE):
+                if not user_input.get(key):
+                    user_input.pop(key, None)
+            if not errors:
+                if index is None:
+                    valves.append({ITEM_ID: uuid.uuid4().hex, **user_input})
+                else:
+                    valves[index] = {ITEM_ID: valves[index][ITEM_ID], **user_input}
+                return await self.async_step_valves()
+
+        # Optional in the schema so that an empty form can mean "back";
+        # required fields are checked above.
+        fields: dict[Any, Any] = {
+            vol.Optional(ITEM_NAME): TextSelector(),
+            vol.Optional(COVER_OPEN_COMMAND): TextSelector(),
+            vol.Optional(COVER_CLOSE_COMMAND): TextSelector(),
+            vol.Optional(VALVE_SECTIONS): _pick_many(outputs),
+            vol.Optional(VALVE_MAIN): _pick_one(outputs),
+            vol.Optional(VALVE_AUTO_CLOSE): NumberSelector(
+                NumberSelectorConfig(
+                    min=1, max=720, step=1, unit_of_measurement="min",
+                    mode=NumberSelectorMode.BOX,
+                )
+            ),
+        }
+        if index is not None:
+            fields[vol.Optional("delete", default=False)] = BooleanSelector()
+        if user_input is not None:
+            suggested = user_input
+        else:
+            suggested = valves[index] if index is not None else None
+        return self.async_show_form(
+            step_id=step_id,
+            data_schema=self.add_suggested_values_to_schema(vol.Schema(fields), suggested),
+            errors=errors,
+        )
+
     # --------------------------------------------------------------- buttons
 
     async def async_step_add_button(
@@ -656,5 +789,5 @@ def _edit_step(kind: str, index: int) -> _Step:
 
 
 for _index in range(MAX_ITEMS):
-    for _kind in ("cover", "button"):
+    for _kind in ("cover", "valve", "button"):
         setattr(NexoOptionsFlow, f"async_step_{_kind}_{_index}", _edit_step(_kind, _index))

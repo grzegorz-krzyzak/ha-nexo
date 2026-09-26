@@ -18,6 +18,7 @@ OPT_THERMOMETERS: Final = "thermometers"
 OPT_ANALOG_SENSORS: Final = "analog_sensors"
 OPT_COVERS: Final = "covers"
 OPT_BUTTONS: Final = "buttons"
+OPT_VALVES: Final = "valves"
 OPT_SCAN_INTERVAL: Final = "scan_interval"
 
 # Keys of a configured cover or button
@@ -31,6 +32,12 @@ COVER_REED_SENSOR: Final = "reed_sensor"
 COVER_OPEN_ONLY_WHEN_CLOSED: Final = "open_only_when_closed"
 # Full travel time plus a margin, in seconds; set, it enables the Step button
 COVER_TRAVEL_TIME: Final = "travel_time"
+
+# Keys of a configured valve; its commands use COVER_OPEN_COMMAND and
+# COVER_CLOSE_COMMAND like a gate's.
+VALVE_SECTIONS: Final = "sections"
+VALVE_MAIN: Final = "main_valve"
+VALVE_AUTO_CLOSE: Final = "auto_close"  # minutes
 
 # A reed switch (SENSOR) reads 101 when intact - for a door or gate, closed -
 # and 102 when violated. Nothing else is distinguishable: open, ajar and in

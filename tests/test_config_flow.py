@@ -64,12 +64,12 @@ async def test_menu_summary(hass: HomeAssistant, fake_nexo) -> None:
     result = await hass.config_entries.options.async_init(entry.entry_id)
     assert result["type"] is FlowResultType.MENU
     assert result["menu_options"] == [
-        "connection", "sensors", "covers", "buttons", "settings", "save"
+        "connection", "sensors", "covers", "valves", "buttons", "settings", "save"
     ]
     placeholders = result["description_placeholders"]
     assert placeholders["address"] == "192.0.2.10:1024"
+    assert result["step_id"] == "menu"
     assert placeholders["alert_open"] == '<ha-alert alert-type="success">'
-    assert placeholders["status"] == "connected"
     assert placeholders["binary_sensors"] == "2"
     assert placeholders["covers"] == "Entry gate, Garage, Shed"
 
@@ -92,7 +92,6 @@ async def test_add_edit_and_delete_cover(hass: HomeAssistant, fake_nexo) -> None
     assert result["type"] is FlowResultType.MENU
     assert result["menu_options"] == ["cover_0", "add_cover", "back"]
     assert result["description_placeholders"]["cover_0_info"] == "GO / GC · KON GATE"
-    assert result["description_placeholders"]["cover_0_guard"] == "yes"
 
     # Edit: the form comes prefilled, the change keeps the entity's id
     result = await _pick(hass, flow_id, "cover_0")
@@ -162,7 +161,7 @@ async def test_connection_from_options(hass: HomeAssistant, fake_nexo) -> None:
     await _pick(hass, flow_id, "connection")
     result = await _submit(hass, flow_id, {"host": "192.0.2.20", "port": 1024})
     assert result["description_placeholders"]["address"] == "192.0.2.20:1024"
-    assert result["description_placeholders"]["status"] == "unsaved"
+    assert result["step_id"] == "menu_unsaved"
     assert entry.data["host"] == "192.0.2.10"  # not before saving
 
     await _pick(hass, flow_id, "save")
@@ -210,8 +209,8 @@ async def test_reconfigure_keeps_entities(hass: HomeAssistant, fake_nexo) -> Non
 async def test_empty_menu_lists(hass: HomeAssistant, fake_nexo) -> None:
     entry = await _setup(hass, options={})
     result = await hass.config_entries.options.async_init(entry.entry_id)
-    assert result["description_placeholders"]["covers"] == "__none__"
-    assert result["description_placeholders"]["buttons"] == "__none__"
+    assert result["description_placeholders"]["covers"] == "—"
+    assert result["description_placeholders"]["buttons"] == "—"
 
 
 async def test_forms_lead_back(hass: HomeAssistant, fake_nexo) -> None:
@@ -226,7 +225,7 @@ async def test_forms_lead_back(hass: HomeAssistant, fake_nexo) -> None:
         )
     validate.assert_not_called()
     assert result["step_id"] == "menu"
-    assert result["description_placeholders"]["status"] == "connected"
+    assert result["step_id"] == "menu"
 
     # An empty add form: back to the submenu, nothing added
     await _pick(hass, flow_id, "covers")
@@ -264,3 +263,49 @@ async def test_pin_is_masked_not_sent(hass: HomeAssistant, fake_nexo) -> None:
     await _pick(hass, flow_id, "save")
     await hass.async_block_till_done()
     assert entry.data["password"] == "new"
+
+
+async def test_add_and_edit_valve(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass, options={})
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await _pick(hass, flow_id, "valves")
+    await _pick(hass, flow_id, "add_valve")
+    lawn = {
+        "name": "Lawn", "open_command": "PST", "close_command": "PPR",
+        "sections": ["S1", "S2"], "main_valve": "S1",
+    }
+    result = await _submit(hass, flow_id, lawn)
+    assert result["errors"] == {"main_valve": "main_valve_is_a_section"}
+    result = await _submit(hass, flow_id, {**lawn, "main_valve": "ZG"})
+    assert result["menu_options"] == ["valve_0", "add_valve", "back"]
+    assert result["description_placeholders"] == {
+        "valve_0": "Lawn", "valve_0_info": "PST / PPR · S1, S2"
+    }
+    result = await _pick(hass, flow_id, "valve_0")
+    assert result["step_id"] == "valve_0"
+    await _submit(hass, flow_id, {**lawn, "main_valve": "ZG", "auto_close": 20})
+    await _pick(hass, flow_id, "back")
+    await _pick(hass, flow_id, "save")
+    await hass.async_block_till_done()
+    assert entry.options["valves"][0]["auto_close"] == 20
+    assert hass.states.get("valve.nexo_lawn").state == "closed"
+
+
+def test_sections_summary() -> None:
+    from custom_components.nexo.config_flow import _sections_summary
+
+    six = [f"NAWODNIENIE S{i}" for i in range(1, 7)]
+    assert _sections_summary(six) == "NAWODNIENIE S1 … S6"
+    assert _sections_summary(["NAWODNIENIE S7", "NAWODNIENIE S8"]) == "NAWODNIENIE S7, S8"
+    assert _sections_summary(["PUMP"]) == "PUMP"
+    assert _sections_summary(["A 1", "B 2", "C 3"]) == "A 1 … C 3"
+
+
+async def test_menu_variant_when_not_answering(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass)
+    entry.runtime_data.coordinator.last_update_success = False
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    assert result["step_id"] == "menu_offline"
+    assert result["description_placeholders"]["alert_open"] == '<ha-alert alert-type="warning">'
+    result = await _pick(hass, result["flow_id"], "settings")
+    assert result["step_id"] == "settings"

@@ -23,13 +23,20 @@ from .const import (
     OPT_BUTTONS,
     OPT_COVERS,
     OPT_THERMOMETERS,
+    OPT_VALVES,
 )
 from .coordinator import NexoCoordinator
 from .motion import Motion
 from .hub import NexoHub
 from .nexo_client import NexoAuthError, NexoError
 
-PLATFORMS = [Platform.BINARY_SENSOR, Platform.BUTTON, Platform.COVER, Platform.SENSOR]
+PLATFORMS = [
+    Platform.BINARY_SENSOR,
+    Platform.BUTTON,
+    Platform.COVER,
+    Platform.SENSOR,
+    Platform.VALVE,
+]
 
 
 @dataclass
@@ -135,6 +142,7 @@ def _remove_deselected_entities(hass: HomeAssistant, entry: NexoConfigEntry) -> 
             if item.get(COVER_TRAVEL_TIME)
         ),
         *(f"button_{item[ITEM_ID]}" for item in options.get(OPT_BUTTONS, [])),
+        *(f"valve_{item[ITEM_ID]}" for item in options.get(OPT_VALVES, [])),
     }
     expected = {f"{entry.entry_id}_{key}" for key in keys}
 

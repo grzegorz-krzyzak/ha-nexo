@@ -54,6 +54,7 @@
           "connection": "Connection",
           "sensors": "Sensors",
           "covers": "Gates and doors",
+          "valves": "Valves",
           "buttons": "Buttons",
           "settings": "Settings",
           "save": "Save and close"
@@ -61,12 +62,57 @@
         "menu_option_descriptions": {
           "connection": "{address}",
           "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
-          "covers": "{covers, select, __none__ {none} other {{covers}}}",
-          "buttons": "{buttons, select, __none__ {none} other {{buttons}}}",
+          "covers": "{covers}",
+          "buttons": "{buttons}",
           "settings": "Polling every {scan_interval} s",
-          "save": "Closing the window with ✕ discards the changes"
+          "save": "Closing the window with ✕ discards the changes",
+          "valves": "{valves}"
         },
-        "description": "{alert_open}{status, select, connected {Connected to the central unit} not_answering {The central unit is not answering} other {Connection changed – choose Save and close to apply it}}{alert_close}"
+        "description": "{alert_open}Connected to the central unit{alert_close}"
+      },
+      "menu_offline": {
+        "title": "Nexo",
+        "menu_options": {
+          "connection": "Connection",
+          "sensors": "Sensors",
+          "covers": "Gates and doors",
+          "valves": "Valves",
+          "buttons": "Buttons",
+          "settings": "Settings",
+          "save": "Save and close"
+        },
+        "menu_option_descriptions": {
+          "connection": "{address}",
+          "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
+          "covers": "{covers}",
+          "buttons": "{buttons}",
+          "settings": "Polling every {scan_interval} s",
+          "save": "Closing the window with ✕ discards the changes",
+          "valves": "{valves}"
+        },
+        "description": "{alert_open}The central unit is not answering{alert_close}"
+      },
+      "menu_unsaved": {
+        "title": "Nexo",
+        "menu_options": {
+          "connection": "Connection",
+          "sensors": "Sensors",
+          "covers": "Gates and doors",
+          "valves": "Valves",
+          "buttons": "Buttons",
+          "settings": "Settings",
+          "save": "Save and close"
+        },
+        "menu_option_descriptions": {
+          "connection": "{address}",
+          "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
+          "covers": "{covers}",
+          "buttons": "{buttons}",
+          "settings": "Polling every {scan_interval} s",
+          "save": "Closing the window with ✕ discards the changes",
+          "valves": "{valves}"
+        },
+        "description": "{alert_open}Connection changed – choose Save and close to apply it{alert_close}"
       },
       "covers": {
         "title": "Gates and doors",
@@ -95,26 +141,26 @@
           "back": "Back"
         },
         "menu_option_descriptions": {
-          "cover_0": "{cover_0_info}{cover_0_guard, select, yes { · only when closed} other {}}",
-          "cover_1": "{cover_1_info}{cover_1_guard, select, yes { · only when closed} other {}}",
-          "cover_2": "{cover_2_info}{cover_2_guard, select, yes { · only when closed} other {}}",
-          "cover_3": "{cover_3_info}{cover_3_guard, select, yes { · only when closed} other {}}",
-          "cover_4": "{cover_4_info}{cover_4_guard, select, yes { · only when closed} other {}}",
-          "cover_5": "{cover_5_info}{cover_5_guard, select, yes { · only when closed} other {}}",
-          "cover_6": "{cover_6_info}{cover_6_guard, select, yes { · only when closed} other {}}",
-          "cover_7": "{cover_7_info}{cover_7_guard, select, yes { · only when closed} other {}}",
-          "cover_8": "{cover_8_info}{cover_8_guard, select, yes { · only when closed} other {}}",
-          "cover_9": "{cover_9_info}{cover_9_guard, select, yes { · only when closed} other {}}",
-          "cover_10": "{cover_10_info}{cover_10_guard, select, yes { · only when closed} other {}}",
-          "cover_11": "{cover_11_info}{cover_11_guard, select, yes { · only when closed} other {}}",
-          "cover_12": "{cover_12_info}{cover_12_guard, select, yes { · only when closed} other {}}",
-          "cover_13": "{cover_13_info}{cover_13_guard, select, yes { · only when closed} other {}}",
-          "cover_14": "{cover_14_info}{cover_14_guard, select, yes { · only when closed} other {}}",
-          "cover_15": "{cover_15_info}{cover_15_guard, select, yes { · only when closed} other {}}",
-          "cover_16": "{cover_16_info}{cover_16_guard, select, yes { · only when closed} other {}}",
-          "cover_17": "{cover_17_info}{cover_17_guard, select, yes { · only when closed} other {}}",
-          "cover_18": "{cover_18_info}{cover_18_guard, select, yes { · only when closed} other {}}",
-          "cover_19": "{cover_19_info}{cover_19_guard, select, yes { · only when closed} other {}}"
+          "cover_0": "{cover_0_info}",
+          "cover_1": "{cover_1_info}",
+          "cover_2": "{cover_2_info}",
+          "cover_3": "{cover_3_info}",
+          "cover_4": "{cover_4_info}",
+          "cover_5": "{cover_5_info}",
+          "cover_6": "{cover_6_info}",
+          "cover_7": "{cover_7_info}",
+          "cover_8": "{cover_8_info}",
+          "cover_9": "{cover_9_info}",
+          "cover_10": "{cover_10_info}",
+          "cover_11": "{cover_11_info}",
+          "cover_12": "{cover_12_info}",
+          "cover_13": "{cover_13_info}",
+          "cover_14": "{cover_14_info}",
+          "cover_15": "{cover_15_info}",
+          "cover_16": "{cover_16_info}",
+          "cover_17": "{cover_17_info}",
+          "cover_18": "{cover_18_info}",
+          "cover_19": "{cover_19_info}"
         }
       },
       "buttons": {
@@ -871,6 +917,453 @@
         "data_description": {
           "scan_interval": "Each imported sensor is one query of roughly 50 ms, so a full sweep takes longer the more you import."
         }
+      },
+      "valves": {
+        "title": "Valves",
+        "menu_options": {
+          "valve_0": "{valve_0}",
+          "valve_1": "{valve_1}",
+          "valve_2": "{valve_2}",
+          "valve_3": "{valve_3}",
+          "valve_4": "{valve_4}",
+          "valve_5": "{valve_5}",
+          "valve_6": "{valve_6}",
+          "valve_7": "{valve_7}",
+          "valve_8": "{valve_8}",
+          "valve_9": "{valve_9}",
+          "valve_10": "{valve_10}",
+          "valve_11": "{valve_11}",
+          "valve_12": "{valve_12}",
+          "valve_13": "{valve_13}",
+          "valve_14": "{valve_14}",
+          "valve_15": "{valve_15}",
+          "valve_16": "{valve_16}",
+          "valve_17": "{valve_17}",
+          "valve_18": "{valve_18}",
+          "valve_19": "{valve_19}",
+          "add_valve": "Add a valve",
+          "back": "Back"
+        },
+        "menu_option_descriptions": {
+          "valve_0": "{valve_0_info}",
+          "valve_1": "{valve_1_info}",
+          "valve_2": "{valve_2_info}",
+          "valve_3": "{valve_3_info}",
+          "valve_4": "{valve_4_info}",
+          "valve_5": "{valve_5_info}",
+          "valve_6": "{valve_6_info}",
+          "valve_7": "{valve_7_info}",
+          "valve_8": "{valve_8_info}",
+          "valve_9": "{valve_9_info}",
+          "valve_10": "{valve_10_info}",
+          "valve_11": "{valve_11_info}",
+          "valve_12": "{valve_12_info}",
+          "valve_13": "{valve_13_info}",
+          "valve_14": "{valve_14_info}",
+          "valve_15": "{valve_15_info}",
+          "valve_16": "{valve_16_info}",
+          "valve_17": "{valve_17_info}",
+          "valve_18": "{valve_18_info}",
+          "valve_19": "{valve_19_info}"
+        }
+      },
+      "add_valve": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands. Submit an empty form to go back.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_0": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_1": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_2": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_3": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_4": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_5": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_6": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_7": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_8": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_9": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_10": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_11": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_12": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_13": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_14": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_15": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_16": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_17": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_18": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
+      },
+      "valve_19": {
+        "title": "Valve",
+        "description": "A watering program or anything else started and stopped by a pair of logic commands.",
+        "data": {
+          "name": "Name",
+          "open_command": "Open (start) command",
+          "close_command": "Close (stop) command",
+          "sections": "Sections",
+          "main_valve": "Main valve",
+          "auto_close": "Close automatically after",
+          "delete": "Delete this valve"
+        },
+        "data_description": {
+          "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
+          "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
+          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+        }
       }
     },
     "error": {
@@ -881,7 +1374,8 @@
       "command_too_long": "Logic commands are at most 7 characters.",
       "guard_needs_reed_sensor": "Needs a reed switch to check.",
       "required": "Required.",
-      "step_needs_unguarded": "The Step button needs \"Open only when confirmed closed\" off: it stops a moving gate with the opposite command."
+      "step_needs_unguarded": "The Step button needs \"Open only when confirmed closed\" off: it stops a moving gate with the opposite command.",
+      "main_valve_is_a_section": "The main valve cannot also be one of the sections."
     },
     "abort": {
       "cannot_list": "Cannot read the resource list from the central unit.",

@@ -54,6 +54,7 @@
           "connection": "Połączenie",
           "sensors": "Czujniki",
           "covers": "Bramy i drzwi",
+          "valves": "Zawory",
           "buttons": "Przyciski",
           "settings": "Ustawienia",
           "save": "Zapisz i zamknij"
@@ -61,12 +62,57 @@
         "menu_option_descriptions": {
           "connection": "{address}",
           "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors}",
-          "covers": "{covers, select, __none__ {brak} other {{covers}}}",
-          "buttons": "{buttons, select, __none__ {brak} other {{buttons}}}",
+          "covers": "{covers}",
+          "buttons": "{buttons}",
           "settings": "Odpytywanie co {scan_interval} s",
-          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany"
+          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
+          "valves": "{valves}"
         },
-        "description": "{alert_open}{status, select, connected {Połączono z centralą} not_answering {Centrala nie odpowiada} other {Zmieniono połączenie – wybierz Zapisz i zamknij, żeby je zastosować}}{alert_close}"
+        "description": "{alert_open}Połączono z centralą{alert_close}"
+      },
+      "menu_offline": {
+        "title": "Nexo",
+        "menu_options": {
+          "connection": "Połączenie",
+          "sensors": "Czujniki",
+          "covers": "Bramy i drzwi",
+          "valves": "Zawory",
+          "buttons": "Przyciski",
+          "settings": "Ustawienia",
+          "save": "Zapisz i zamknij"
+        },
+        "menu_option_descriptions": {
+          "connection": "{address}",
+          "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors}",
+          "covers": "{covers}",
+          "buttons": "{buttons}",
+          "settings": "Odpytywanie co {scan_interval} s",
+          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
+          "valves": "{valves}"
+        },
+        "description": "{alert_open}Centrala nie odpowiada{alert_close}"
+      },
+      "menu_unsaved": {
+        "title": "Nexo",
+        "menu_options": {
+          "connection": "Połączenie",
+          "sensors": "Czujniki",
+          "covers": "Bramy i drzwi",
+          "valves": "Zawory",
+          "buttons": "Przyciski",
+          "settings": "Ustawienia",
+          "save": "Zapisz i zamknij"
+        },
+        "menu_option_descriptions": {
+          "connection": "{address}",
+          "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors}",
+          "covers": "{covers}",
+          "buttons": "{buttons}",
+          "settings": "Odpytywanie co {scan_interval} s",
+          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
+          "valves": "{valves}"
+        },
+        "description": "{alert_open}Zmieniono połączenie – wybierz Zapisz i zamknij, żeby je zastosować{alert_close}"
       },
       "covers": {
         "title": "Bramy i drzwi",
@@ -95,26 +141,26 @@
           "back": "Wróć"
         },
         "menu_option_descriptions": {
-          "cover_0": "{cover_0_info}{cover_0_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_1": "{cover_1_info}{cover_1_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_2": "{cover_2_info}{cover_2_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_3": "{cover_3_info}{cover_3_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_4": "{cover_4_info}{cover_4_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_5": "{cover_5_info}{cover_5_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_6": "{cover_6_info}{cover_6_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_7": "{cover_7_info}{cover_7_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_8": "{cover_8_info}{cover_8_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_9": "{cover_9_info}{cover_9_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_10": "{cover_10_info}{cover_10_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_11": "{cover_11_info}{cover_11_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_12": "{cover_12_info}{cover_12_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_13": "{cover_13_info}{cover_13_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_14": "{cover_14_info}{cover_14_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_15": "{cover_15_info}{cover_15_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_16": "{cover_16_info}{cover_16_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_17": "{cover_17_info}{cover_17_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_18": "{cover_18_info}{cover_18_guard, select, yes { · tylko gdy zamknięta} other {}}",
-          "cover_19": "{cover_19_info}{cover_19_guard, select, yes { · tylko gdy zamknięta} other {}}"
+          "cover_0": "{cover_0_info}",
+          "cover_1": "{cover_1_info}",
+          "cover_2": "{cover_2_info}",
+          "cover_3": "{cover_3_info}",
+          "cover_4": "{cover_4_info}",
+          "cover_5": "{cover_5_info}",
+          "cover_6": "{cover_6_info}",
+          "cover_7": "{cover_7_info}",
+          "cover_8": "{cover_8_info}",
+          "cover_9": "{cover_9_info}",
+          "cover_10": "{cover_10_info}",
+          "cover_11": "{cover_11_info}",
+          "cover_12": "{cover_12_info}",
+          "cover_13": "{cover_13_info}",
+          "cover_14": "{cover_14_info}",
+          "cover_15": "{cover_15_info}",
+          "cover_16": "{cover_16_info}",
+          "cover_17": "{cover_17_info}",
+          "cover_18": "{cover_18_info}",
+          "cover_19": "{cover_19_info}"
         }
       },
       "buttons": {
@@ -871,6 +917,453 @@
         "data_description": {
           "scan_interval": "Każdy zaimportowany czujnik to jedno zapytanie trwające ok. 50 ms, więc pełny obieg trwa tym dłużej, im więcej importujesz."
         }
+      },
+      "valves": {
+        "title": "Zawory",
+        "menu_options": {
+          "valve_0": "{valve_0}",
+          "valve_1": "{valve_1}",
+          "valve_2": "{valve_2}",
+          "valve_3": "{valve_3}",
+          "valve_4": "{valve_4}",
+          "valve_5": "{valve_5}",
+          "valve_6": "{valve_6}",
+          "valve_7": "{valve_7}",
+          "valve_8": "{valve_8}",
+          "valve_9": "{valve_9}",
+          "valve_10": "{valve_10}",
+          "valve_11": "{valve_11}",
+          "valve_12": "{valve_12}",
+          "valve_13": "{valve_13}",
+          "valve_14": "{valve_14}",
+          "valve_15": "{valve_15}",
+          "valve_16": "{valve_16}",
+          "valve_17": "{valve_17}",
+          "valve_18": "{valve_18}",
+          "valve_19": "{valve_19}",
+          "add_valve": "Dodaj zawór",
+          "back": "Wróć"
+        },
+        "menu_option_descriptions": {
+          "valve_0": "{valve_0_info}",
+          "valve_1": "{valve_1_info}",
+          "valve_2": "{valve_2_info}",
+          "valve_3": "{valve_3_info}",
+          "valve_4": "{valve_4_info}",
+          "valve_5": "{valve_5_info}",
+          "valve_6": "{valve_6_info}",
+          "valve_7": "{valve_7_info}",
+          "valve_8": "{valve_8_info}",
+          "valve_9": "{valve_9_info}",
+          "valve_10": "{valve_10_info}",
+          "valve_11": "{valve_11_info}",
+          "valve_12": "{valve_12_info}",
+          "valve_13": "{valve_13_info}",
+          "valve_14": "{valve_14_info}",
+          "valve_15": "{valve_15_info}",
+          "valve_16": "{valve_16_info}",
+          "valve_17": "{valve_17_info}",
+          "valve_18": "{valve_18_info}",
+          "valve_19": "{valve_19_info}"
+        }
+      },
+      "add_valve": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki. Zatwierdź pusty formularz, żeby wrócić.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_0": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_1": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_2": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_3": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_4": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_5": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_6": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_7": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_8": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_9": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_10": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_11": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_12": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_13": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_14": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_15": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_16": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_17": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_18": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
+      },
+      "valve_19": {
+        "title": "Zawór",
+        "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
+        "data": {
+          "name": "Nazwa",
+          "open_command": "Komenda otwarcia (start)",
+          "close_command": "Komenda zamknięcia (stop)",
+          "sections": "Sekcje",
+          "main_valve": "Zawór główny",
+          "auto_close": "Zamknij automatycznie po",
+          "delete": "Usuń ten zawór"
+        },
+        "data_description": {
+          "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
+          "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
+          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+        }
       }
     },
     "error": {
@@ -881,7 +1374,8 @@
       "command_too_long": "Komendy logiki mają najwyżej 7 znaków.",
       "guard_needs_reed_sensor": "Wymaga kontaktronu, żeby było co sprawdzić.",
       "required": "Pole wymagane.",
-      "step_needs_unguarded": "Przycisk Krok wymaga wyłączenia „Otwieraj tylko przy potwierdzonym zamknięciu”: zatrzymuje jadącą bramę przeciwną komendą."
+      "step_needs_unguarded": "Przycisk Krok wymaga wyłączenia „Otwieraj tylko przy potwierdzonym zamknięciu”: zatrzymuje jadącą bramę przeciwną komendą.",
+      "main_valve_is_a_section": "Zawór główny nie może być jednocześnie sekcją."
     },
     "abort": {
       "cannot_list": "Nie można pobrać listy zasobów z centrali.",

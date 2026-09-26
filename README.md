@@ -17,6 +17,7 @@ connection the NexoVision app uses. Local polling, no cloud.
 | Thermometers | `sensor` | °C |
 | Analogue inputs | `sensor` | raw value, no unit |
 | Gates and doors driven by logic commands | `cover` | closed / not closed, from a reed switch |
+| Watering programs and other start/stop command pairs | `valve` | open while any of its sections is on |
 | Any logic command | `button` | fire and forget |
 
 Lights, dimmers, outputs, thermostats, blinds and alarm partitions are not
@@ -50,8 +51,8 @@ shows the current settings next to each item:
   Entities are kept when the address changes.
 - **Sensors** - the lists come from the central unit. Each imported resource
   costs one query of about 50 ms per polling cycle.
-- **Gates and doors** and **Buttons** - one entry each; pick one to edit or
-  delete it. Up to 20 of each.
+- **Gates and doors**, **Valves** and **Buttons** - one entry each; pick one to
+  edit or delete it. Up to 20 of each.
 - **Settings** - polling interval, 10 s by default.
 
 Nothing is stored until **Save and close**; closing the dialog discards the
@@ -120,6 +121,29 @@ when confirmed closed*, which would refuse the stop on the way down.
 A door strike behind a logic rule is best added as a **button**: the strike
 pulse is over before the command returns, and the reed switch does not change
 until someone pushes the door, so there is nothing to report but "sent".
+
+## Valves
+
+A **valve** is a pair of logic commands - start and stop - for a watering
+program or anything similar. Its state comes from the outputs the program
+switches:
+
+- **Sections** - the outputs the program turns on one after another. The
+  valve is open while any of them is on. Without sections the state is unknown
+  and both commands stay available.
+- **Main valve** - an output that stays on for the whole run. Programs usually
+  pause for a few seconds between sections; while the main valve is on, the
+  program whose section ran last still counts as running. Several valves can
+  share one main valve.
+
+Only outputs are observed, not commands, so a program started from the Nexo
+app, a remote or the central unit's own schedule shows up the same way.
+Closing the main valve ends every run.
+
+**Close automatically after** sends the stop command after the given time -
+a convenience for programs the central unit does not end on its own. The timer
+lives in Home Assistant and is lost on a restart: if watering must end, give
+the rule its own duration in the central unit.
 
 ## Protocol notes
 

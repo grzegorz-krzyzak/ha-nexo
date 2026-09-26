@@ -19,9 +19,13 @@ from .const import (
     OPT_COVERS,
     OPT_SCAN_INTERVAL,
     OPT_THERMOMETERS,
+    OPT_VALVES,
+    VALVE_MAIN,
+    VALVE_SECTIONS,
 )
 from .hub import NexoHub
 from .nexo_client import NexoConnectionError, NexoError
+from .valve_state import valve_states
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -54,9 +58,22 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
                 for cover in options.get(OPT_COVERS, [])
                 if cover.get(COVER_REED_SENSOR)
             ),
+            *(
+                section
+                for valve in options.get(OPT_VALVES, [])
+                for section in valve.get(VALVE_SECTIONS, [])
+            ),
+            *(
+                valve[VALVE_MAIN]
+                for valve in options.get(OPT_VALVES, [])
+                if valve.get(VALVE_MAIN)
+            ),
         }
         self.resources = sorted(names)
         self._failed_cycles = 0
+        self._valves = options.get(OPT_VALVES, [])
+        self._last_active: dict[str, str] = {}
+        self.valve_states: dict[str, bool | None] = {}
 
     async def _async_update_data(self) -> dict[str, int]:
         try:
@@ -74,6 +91,7 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
                 self.hass.config_entries.async_schedule_reload(self.config_entry.entry_id)
             raise
         self._failed_cycles = 0
+        self.valve_states = valve_states(self._valves, data, self._last_active)
         return data
 
     async def _async_poll(self) -> dict[str, int]:

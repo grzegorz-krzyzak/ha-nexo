@@ -47,6 +47,18 @@ OPTIONS = {
         },
     ],
     "buttons": [{"id": "wicket", "name": "Wicket", "command": "WK"}],
+    "valves": [
+        {
+            "id": "lawn",
+            "name": "Lawn",
+            "open_command": "PST",
+            "close_command": "PPR",
+            "sections": ["S1", "S2"],
+            "main_valve": "ZG",
+            "auto_close": 30,
+        },
+        {"id": "pump", "name": "Pump", "open_command": "PO", "close_command": "PC"},
+    ],
 }
 
 
@@ -242,3 +254,57 @@ async def test_toggle_steps_when_travel_time_is_set(hass: HomeAssistant, fake_ne
 async def test_no_step_button_without_travel_time(hass: HomeAssistant, fake_nexo) -> None:
     await _setup(hass)
     assert hass.states.get("button.nexo_entry_gate_step") is None
+
+
+async def _tick(hass: HomeAssistant, freezer, seconds: float) -> None:
+    from datetime import timedelta
+
+    from pytest_homeassistant_custom_component.common import async_fire_time_changed
+
+    freezer.tick(timedelta(seconds=seconds))
+    async_fire_time_changed(hass)
+    await hass.async_block_till_done()
+
+
+async def test_valve_state_follows_sections(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    await _setup(hass)
+    assert hass.states.get("valve.nexo_lawn").state == "closed"
+    assert hass.states.get("valve.nexo_pump").state == "unknown"
+
+    fake_nexo.states.update(ZG=1, S1=1)
+    await _tick(hass, freezer, 11)
+    assert hass.states.get("valve.nexo_lawn").state == "open"
+    fake_nexo.states.update(S1=0)  # pause between sections
+    await _tick(hass, freezer, 11)
+    assert hass.states.get("valve.nexo_lawn").state == "open"
+    fake_nexo.states.update(ZG=0)
+    await _tick(hass, freezer, 11)
+    assert hass.states.get("valve.nexo_lawn").state == "closed"
+
+
+async def test_valve_commands(hass: HomeAssistant, fake_nexo) -> None:
+    await _setup(hass)
+    for service, command in (("open_valve", "PO"), ("close_valve", "PC")):
+        await hass.services.async_call("valve", service, {"entity_id": "valve.nexo_pump"}, blocking=True)
+        fake_nexo.trigger_logic.assert_called_with(command)
+
+
+async def test_valve_auto_close(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    await _setup(hass)
+    await hass.services.async_call("valve", "open_valve", {"entity_id": "valve.nexo_lawn"}, blocking=True)
+    fake_nexo.trigger_logic.assert_called_with("PST")
+    fake_nexo.states.update(ZG=1, S1=1)
+    await _tick(hass, freezer, 29 * 60)
+    fake_nexo.trigger_logic.assert_called_with("PST")  # not yet
+    await _tick(hass, freezer, 2 * 60)
+    fake_nexo.trigger_logic.assert_called_with("PPR")
+
+
+async def test_valve_auto_close_cancelled_when_it_ends(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    await _setup(hass)
+    fake_nexo.states.update(ZG=1, S1=1)  # started elsewhere
+    await _tick(hass, freezer, 11)
+    fake_nexo.states.update(ZG=0, S1=0)  # the central unit ended it
+    await _tick(hass, freezer, 11)
+    await _tick(hass, freezer, 31 * 60)
+    fake_nexo.trigger_logic.assert_not_called()
