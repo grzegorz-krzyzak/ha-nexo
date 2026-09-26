@@ -179,8 +179,12 @@ def _pick_many(names: list[str]) -> SelectSelector:
 
 
 def _pick_one(names: list[str]) -> SelectSelector:
+    # custom_value is what makes the frontend render a single choice with a
+    # search box; anything typed is checked against the list on submit.
     return SelectSelector(
-        SelectSelectorConfig(options=names, sort=True, mode=SelectSelectorMode.DROPDOWN)
+        SelectSelectorConfig(
+            options=names, sort=True, custom_value=True, mode=SelectSelectorMode.DROPDOWN
+        )
     )
 
 
@@ -556,6 +560,9 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 user_input[key] = user_input.get(key, "").strip()
                 if error := _check_command(user_input[key]):
                     errors[key] = error
+            reed = user_input.get(COVER_REED_SENSOR)
+            if reed and reed not in sensors:
+                errors[COVER_REED_SENSOR] = "unknown_resource"
             if user_input[COVER_OPEN_ONLY_WHEN_CLOSED] and not user_input.get(
                 COVER_REED_SENSOR
             ):
@@ -651,7 +658,9 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 user_input[key] = user_input.get(key, "").strip()
                 if error := _check_command(user_input[key]):
                     errors[key] = error
-            if user_input.get(VALVE_MAIN) in user_input.get(VALVE_SECTIONS, []):
+            if user_input.get(VALVE_MAIN) and user_input[VALVE_MAIN] not in outputs:
+                errors[VALVE_MAIN] = "unknown_resource"
+            elif user_input.get(VALVE_MAIN) in user_input.get(VALVE_SECTIONS, []):
                 errors[VALVE_MAIN] = "main_valve_is_a_section"
             for key in (VALVE_SECTIONS, VALVE_MAIN, VALVE_AUTO_CLOSE):
                 if not user_input.get(key):

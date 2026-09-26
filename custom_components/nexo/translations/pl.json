@@ -1375,7 +1375,8 @@
       "guard_needs_reed_sensor": "Wymaga kontaktronu, żeby było co sprawdzić.",
       "required": "Pole wymagane.",
       "step_needs_unguarded": "Przycisk Krok wymaga wyłączenia „Otwieraj tylko przy potwierdzonym zamknięciu”: zatrzymuje jadącą bramę przeciwną komendą.",
-      "main_valve_is_a_section": "Zawór główny nie może być jednocześnie sekcją."
+      "main_valve_is_a_section": "Zawór główny nie może być jednocześnie sekcją.",
+      "unknown_resource": "Nie ma takiego zasobu w centrali."
     },
     "abort": {
       "cannot_list": "Nie można pobrać listy zasobów z centrali.",

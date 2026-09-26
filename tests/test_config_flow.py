@@ -81,6 +81,8 @@ async def test_add_edit_and_delete_cover(hass: HomeAssistant, fake_nexo) -> None
     result = await _pick(hass, flow_id, "covers")
     assert result["menu_options"] == ["add_cover", "back"]
     result = await _pick(hass, flow_id, "add_cover")
+    result = await _submit(hass, flow_id, {**GATE, "reed_sensor": "TYPO"})
+    assert result["errors"] == {"reed_sensor": "unknown_resource"}
     result = await _submit(hass, flow_id, {**GATE, "open_command": "TOOLONG1"})
     assert result["errors"] == {"open_command": "command_too_long"}
     no_reed = {k: v for k, v in GATE.items() if k != "reed_sensor"}
@@ -276,6 +278,8 @@ async def test_add_and_edit_valve(hass: HomeAssistant, fake_nexo) -> None:
     }
     result = await _submit(hass, flow_id, lawn)
     assert result["errors"] == {"main_valve": "main_valve_is_a_section"}
+    result = await _submit(hass, flow_id, {**lawn, "main_valve": "NO SUCH"})
+    assert result["errors"] == {"main_valve": "unknown_resource"}
     result = await _submit(hass, flow_id, {**lawn, "main_valve": "ZG"})
     assert result["menu_options"] == ["valve_0", "add_valve", "back"]
     assert result["description_placeholders"] == {

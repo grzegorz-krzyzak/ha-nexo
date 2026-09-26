@@ -1375,7 +1375,8 @@
       "guard_needs_reed_sensor": "Needs a reed switch to check.",
       "required": "Required.",
       "step_needs_unguarded": "The Step button needs \"Open only when confirmed closed\" off: it stops a moving gate with the opposite command.",
-      "main_valve_is_a_section": "The main valve cannot also be one of the sections."
+      "main_valve_is_a_section": "The main valve cannot also be one of the sections.",
+      "unknown_resource": "No such resource in the central unit."
     },
     "abort": {
       "cannot_list": "Cannot read the resource list from the central unit.",
