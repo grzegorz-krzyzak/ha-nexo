@@ -53,6 +53,7 @@
         "menu_options": {
           "connection": "Connection",
           "sensors": "Sensors",
+          "analog": "Analog inputs",
           "covers": "Gates and doors",
           "valves": "Valves",
           "buttons": "Buttons",
@@ -66,7 +67,8 @@
           "buttons": "{buttons}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
-          "valves": "{valves}"
+          "valves": "{valves}",
+          "analog": "Type and calibration"
         },
         "description": "{alert_open}Connected to the central unit{alert_close}"
       },
@@ -75,6 +77,7 @@
         "menu_options": {
           "connection": "Connection",
           "sensors": "Sensors",
+          "analog": "Analog inputs",
           "covers": "Gates and doors",
           "valves": "Valves",
           "buttons": "Buttons",
@@ -88,7 +91,8 @@
           "buttons": "{buttons}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
-          "valves": "{valves}"
+          "valves": "{valves}",
+          "analog": "Type and calibration"
         },
         "description": "{alert_open}The central unit is not answering{alert_close}"
       },
@@ -97,6 +101,7 @@
         "menu_options": {
           "connection": "Connection",
           "sensors": "Sensors",
+          "analog": "Analog inputs",
           "covers": "Gates and doors",
           "valves": "Valves",
           "buttons": "Buttons",
@@ -110,7 +115,8 @@
           "buttons": "{buttons}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
-          "valves": "{valves}"
+          "valves": "{valves}",
+          "analog": "Type and calibration"
         },
         "description": "{alert_open}Connection changed – choose Save and close to apply it{alert_close}"
       },
@@ -237,6 +243,295 @@
         "data_description": {
           "binary_sensors": "On when violated: a door open, motion detected. Set what each one is under \"Show as\" in its entity settings.",
           "analog_sensors": "Raw values without a unit - the central unit does not say what is wired in."
+        }
+      },
+      "analog": {
+        "title": "Analog inputs",
+        "description": "Pick an input to set its type and calibration. The list follows the analog inputs selected under Sensors.",
+        "menu_options": {
+          "analog_0": "{analog_0}",
+          "analog_1": "{analog_1}",
+          "analog_2": "{analog_2}",
+          "analog_3": "{analog_3}",
+          "analog_4": "{analog_4}",
+          "analog_5": "{analog_5}",
+          "analog_6": "{analog_6}",
+          "analog_7": "{analog_7}",
+          "analog_8": "{analog_8}",
+          "analog_9": "{analog_9}",
+          "analog_10": "{analog_10}",
+          "analog_11": "{analog_11}",
+          "analog_12": "{analog_12}",
+          "analog_13": "{analog_13}",
+          "analog_14": "{analog_14}",
+          "analog_15": "{analog_15}",
+          "analog_16": "{analog_16}",
+          "analog_17": "{analog_17}",
+          "analog_18": "{analog_18}",
+          "analog_19": "{analog_19}",
+          "back": "Back"
+        },
+        "menu_option_descriptions": {
+          "analog_0": "{analog_0_info}",
+          "analog_1": "{analog_1_info}",
+          "analog_2": "{analog_2_info}",
+          "analog_3": "{analog_3_info}",
+          "analog_4": "{analog_4_info}",
+          "analog_5": "{analog_5_info}",
+          "analog_6": "{analog_6_info}",
+          "analog_7": "{analog_7_info}",
+          "analog_8": "{analog_8_info}",
+          "analog_9": "{analog_9_info}",
+          "analog_10": "{analog_10_info}",
+          "analog_11": "{analog_11_info}",
+          "analog_12": "{analog_12_info}",
+          "analog_13": "{analog_13_info}",
+          "analog_14": "{analog_14_info}",
+          "analog_15": "{analog_15_info}",
+          "analog_16": "{analog_16_info}",
+          "analog_17": "{analog_17_info}",
+          "analog_18": "{analog_18_info}",
+          "analog_19": "{analog_19_info}"
+        }
+      },
+      "analog_0": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_1": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_2": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_3": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_4": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_5": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_6": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_7": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_8": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_9": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_10": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_11": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_12": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_13": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_14": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_15": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_16": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_17": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_18": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
+        }
+      },
+      "analog_19": {
+        "title": "Analog input",
+        "description": "{resource} reads 0-100 of the range set for its sensor in the central unit.",
+        "data": {
+          "kind": "Type",
+          "offset": "Calibration"
+        },
+        "data_description": {
+          "kind": "Decides the unit and how Home Assistant shows the value.",
+          "offset": "Added to the reading, from -10 to +10. A percentage stays within 0-100."
         }
       },
       "add_cover": {
@@ -1394,6 +1689,14 @@
         "gate": "Gate",
         "garage": "Garage door",
         "door": "Door"
+      }
+    },
+    "analog_kind": {
+      "options": {
+        "raw": "Raw value",
+        "humidity": "Air humidity",
+        "moisture": "Soil moisture",
+        "percent": "Percentage"
       }
     }
   },

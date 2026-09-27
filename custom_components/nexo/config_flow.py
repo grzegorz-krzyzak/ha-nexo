@@ -19,6 +19,7 @@ from homeassistant.config_entries import (
 )
 from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.translation import async_get_translations
 from homeassistant.helpers.selector import (
     BooleanSelector,
     NumberSelector,
@@ -33,6 +34,11 @@ from homeassistant.helpers.selector import (
 )
 
 from .const import (
+    ANALOG_KIND,
+    ANALOG_KIND_RAW,
+    ANALOG_KINDS,
+    ANALOG_OFFSET,
+    ANALOG_OFFSET_LIMIT,
     COVER_CLOSE_COMMAND,
     COVER_DEVICE_CLASS,
     COVER_OPEN_COMMAND,
@@ -53,6 +59,7 @@ from .const import (
     MAX_INTERVAL,
     MIN_INTERVAL,
     OPT_ANALOG_SENSORS,
+    OPT_ANALOG_SETTINGS,
     OPT_BINARY_SENSORS,
     OPT_BUTTONS,
     OPT_COVERS,
@@ -216,6 +223,22 @@ def _sections_summary(sections: list[str]) -> str:
     return prefix + joined
 
 
+async def _kind_labels(hass: HomeAssistant) -> dict[str, str]:
+    """The analog kinds' names in the user's language, for the menu."""
+    strings = await async_get_translations(hass, hass.config.language, "selector", [DOMAIN])
+    prefix = f"component.{DOMAIN}.selector.analog_kind.options."
+    return {kind: strings.get(prefix + kind, kind) for kind in ANALOG_KINDS}
+
+
+def _analog_summary(item: dict[str, Any], kinds: dict[str, str]) -> str:
+    """'Soil moisture · +2' - the kind, and the offset when there is one."""
+    summary = kinds[item.get(ANALOG_KIND, ANALOG_KIND_RAW)]
+    offset = item.get(ANALOG_OFFSET, 0)
+    if offset:
+        summary += f" · {offset:+g}"
+    return summary
+
+
 def _cover_summary(item: dict[str, Any]) -> str:
     parts = [f"{item[COVER_OPEN_COMMAND]} / {item[COVER_CLOSE_COMMAND]}"]
     if item.get(COVER_REED_SENSOR):
@@ -364,7 +387,8 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         return self.async_show_menu(
             step_id=MENU_STEPS[status],
             menu_options=[
-                "connection", "sensors", "covers", "valves", "buttons", "settings", "save"
+                "connection", "sensors", "analog", "covers", "valves", "buttons",
+                "settings", "save",
             ],
             description_placeholders={
                 "address": f"{connection[CONF_HOST]}:{connection.get(CONF_PORT, DEFAULT_PORT)}",
@@ -447,6 +471,72 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             step_id="valves", menu_options=menu, description_placeholders=placeholders
         )
 
+    async def async_step_analog(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        names = self._options.get(OPT_ANALOG_SENSORS, [])[:MAX_ITEMS]
+        settings = self._options.get(OPT_ANALOG_SETTINGS, {})
+        kinds = await _kind_labels(self.hass)
+        placeholders: dict[str, str] = {}
+        for i, name in enumerate(names):
+            item = settings.get(name, {})
+            placeholders[f"analog_{i}"] = name
+            placeholders[f"analog_{i}_info"] = _analog_summary(item, kinds)
+        return self.async_show_menu(
+            step_id="analog",
+            menu_options=[*(f"analog_{i}" for i in range(len(names))), "back"],
+            description_placeholders=placeholders,
+        )
+
+    async def _async_step_edit_analog(
+        self, index: int, user_input: dict[str, Any] | None
+    ) -> ConfigFlowResult:
+        names = self._options.get(OPT_ANALOG_SENSORS, [])
+        if index >= len(names):
+            return await self.async_step_analog()
+        name = names[index]
+        settings: dict[str, Any] = self._options.setdefault(OPT_ANALOG_SETTINGS, {})
+        if user_input is not None:
+            item = {
+                ANALOG_KIND: user_input[ANALOG_KIND],
+                ANALOG_OFFSET: int(user_input.get(ANALOG_OFFSET) or 0),
+            }
+            if item == {ANALOG_KIND: ANALOG_KIND_RAW, ANALOG_OFFSET: 0}:
+                settings.pop(name, None)  # the default needs no entry
+            else:
+                settings[name] = item
+            return await self.async_step_analog()
+
+        current = settings.get(name, {})
+        schema = vol.Schema(
+            {
+                vol.Required(
+                    ANALOG_KIND, default=current.get(ANALOG_KIND, ANALOG_KIND_RAW)
+                ): SelectSelector(
+                    SelectSelectorConfig(
+                        options=ANALOG_KINDS,
+                        mode=SelectSelectorMode.DROPDOWN,
+                        translation_key="analog_kind",
+                    )
+                ),
+                vol.Required(
+                    ANALOG_OFFSET, default=current.get(ANALOG_OFFSET, 0)
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=-ANALOG_OFFSET_LIMIT,
+                        max=ANALOG_OFFSET_LIMIT,
+                        step=1,
+                        mode=NumberSelectorMode.BOX,
+                    )
+                ),
+            }
+        )
+        return self.async_show_form(
+            step_id=f"analog_{index}",
+            data_schema=schema,
+            description_placeholders={"resource": name},
+        )
+
     async def async_step_save(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
@@ -519,6 +609,10 @@ class NexoOptionsFlow(OptionsFlowWithReload):
 
         if user_input is not None:
             self._options.update(user_input)
+            selected = set(self._options.get(OPT_ANALOG_SENSORS, []))
+            settings = self._options.get(OPT_ANALOG_SETTINGS, {})
+            for name in [n for n in settings if n not in selected]:
+                del settings[name]
             return await self.async_step_menu()
 
         schema = vol.Schema(
@@ -811,5 +905,5 @@ def _edit_step(kind: str, index: int) -> _Step:
 
 
 for _index in range(MAX_ITEMS):
-    for _kind in ("cover", "valve", "button"):
+    for _kind in ("cover", "valve", "button", "analog"):
         setattr(NexoOptionsFlow, f"async_step_{_kind}_{_index}", _edit_step(_kind, _index))

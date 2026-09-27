@@ -431,3 +431,30 @@ async def test_a_tick_without_reads_keeps_the_failure(hass: HomeAssistant, fake_
     await _tick(hass, freezer, 1)  # nothing due: proves nothing
     assert hass.states.get(entity_id).state == "off"
 
+
+async def test_analog_input_raw_by_default(hass: HomeAssistant, fake_nexo) -> None:
+    await _setup(hass)
+    state = hass.states.get("sensor.nexo_humidity")
+    assert state.state == "55"
+    assert "unit_of_measurement" not in state.attributes
+    assert "device_class" not in state.attributes
+
+
+async def test_analog_input_kind_and_offset(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    await _setup(hass, {**OPTIONS, "analog_settings": {"HUMIDITY": {"kind": "humidity", "offset": -3}}})
+    state = hass.states.get("sensor.nexo_humidity")
+    assert state.state == "52"
+    assert state.attributes["unit_of_measurement"] == "%"
+    assert state.attributes["device_class"] == "humidity"
+    fake_nexo.states["HUMIDITY"] = 2
+    await _tick(hass, freezer, 61)
+    assert hass.states.get("sensor.nexo_humidity").state == "0"  # clamped, not -1
+
+
+async def test_analog_percent_clamps_high(hass: HomeAssistant, fake_nexo) -> None:
+    fake_nexo.states["HUMIDITY"] = 95
+    await _setup(hass, {**OPTIONS, "analog_settings": {"HUMIDITY": {"kind": "percent", "offset": 10}}})
+    state = hass.states.get("sensor.nexo_humidity")
+    assert state.state == "100"
+    assert "device_class" not in state.attributes
+

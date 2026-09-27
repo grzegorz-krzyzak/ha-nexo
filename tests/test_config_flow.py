@@ -64,7 +64,7 @@ async def test_menu_summary(hass: HomeAssistant, fake_nexo) -> None:
     result = await hass.config_entries.options.async_init(entry.entry_id)
     assert result["type"] is FlowResultType.MENU
     assert result["menu_options"] == [
-        "connection", "sensors", "covers", "valves", "buttons", "settings", "save"
+        "connection", "sensors", "analog", "covers", "valves", "buttons", "settings", "save"
     ]
     placeholders = result["description_placeholders"]
     assert placeholders["address"] == "192.0.2.10:1024"
@@ -330,4 +330,44 @@ async def test_polling_settings(hass: HomeAssistant, fake_nexo) -> None:
     assert entry.options["interval_inputs"] == 3
     assert entry.options["interval_measurements"] == 300
     assert "scan_interval" not in entry.options
+
+
+async def test_analog_input_settings(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass)
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    result = await _pick(hass, result["flow_id"], "analog")
+    assert result["menu_options"] == ["analog_0", "back"]
+    assert result["description_placeholders"]["analog_0"] == "HUMIDITY"
+    assert result["description_placeholders"]["analog_0_info"] == "Raw value"
+    result = await _pick(hass, result["flow_id"], "analog_0")
+    assert result["type"] is FlowResultType.FORM
+    result = await _submit(hass, result["flow_id"], {"kind": "moisture", "offset": 2})
+    assert result["description_placeholders"]["analog_0_info"] == "Soil moisture · +2"
+    result = await _pick(hass, result["flow_id"], "back")
+    result = await _pick(hass, result["flow_id"], "save")
+    assert entry.options["analog_settings"] == {"HUMIDITY": {"kind": "moisture", "offset": 2}}
+
+
+async def test_analog_default_and_deselected_leave_no_settings(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass, {**OPTIONS, "analog_settings": {"HUMIDITY": {"kind": "percent", "offset": 0}}})
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    result = await _pick(hass, result["flow_id"], "analog")
+    result = await _pick(hass, result["flow_id"], "analog_0")
+    result = await _submit(hass, result["flow_id"], {"kind": "raw", "offset": 0})
+    result = await _pick(hass, result["flow_id"], "back")
+    result = await _pick(hass, result["flow_id"], "save")
+    assert entry.options["analog_settings"] == {}
+
+    await hass.async_block_till_done()  # the save reloads the entry
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    result = await _pick(hass, result["flow_id"], "analog")
+    result = await _pick(hass, result["flow_id"], "analog_0")
+    result = await _submit(hass, result["flow_id"], {"kind": "humidity", "offset": -3})
+    result = await _pick(hass, result["flow_id"], "back")
+    result = await _pick(hass, result["flow_id"], "sensors")
+    result = await _submit(hass, result["flow_id"], {
+        "binary_sensors": ["KON DOOR"], "thermometers": [], "analog_sensors": [],
+    })
+    result = await _pick(hass, result["flow_id"], "save")
+    assert entry.options["analog_settings"] == {}
 

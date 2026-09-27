@@ -53,6 +53,7 @@
         "menu_options": {
           "connection": "Połączenie",
           "sensors": "Czujniki",
+          "analog": "Wejścia analogowe",
           "covers": "Bramy i drzwi",
           "valves": "Zawory",
           "buttons": "Przyciski",
@@ -66,7 +67,8 @@
           "buttons": "{buttons}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
-          "valves": "{valves}"
+          "valves": "{valves}",
+          "analog": "Rodzaj i kalibracja"
         },
         "description": "{alert_open}Połączono z centralą{alert_close}"
       },
@@ -75,6 +77,7 @@
         "menu_options": {
           "connection": "Połączenie",
           "sensors": "Czujniki",
+          "analog": "Wejścia analogowe",
           "covers": "Bramy i drzwi",
           "valves": "Zawory",
           "buttons": "Przyciski",
@@ -88,7 +91,8 @@
           "buttons": "{buttons}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
-          "valves": "{valves}"
+          "valves": "{valves}",
+          "analog": "Rodzaj i kalibracja"
         },
         "description": "{alert_open}Centrala nie odpowiada{alert_close}"
       },
@@ -97,6 +101,7 @@
         "menu_options": {
           "connection": "Połączenie",
           "sensors": "Czujniki",
+          "analog": "Wejścia analogowe",
           "covers": "Bramy i drzwi",
           "valves": "Zawory",
           "buttons": "Przyciski",
@@ -110,7 +115,8 @@
           "buttons": "{buttons}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
-          "valves": "{valves}"
+          "valves": "{valves}",
+          "analog": "Rodzaj i kalibracja"
         },
         "description": "{alert_open}Zmieniono połączenie – wybierz Zapisz i zamknij, żeby je zastosować{alert_close}"
       },
@@ -237,6 +243,295 @@
         "data_description": {
           "binary_sensors": "Włączone, gdy naruszone: drzwi otwarte, wykryty ruch. Co to za czujnik, ustawisz w opcji „Pokaż jako” w ustawieniach encji.",
           "analog_sensors": "Surowe wartości bez jednostki - centrala nie podaje, co jest podłączone."
+        }
+      },
+      "analog": {
+        "title": "Wejścia analogowe",
+        "description": "Wybierz wejście, żeby ustawić jego rodzaj i kalibrację. Lista obejmuje wejścia analogowe wybrane w Czujnikach.",
+        "menu_options": {
+          "analog_0": "{analog_0}",
+          "analog_1": "{analog_1}",
+          "analog_2": "{analog_2}",
+          "analog_3": "{analog_3}",
+          "analog_4": "{analog_4}",
+          "analog_5": "{analog_5}",
+          "analog_6": "{analog_6}",
+          "analog_7": "{analog_7}",
+          "analog_8": "{analog_8}",
+          "analog_9": "{analog_9}",
+          "analog_10": "{analog_10}",
+          "analog_11": "{analog_11}",
+          "analog_12": "{analog_12}",
+          "analog_13": "{analog_13}",
+          "analog_14": "{analog_14}",
+          "analog_15": "{analog_15}",
+          "analog_16": "{analog_16}",
+          "analog_17": "{analog_17}",
+          "analog_18": "{analog_18}",
+          "analog_19": "{analog_19}",
+          "back": "Wróć"
+        },
+        "menu_option_descriptions": {
+          "analog_0": "{analog_0_info}",
+          "analog_1": "{analog_1_info}",
+          "analog_2": "{analog_2_info}",
+          "analog_3": "{analog_3_info}",
+          "analog_4": "{analog_4_info}",
+          "analog_5": "{analog_5_info}",
+          "analog_6": "{analog_6_info}",
+          "analog_7": "{analog_7_info}",
+          "analog_8": "{analog_8_info}",
+          "analog_9": "{analog_9_info}",
+          "analog_10": "{analog_10_info}",
+          "analog_11": "{analog_11_info}",
+          "analog_12": "{analog_12_info}",
+          "analog_13": "{analog_13_info}",
+          "analog_14": "{analog_14_info}",
+          "analog_15": "{analog_15_info}",
+          "analog_16": "{analog_16_info}",
+          "analog_17": "{analog_17_info}",
+          "analog_18": "{analog_18_info}",
+          "analog_19": "{analog_19_info}"
+        }
+      },
+      "analog_0": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_1": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_2": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_3": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_4": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_5": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_6": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_7": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_8": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_9": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_10": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_11": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_12": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_13": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_14": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_15": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_16": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_17": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_18": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
+        }
+      },
+      "analog_19": {
+        "title": "Wejście analogowe",
+        "description": "{resource} podaje wartość 0-100 z zakresu ustawionego dla czujnika w centrali.",
+        "data": {
+          "kind": "Rodzaj",
+          "offset": "Kalibracja"
+        },
+        "data_description": {
+          "kind": "Decyduje o jednostce i o tym, jak Home Assistant pokazuje wartość.",
+          "offset": "Dodawana do odczytu, od -10 do +10. Wartość procentowa pozostaje w zakresie 0-100."
         }
       },
       "add_cover": {
@@ -1394,6 +1689,14 @@
         "gate": "Brama",
         "garage": "Brama garażowa",
         "door": "Drzwi"
+      }
+    },
+    "analog_kind": {
+      "options": {
+        "raw": "Surowa wartość",
+        "humidity": "Wilgotność powietrza",
+        "moisture": "Wilgotność gleby",
+        "percent": "Procent"
       }
     }
   },

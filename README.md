@@ -51,6 +51,8 @@ shows the current settings next to each item:
   Entities are kept when the address changes.
 - **Sensors** - the lists come from the central unit. Each imported resource
   costs one query of about 50 ms each time it is read.
+- **Analog inputs** - the type and calibration of each imported analog input
+  (see *Analog inputs*).
 - **Gates and doors**, **Valves** and **Buttons** - one entry each; pick one to
   edit or delete it. Up to 20 of each.
 - **Settings** - how often each group of resources is read (see *Polling*).
@@ -58,6 +60,22 @@ shows the current settings next to each item:
 Nothing is stored until **Save and close**; closing the dialog discards the
 changes. Home Assistant forms have no back button: submitting a form without
 changes - or an empty *add* form - goes back to the menu.
+
+### Analog inputs
+
+An analog input reads 0-100 of the range set for its sensor in the central
+unit - a 0-10 V humidity sensor, a photoresistor - and the central unit does
+not say what is wired in. Each input's **type** decides how it shows:
+
+| Type | Shown as |
+|---|---|
+| Raw value (default) | a plain number, e.g. for a resistor-ladder switch |
+| Air humidity | %, humidity sensor |
+| Soil moisture | %, moisture sensor |
+| Percentage | %, e.g. a light level |
+
+A **calibration** of -10 to +10 is added to the reading - the central unit
+offers one only for thermometers. A percentage stays within 0-100.
 
 ### Polling
 

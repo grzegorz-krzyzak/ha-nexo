@@ -40,11 +40,23 @@ KEEPALIVE_CHECK: Final = 1  # seconds between checks
 OPT_BINARY_SENSORS: Final = "binary_sensors"
 OPT_THERMOMETERS: Final = "thermometers"
 OPT_ANALOG_SENSORS: Final = "analog_sensors"
+# Per analog input, by resource name: {"kind": ..., "offset": ...}
+OPT_ANALOG_SETTINGS: Final = "analog_settings"
 OPT_COVERS: Final = "covers"
 OPT_BUTTONS: Final = "buttons"
 OPT_VALVES: Final = "valves"
 # The single polling interval of 0.1.x and 0.2.x, replaced by the groups above
 LEGACY_OPT_SCAN_INTERVAL: Final = "scan_interval"
+
+# An analog input reads 0-100 of the range its sensor is configured for in
+# the central unit (0-10 V or a resistive sensor); the unit is not reported.
+# The kind picks how Home Assistant shows it; a whole-number offset
+# calibrates it, as the central unit itself only offers for thermometers.
+ANALOG_KIND: Final = "kind"
+ANALOG_OFFSET: Final = "offset"
+ANALOG_KIND_RAW: Final = "raw"
+ANALOG_KINDS: Final = ["raw", "humidity", "moisture", "percent"]
+ANALOG_OFFSET_LIMIT: Final = 10
 
 # Keys of a configured cover or button
 ITEM_ID: Final = "id"
