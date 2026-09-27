@@ -19,7 +19,6 @@ from homeassistant.config_entries import (
 )
 from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.translation import async_get_translations
 from homeassistant.helpers.selector import (
     BooleanSelector,
     NumberSelector,
@@ -224,20 +223,18 @@ def _sections_summary(sections: list[str]) -> str:
     return prefix + joined
 
 
-async def _kind_labels(hass: HomeAssistant) -> dict[str, str]:
-    """The analog kinds' names in the user's language, for the menu."""
-    strings = await async_get_translations(hass, hass.config.language, "selector", [DOMAIN])
-    prefix = f"component.{DOMAIN}.selector.analog_kind.options."
-    return {kind: strings.get(prefix + kind, kind) for kind in ANALOG_KINDS}
+def _analog_placeholders(index: int, item: dict[str, Any]) -> dict[str, str]:
+    """Language-free values for an analog input's menu line.
 
-
-def _analog_summary(item: dict[str, Any], kinds: dict[str, str]) -> str:
-    """'Soil moisture · +2' - the kind, and the offset when there is one."""
-    summary = kinds[item.get(ANALOG_KIND, ANALOG_KIND_RAW)]
-    offset = item.get(ANALOG_OFFSET, 0)
-    if offset:
-        summary += f" · {offset:+g}"
-    return summary
+    The words come from the translations, which the frontend picks in the
+    viewer's language; a flow does not know that language, so nothing here
+    may be text.
+    """
+    kind = item.get(ANALOG_KIND, ANALOG_KIND_RAW)
+    return {
+        f"analog_{index}_unit": "—" if kind == ANALOG_KIND_RAW else "%",
+        f"analog_{index}_offset": f"{int(item.get(ANALOG_OFFSET, 0)):+d}",
+    }
 
 
 def _cover_summary(item: dict[str, Any]) -> str:
@@ -478,12 +475,10 @@ class NexoOptionsFlow(OptionsFlowWithReload):
     ) -> ConfigFlowResult:
         names = self._options.get(OPT_ANALOG_SENSORS, [])[:MAX_ITEMS]
         settings = self._options.get(OPT_ANALOG_SETTINGS, {})
-        kinds = await _kind_labels(self.hass)
         placeholders: dict[str, str] = {}
         for i, name in enumerate(names):
-            item = settings.get(name, {})
             placeholders[f"analog_{i}"] = name
-            placeholders[f"analog_{i}_info"] = _analog_summary(item, kinds)
+            placeholders.update(_analog_placeholders(i, settings.get(name, {})))
         return self.async_show_menu(
             step_id="analog",
             menu_options=[*(f"analog_{i}" for i in range(len(names))), "back"],

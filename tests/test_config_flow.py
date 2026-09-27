@@ -338,11 +338,13 @@ async def test_analog_input_settings(hass: HomeAssistant, fake_nexo) -> None:
     result = await _pick(hass, result["flow_id"], "analog")
     assert result["menu_options"] == ["analog_0", "back"]
     assert result["description_placeholders"]["analog_0"] == "HUMIDITY"
-    assert result["description_placeholders"]["analog_0_info"] == "Raw value"
+    placeholders = result["description_placeholders"]
+    assert (placeholders["analog_0_unit"], placeholders["analog_0_offset"]) == ("—", "+0")
     result = await _pick(hass, result["flow_id"], "analog_0")
     assert result["type"] is FlowResultType.FORM
     result = await _submit(hass, result["flow_id"], {"kind": "moisture", "offset": 2})
-    assert result["description_placeholders"]["analog_0_info"] == "Soil moisture · +2"
+    placeholders = result["description_placeholders"]
+    assert (placeholders["analog_0_unit"], placeholders["analog_0_offset"]) == ("%", "+2")
     result = await _pick(hass, result["flow_id"], "back")
     result = await _pick(hass, result["flow_id"], "save")
     assert entry.options["analog_settings"] == {"HUMIDITY": {"kind": "moisture", "offset": 2}}
