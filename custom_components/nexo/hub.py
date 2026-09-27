@@ -5,10 +5,12 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Callable
 from functools import partial
+import time
 from typing import Any, TypeVar
 
 from homeassistant.core import HomeAssistant
 
+from .const import KEEPALIVE_IDLE
 from .nexo_client import ImportTypes, NexoClient
 
 _T = TypeVar("_T")
@@ -31,6 +33,7 @@ class NexoHub:
         self._client: NexoClient | None = None
         self._lock = asyncio.Lock()
         self._resources: dict[ImportTypes, list[str]] = {}
+        self._last_call = time.monotonic()
 
     @property
     def client(self) -> NexoClient:
@@ -58,7 +61,21 @@ class NexoHub:
         its first argument, for operations spanning several commands.
         """
         async with self._lock:
-            return await self.hass.async_add_executor_job(func, *args)
+            try:
+                return await self.hass.async_add_executor_job(func, *args)
+            finally:
+                self._last_call = time.monotonic()
+
+    async def async_keepalive(self) -> None:
+        """Ping the card if the connection has been quiet, so it stays open.
+
+        Skipped while a call is running: that call is traffic already.
+        """
+        if self._client is None or self._lock.locked():
+            return
+        if time.monotonic() - self._last_call < KEEPALIVE_IDLE:
+            return
+        await self.async_call(self._client.ping)
 
     async def async_resources(self, resource_type: ImportTypes) -> list[str]:
         """Return the resource names of one type, read once and cached."""

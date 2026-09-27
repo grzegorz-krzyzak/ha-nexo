@@ -273,6 +273,27 @@ async def test_step_button_icon_without_reed_switch(hass: HomeAssistant, fake_ne
     assert "icon" not in hass.states.get("button.nexo_garage_step").attributes
 
 
+async def test_keepalive_pings_only_a_quiet_connection(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    await _setup(hass)
+    pings: list[None] = []
+
+    def ping() -> bool:
+        pings.append(None)
+        return True
+
+    fake_nexo.ping = ping
+    await _tick(hass, freezer, 1)
+    await _tick(hass, freezer, 1)
+    assert pings == []  # the setup sweep was traffic enough
+    await _tick(hass, freezer, 1)
+    await _tick(hass, freezer, 1)
+    assert len(pings) == 1
+    # From then on no silence reaches the card's 5 s limit
+    for _ in range(20):
+        await _tick(hass, freezer, 1)
+    assert 4 <= len(pings) <= 8
+
+
 async def _tick(hass: HomeAssistant, freezer, seconds: float) -> None:
     from datetime import timedelta
 

@@ -3,16 +3,19 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT, Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers import device_registry as dr, entity_registry as er
+from homeassistant.helpers.event import async_track_time_interval
 
 from .const import (
     DEFAULT_PORT,
     DOMAIN,
+    KEEPALIVE_CHECK,
     COVER_TRAVEL_TIME,
     ITEM_ID,
     MANUFACTURER,
@@ -79,6 +82,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: NexoConfigEntry) -> bool
     entry.runtime_data = NexoData(hub, coordinator, motions)
     await _async_register_device(hass, entry, hub)
     _remove_deselected_entities(hass, entry)
+
+    async def _async_keepalive(now: datetime) -> None:
+        await hub.async_keepalive()
+
+    entry.async_on_unload(
+        async_track_time_interval(
+            hass, _async_keepalive, timedelta(seconds=KEEPALIVE_CHECK),
+            cancel_on_shutdown=True,
+        )
+    )
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True

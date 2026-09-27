@@ -12,6 +12,14 @@ DEFAULT_SCAN_INTERVAL: Final = 10  # seconds
 MIN_SCAN_INTERVAL: Final = 5
 MAX_SCAN_INTERVAL: Final = 300
 
+# The LAN card closes a connection that stays silent longer than the
+# tolerance for communication breaks in its settings (5 s by default), and
+# the next command then fails. Between polling sweeps the connection is kept
+# alive with a ping - answered by the card itself, so no load on the central
+# unit - once it has been quiet this long.
+KEEPALIVE_IDLE: Final = 3  # seconds
+KEEPALIVE_CHECK: Final = 1  # seconds between checks
+
 # Options: which resources are imported, and the logic-driven entities
 OPT_BINARY_SENSORS: Final = "binary_sensors"
 OPT_THERMOMETERS: Final = "thermometers"

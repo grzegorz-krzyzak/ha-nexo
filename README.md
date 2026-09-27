@@ -172,6 +172,14 @@ treats a failed read as "no news" rather than a change of state. Resource
 listings are checked the same way, by the type and index each entry echoes
 back.
 
+The LAN card closes a connection that has been silent longer than the
+tolerance for communication breaks set in the central unit's LAN card
+settings (5 s by default). With a polling interval longer than that, the
+first read of every sweep would find the connection gone and have to
+reconnect. So once the connection has been quiet for 3 s the integration
+sends a `ping`, which the card answers itself without involving the central
+unit.
+
 ## Credits
 
 The client is a rewrite of `pyNexo.py` from
