@@ -256,6 +256,23 @@ async def test_no_step_button_without_travel_time(hass: HomeAssistant, fake_nexo
     assert hass.states.get("button.nexo_entry_gate_step") is None
 
 
+async def test_step_button_icon_follows_reed_switch(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    await _setup(hass)
+    entity_id = "button.nexo_garage_step"
+    assert hass.states.get(entity_id).attributes["icon"] == "mdi:garage"
+    for reed, icon in ((102, "mdi:garage-open"), (0, "mdi:garage-alert"), (101, "mdi:garage")):
+        fake_nexo.states["KON DOOR"] = reed
+        await _tick(hass, freezer, 11)
+        assert hass.states.get(entity_id).attributes["icon"] == icon
+
+
+async def test_step_button_icon_without_reed_switch(hass: HomeAssistant, fake_nexo) -> None:
+    covers = [dict(OPTIONS["covers"][1])]
+    del covers[0]["reed_sensor"]
+    await _setup(hass, {**OPTIONS, "covers": covers})
+    assert "icon" not in hass.states.get("button.nexo_garage_step").attributes
+
+
 async def _tick(hass: HomeAssistant, freezer, seconds: float) -> None:
     from datetime import timedelta
 

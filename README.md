@@ -118,6 +118,13 @@ another app used in between is not seen, so one press may fall out of step;
 the next closed reading puts it right. Not available together with *Open only
 when confirmed closed*, which would refuse the stop on the way down.
 
+A button's state is always the time of its last press, so the button shows
+the gate's state in its **icon**, from the reed switch: closed, not closed,
+or unreadable (for example `mdi:garage`, `mdi:garage-open`,
+`mdi:garage-alert`). Useful where a car widget shows only the button. Nothing
+in between is guessed from the travel time. An icon set by hand on the entity
+overrides it.
+
 A door strike behind a logic rule is best added as a **button**: the strike
 pulse is over before the command returns, and the reed switch does not change
 until someone pushes the door, so there is nothing to report but "sent".

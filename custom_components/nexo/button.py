@@ -11,18 +11,30 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import NexoConfigEntry
 from .const import (
+    COVER_DEVICE_CLASS,
+    COVER_REED_SENSOR,
     COVER_TRAVEL_TIME,
     ITEM_COMMAND,
     ITEM_ID,
     ITEM_NAME,
     OPT_BUTTONS,
     OPT_COVERS,
+    SENSOR_INTACT,
+    SENSOR_VIOLATED,
 )
 from .coordinator import NexoCoordinator
 from .cover import async_step
 from .entity import NexoEntity
 from .motion import Motion
 from .nexo_client import NexoError
+
+# Per gate type: closed, not closed, reed switch unreadable. Only what the
+# reed switch can tell: no opening or closing guessed from the travel time.
+STEP_ICONS: dict[str, tuple[str, str, str]] = {
+    "garage": ("mdi:garage", "mdi:garage-open", "mdi:garage-alert"),
+    "gate": ("mdi:gate", "mdi:gate-open", "mdi:gate-alert"),
+    "door": ("mdi:door-closed", "mdi:door-open", "mdi:door"),
+}
 
 
 async def async_setup_entry(
@@ -74,6 +86,10 @@ class NexoStepButton(NexoEntity, ButtonEntity):
     Unlike a toggle there is nothing for a dashboard or car widget to
     invert: every press is the same action, and the direction is decided
     here from the reed switch and the last movement.
+
+    A button's state is always the time of its last press, so the gate's
+    state shows in the icon instead - for a car widget that offers only this
+    button.
     """
 
     _attr_translation_key = "step"
@@ -85,6 +101,19 @@ class NexoStepButton(NexoEntity, ButtonEntity):
         self._item = item
         self._motion = motion
         self._attr_translation_placeholders = {"name": item[ITEM_NAME]}
+
+    @property
+    def icon(self) -> str | None:
+        reed_sensor = self._item.get(COVER_REED_SENSOR)
+        icons = STEP_ICONS.get(self._item[COVER_DEVICE_CLASS])
+        if not reed_sensor or icons is None:
+            return None
+        state = (self.coordinator.data or {}).get(reed_sensor)
+        if state == SENSOR_INTACT:
+            return icons[0]
+        if state == SENSOR_VIOLATED:
+            return icons[1]
+        return icons[2]
 
     async def async_press(self) -> None:
         await async_step(self, self._item, self._motion)
