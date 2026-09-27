@@ -458,3 +458,23 @@ async def test_analog_percent_clamps_high(hass: HomeAssistant, fake_nexo) -> Non
     assert state.state == "100"
     assert "device_class" not in state.attributes
 
+
+async def test_output_read_as_sensor(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    await _setup(hass, {**OPTIONS, "output_sensors": ["S7"]})
+    entity_id = "binary_sensor.nexo_s7"
+    assert hass.states.get(entity_id).state == "off"
+    fake_nexo.states["S7"] = 1
+    await _tick(hass, freezer, 5)
+    assert hass.states.get(entity_id).state == "off"  # outputs: every 10 s
+    await _tick(hass, freezer, 5)
+    assert hass.states.get(entity_id).state == "on"
+
+
+async def test_deselected_output_sensor_is_removed(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass, {**OPTIONS, "output_sensors": ["S7"]})
+    assert hass.states.get("binary_sensor.nexo_s7")
+    hass.config_entries.async_update_entry(entry, options={**OPTIONS, "output_sensors": []})
+    await hass.config_entries.async_reload(entry.entry_id)
+    await hass.async_block_till_done()
+    assert er.async_get(hass).async_get("binary_sensor.nexo_s7") is None
+

@@ -40,6 +40,9 @@ KEEPALIVE_CHECK: Final = 1  # seconds between checks
 OPT_BINARY_SENSORS: Final = "binary_sensors"
 OPT_THERMOMETERS: Final = "thermometers"
 OPT_ANALOG_SENSORS: Final = "analog_sensors"
+# Outputs imported read-only, as binary sensors: whatever the user maps onto
+# an output in the central unit (a mode, a state of a rule) becomes visible
+OPT_OUTPUT_SENSORS: Final = "output_sensors"
 # Per analog input, by resource name: {"kind": ..., "offset": ...}
 OPT_ANALOG_SETTINGS: Final = "analog_settings"
 OPT_COVERS: Final = "covers"

@@ -62,7 +62,7 @@
         },
         "menu_option_descriptions": {
           "connection": "{address}",
-          "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
+          "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors} · outputs: {output_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, measurements {interval_measurements} s",
@@ -86,7 +86,7 @@
         },
         "menu_option_descriptions": {
           "connection": "{address}",
-          "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
+          "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors} · outputs: {output_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, measurements {interval_measurements} s",
@@ -110,7 +110,7 @@
         },
         "menu_option_descriptions": {
           "connection": "{address}",
-          "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
+          "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors} · outputs: {output_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, measurements {interval_measurements} s",
@@ -238,11 +238,13 @@
         "data": {
           "binary_sensors": "Inputs (reed switches, motion detectors)",
           "thermometers": "Thermometers",
-          "analog_sensors": "Analogue inputs"
+          "analog_sensors": "Analogue inputs",
+          "output_sensors": "Outputs (read only)"
         },
         "data_description": {
           "binary_sensors": "On when violated: a door open, motion detected. Set what each one is under \"Show as\" in its entity settings.",
-          "analog_sensors": "Raw values without a unit - the central unit does not say what is wired in."
+          "analog_sensors": "Set the type and calibration of each under Analog inputs.",
+          "output_sensors": "On while the output is switched on. Useful for anything a rule in the central unit mirrors onto an output. Read only; controlling outputs comes later."
         }
       },
       "analog": {

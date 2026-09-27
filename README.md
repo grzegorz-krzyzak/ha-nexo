@@ -15,13 +15,14 @@ connection the NexoVision app uses. Local polling, no cloud.
 |---|---|---|
 | Inputs (`SENSOR`) - reed switches, motion detectors | `binary_sensor` | on when violated; pick the type under *Show as* |
 | Thermometers | `sensor` | °C |
-| Analogue inputs | `sensor` | raw value, no unit |
+| Analogue inputs | `sensor` | raw value, or humidity / soil moisture / percentage with a calibration |
+| Outputs, read only | `binary_sensor` | on while switched on; for anything a rule mirrors onto an output |
 | Gates and doors driven by logic commands | `cover` | closed / not closed, from a reed switch |
 | Watering programs and other start/stop command pairs | `valve` | open while any of its sections is on |
 | Any logic command | `button` | fire and forget |
 
-Lights, dimmers, outputs, thermostats, blinds and alarm partitions are not
-supported yet.
+Controlling lights, dimmers and outputs, and thermostats, blinds and alarm
+partitions are not supported yet.
 
 ## Installation
 
@@ -84,7 +85,7 @@ Resources are read in three groups, each at its own interval:
 | Group | What | Default |
 |---|---|---|
 | Inputs | reed switches and motion sensors, including the gates' reed switches | 5 s |
-| Outputs | watering sections and the main valve | 10 s |
+| Outputs | watering sections, the main valve, outputs read as sensors | 10 s |
 | Measurements | thermometers and analog inputs | 60 s |
 
 After a command, what shows its effect is read every second for a while:

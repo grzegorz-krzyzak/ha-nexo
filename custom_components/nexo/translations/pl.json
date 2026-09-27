@@ -62,7 +62,7 @@
         },
         "menu_option_descriptions": {
           "connection": "{address}",
-          "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors}",
+          "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors} · wyjścia: {output_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, pomiary co {interval_measurements} s",
@@ -86,7 +86,7 @@
         },
         "menu_option_descriptions": {
           "connection": "{address}",
-          "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors}",
+          "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors} · wyjścia: {output_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, pomiary co {interval_measurements} s",
@@ -110,7 +110,7 @@
         },
         "menu_option_descriptions": {
           "connection": "{address}",
-          "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors}",
+          "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors} · wyjścia: {output_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, pomiary co {interval_measurements} s",
@@ -238,11 +238,13 @@
         "data": {
           "binary_sensors": "Wejścia (kontaktrony, czujki ruchu)",
           "thermometers": "Termometry",
-          "analog_sensors": "Wejścia analogowe"
+          "analog_sensors": "Wejścia analogowe",
+          "output_sensors": "Wyjścia (tylko odczyt)"
         },
         "data_description": {
           "binary_sensors": "Włączone, gdy naruszone: drzwi otwarte, wykryty ruch. Co to za czujnik, ustawisz w opcji „Pokaż jako” w ustawieniach encji.",
-          "analog_sensors": "Surowe wartości bez jednostki - centrala nie podaje, co jest podłączone."
+          "analog_sensors": "Rodzaj i kalibrację każdego ustawisz w pozycji Wejścia analogowe.",
+          "output_sensors": "Włączony, gdy wyjście jest załączone. Przydatne do wszystkiego, co reguła w centrali odwzorowuje na wyjście. Tylko odczyt; sterowanie wyjściami dojdzie później."
         }
       },
       "analog": {

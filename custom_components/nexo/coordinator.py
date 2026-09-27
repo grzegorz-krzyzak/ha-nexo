@@ -24,6 +24,7 @@ from .const import (
     OPT_INTERVAL_INPUTS,
     OPT_INTERVAL_MEASUREMENTS,
     OPT_INTERVAL_OUTPUTS,
+    OPT_OUTPUT_SENSORS,
     OPT_THERMOMETERS,
     OPT_VALVES,
     POLL_TICK,
@@ -69,6 +70,7 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
             ),
         }
         outputs = {
+            *options.get(OPT_OUTPUT_SENSORS, []),
             *(
                 section
                 for valve in options.get(OPT_VALVES, [])

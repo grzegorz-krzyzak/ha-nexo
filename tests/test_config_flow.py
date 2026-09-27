@@ -371,3 +371,17 @@ async def test_analog_default_and_deselected_leave_no_settings(hass: HomeAssista
     result = await _pick(hass, result["flow_id"], "save")
     assert entry.options["analog_settings"] == {}
 
+
+async def test_outputs_offered_as_sensors(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass)
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    result = await _pick(hass, result["flow_id"], "sensors")
+    assert "output_sensors" in result["data_schema"].schema
+    result = await _submit(hass, result["flow_id"], {
+        "binary_sensors": ["KON DOOR"], "thermometers": [], "analog_sensors": [],
+        "output_sensors": ["S7"],
+    })
+    assert result["description_placeholders"]["output_sensors"] == "1"
+    result = await _pick(hass, result["flow_id"], "save")
+    assert entry.options["output_sensors"] == ["S7"]
+

@@ -60,6 +60,7 @@ from .const import (
     MIN_INTERVAL,
     OPT_ANALOG_SENSORS,
     OPT_ANALOG_SETTINGS,
+    OPT_OUTPUT_SENSORS,
     OPT_BINARY_SENSORS,
     OPT_BUTTONS,
     OPT_COVERS,
@@ -397,6 +398,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 OPT_BINARY_SENSORS: str(len(options.get(OPT_BINARY_SENSORS, []))),
                 OPT_THERMOMETERS: str(len(options.get(OPT_THERMOMETERS, []))),
                 OPT_ANALOG_SENSORS: str(len(options.get(OPT_ANALOG_SENSORS, []))),
+                OPT_OUTPUT_SENSORS: str(len(options.get(OPT_OUTPUT_SENSORS, []))),
                 OPT_COVERS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_COVERS, []))
                 or NONE,
                 OPT_BUTTONS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_BUTTONS, []))
@@ -603,6 +605,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 OPT_BINARY_SENSORS: await self._resources(ImportTypes.SENSOR),
                 OPT_THERMOMETERS: await self._resources(ImportTypes.THERMOMETER),
                 OPT_ANALOG_SENSORS: await self._resources(ImportTypes.ANALOGSENSOR),
+                OPT_OUTPUT_SENSORS: await self._resources(ImportTypes.OUTPUT),
             }
         except NexoError as err:
             return self._cannot_list(err)

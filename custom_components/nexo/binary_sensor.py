@@ -1,4 +1,4 @@
-"""Nexo SENSOR resources: reed switches, motion detectors and other inputs."""
+"""Nexo SENSOR resources (reed switches, motion detectors) and outputs read as sensors."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import NexoConfigEntry
-from .const import OPT_BINARY_SENSORS, SENSOR_INTACT, SENSOR_VIOLATED
+from .const import OPT_BINARY_SENSORS, OPT_OUTPUT_SENSORS, SENSOR_INTACT, SENSOR_VIOLATED
 from .entity import NexoEntity, NexoResourceEntity
 
 
@@ -27,6 +27,10 @@ async def async_setup_entry(
             *(
                 NexoBinarySensor(coordinator, "binary_sensor", name)
                 for name in entry.options.get(OPT_BINARY_SENSORS, [])
+            ),
+            *(
+                NexoOutputSensor(coordinator, "output", name)
+                for name in entry.options.get(OPT_OUTPUT_SENSORS, [])
             ),
         ]
     )
@@ -67,3 +71,18 @@ class NexoBinarySensor(NexoResourceEntity, BinarySensorEntity):
         if state == SENSOR_INTACT:
             return False
         return None
+
+
+class NexoOutputSensor(NexoResourceEntity, BinarySensorEntity):
+    """An output, read only: on while it is switched on (non-zero).
+
+    Nothing is assumed about what the output means - a rule in the central
+    unit may switch it to mirror a mode or a variable. Name it and pick a
+    class in Home Assistant.
+    """
+
+    @property
+    def is_on(self) -> bool | None:
+        state = self.raw_state
+        return None if state is None else state != 0
+
