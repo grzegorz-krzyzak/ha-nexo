@@ -50,23 +50,41 @@ shows the current settings next to each item:
   the top of the menu. Also available as *Reconfigure* in the ⋮ menu.
   Entities are kept when the address changes.
 - **Sensors** - the lists come from the central unit. Each imported resource
-  costs one query of about 50 ms per polling cycle.
+  costs one query of about 50 ms each time it is read.
 - **Gates and doors**, **Valves** and **Buttons** - one entry each; pick one to
   edit or delete it. Up to 20 of each.
-- **Settings** - polling interval, 10 s by default.
+- **Settings** - how often each group of resources is read (see *Polling*).
 
 Nothing is stored until **Save and close**; closing the dialog discards the
 changes. Home Assistant forms have no back button: submitting a form without
 changes - or an empty *add* form - goes back to the menu.
 
+### Polling
+
+Resources are read in three groups, each at its own interval:
+
+| Group | What | Default |
+|---|---|---|
+| Inputs | reed switches and motion sensors, including the gates' reed switches | 5 s |
+| Outputs | watering sections and the main valve | 10 s |
+| Measurements | thermometers and analog inputs | 60 s |
+
+After a command, what shows its effect is read every second for a while:
+a gate's reed switch for its travel time (60 s without one), a valve's
+sections and main valve for 30 s. So an opened gate shows as open within
+about a second, whatever the interval.
+
+Updating from 0.2.x: the single polling interval is replaced by these
+groups and starts from the defaults.
+
 ### Connection status
 
 The device has a diagnostic **Connection to central unit** sensor, on while
 the central unit answers - usable in automations, with its history recorded.
-After three polling cycles in a row without an answer the integration reloads,
-so the integrations page shows it as retrying setup, and it keeps retrying
-until the central unit is back. The central unit's firmware version is shown
-in the device info.
+After three read rounds in a row without an answer (about 15 s with the
+default inputs interval) the integration reloads, so the integrations page
+shows it as retrying setup, and it keeps retrying until the central unit is
+back. The central unit's firmware version is shown in the device info.
 
 ## Gates and doors
 
@@ -174,8 +192,8 @@ back.
 
 The LAN card closes a connection that has been silent longer than the
 tolerance for communication breaks set in the central unit's LAN card
-settings (5 s by default). With a polling interval longer than that, the
-first read of every sweep would find the connection gone and have to
+settings (5 s by default). With polling intervals longer than that, the
+first read after a pause would find the connection gone and have to
 reconnect. So once the connection has been quiet for 3 s the integration
 sends a `ping`, which the card answers itself without involving the central
 unit.

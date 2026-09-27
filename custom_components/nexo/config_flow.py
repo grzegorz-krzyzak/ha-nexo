@@ -40,20 +40,25 @@ from .const import (
     COVER_REED_SENSOR,
     COVER_TRAVEL_TIME,
     DEFAULT_PORT,
-    DEFAULT_SCAN_INTERVAL,
+    DEFAULT_INTERVAL_INPUTS,
+    DEFAULT_INTERVAL_MEASUREMENTS,
+    DEFAULT_INTERVAL_OUTPUTS,
     DOMAIN,
     ITEM_COMMAND,
     ITEM_ID,
     ITEM_NAME,
     MAX_ITEMS,
     MAX_LOGIC_COMMAND,
-    MAX_SCAN_INTERVAL,
-    MIN_SCAN_INTERVAL,
+    LEGACY_OPT_SCAN_INTERVAL,
+    MAX_INTERVAL,
+    MIN_INTERVAL,
     OPT_ANALOG_SENSORS,
     OPT_BINARY_SENSORS,
     OPT_BUTTONS,
     OPT_COVERS,
-    OPT_SCAN_INTERVAL,
+    OPT_INTERVAL_INPUTS,
+    OPT_INTERVAL_MEASUREMENTS,
+    OPT_INTERVAL_OUTPUTS,
     OPT_THERMOMETERS,
     OPT_VALVES,
     VALVE_AUTO_CLOSE,
@@ -96,6 +101,13 @@ CONNECTION_SCHEMA = vol.Schema(
 REAUTH_SCHEMA = vol.Schema({vol.Required(CONF_PASSWORD): PASSWORD_SELECTOR})
 
 COVER_DEVICE_CLASSES = ["gate", "garage", "door"]
+
+# Polling intervals in the settings, with their defaults, in display order
+POLLING_INTERVALS = {
+    OPT_INTERVAL_INPUTS: DEFAULT_INTERVAL_INPUTS,
+    OPT_INTERVAL_OUTPUTS: DEFAULT_INTERVAL_OUTPUTS,
+    OPT_INTERVAL_MEASUREMENTS: DEFAULT_INTERVAL_MEASUREMENTS,
+}
 
 # Translations are read twice, and each reader rejects something:
 # - the frontend formats them as ICU messages, where <...> is a tag without
@@ -367,9 +379,10 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 or NONE,
                 OPT_VALVES: ", ".join(i[ITEM_NAME] for i in options.get(OPT_VALVES, []))
                 or NONE,
-                OPT_SCAN_INTERVAL: str(
-                    options.get(OPT_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
-                ),
+                **{
+                    key: str(options.get(key, default))
+                    for key, default in POLLING_INTERVALS.items()
+                },
             },
         )
 
@@ -759,23 +772,23 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         if user_input is not None:
-            self._options[OPT_SCAN_INTERVAL] = int(user_input[OPT_SCAN_INTERVAL])
+            for key in POLLING_INTERVALS:
+                self._options[key] = int(user_input[key])
+            self._options.pop(LEGACY_OPT_SCAN_INTERVAL, None)
             return await self.async_step_menu()
 
         schema = vol.Schema(
             {
-                vol.Required(
-                    OPT_SCAN_INTERVAL,
-                    default=self._options.get(OPT_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
-                ): NumberSelector(
+                vol.Required(key, default=self._options.get(key, default)): NumberSelector(
                     NumberSelectorConfig(
-                        min=MIN_SCAN_INTERVAL,
-                        max=MAX_SCAN_INTERVAL,
+                        min=MIN_INTERVAL,
+                        max=MAX_INTERVAL,
                         step=1,
                         unit_of_measurement="s",
                         mode=NumberSelectorMode.BOX,
                     )
-                ),
+                )
+                for key, default in POLLING_INTERVALS.items()
             }
         )
         return self.async_show_form(step_id="settings", data_schema=schema)

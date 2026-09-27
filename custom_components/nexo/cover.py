@@ -17,11 +17,13 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import NexoConfigEntry
 from .const import (
+    BOOST_GATE_DEFAULT,
     COVER_CLOSE_COMMAND,
     COVER_DEVICE_CLASS,
     COVER_OPEN_COMMAND,
     COVER_OPEN_ONLY_WHEN_CLOSED,
     COVER_REED_SENSOR,
+    COVER_TRAVEL_TIME,
     ITEM_ID,
     ITEM_NAME,
     OPT_COVERS,
@@ -133,7 +135,7 @@ class NexoLogicCover(NexoEntity, CoverEntity):
             ) from err
         if self._motion:
             self._motion.record("up", time.monotonic())
-        await self.coordinator.async_request_refresh()
+        await async_boost_reed(self.coordinator, self._item)
 
     async def async_close_cover(self, **kwargs: Any) -> None:
         # Unconditional: closing an already closed gate is harmless, and it
@@ -146,7 +148,7 @@ class NexoLogicCover(NexoEntity, CoverEntity):
             raise HomeAssistantError(f"{self.name} was not closed: {err}") from err
         if self._motion:
             self._motion.record("down", time.monotonic())
-        await self.coordinator.async_request_refresh()
+        await async_boost_reed(self.coordinator, self._item)
 
     async def async_toggle(self, **kwargs: Any) -> None:
         # With a travel time set, toggle behaves like the remote: up, stop,
@@ -173,4 +175,14 @@ async def async_step(entity: NexoEntity, item: dict[str, Any], motion: Motion) -
         )
     except NexoError as err:
         raise HomeAssistantError(f"{entity.name}: command not sent: {err}") from err
-    await entity.coordinator.async_request_refresh()
+    await async_boost_reed(entity.coordinator, item)
+
+
+async def async_boost_reed(coordinator: NexoCoordinator, item: dict[str, Any]) -> None:
+    """After a command, watch the gate's reed switch closely for its travel."""
+    reed_sensor = item.get(COVER_REED_SENSOR)
+    if reed_sensor:
+        seconds = item.get(COVER_TRAVEL_TIME) or BOOST_GATE_DEFAULT
+        await coordinator.async_boost([reed_sensor], seconds)
+    else:
+        await coordinator.async_request_refresh()

@@ -18,12 +18,14 @@ from homeassistant.helpers.event import async_call_later
 
 from . import NexoConfigEntry
 from .const import (
+    BOOST_VALVE,
     COVER_CLOSE_COMMAND,
     COVER_OPEN_COMMAND,
     ITEM_ID,
     ITEM_NAME,
     OPT_VALVES,
     VALVE_AUTO_CLOSE,
+    VALVE_MAIN,
     VALVE_SECTIONS,
 )
 from .coordinator import NexoCoordinator
@@ -59,6 +61,7 @@ class NexoLogicValve(NexoEntity, ValveEntity):
         self._close_command: str = item[COVER_CLOSE_COMMAND]
         # Without sections there is no state, so both commands stay available
         self._attr_assumed_state = not item.get(VALVE_SECTIONS)
+        self._watched = [*item.get(VALVE_SECTIONS, []), *filter(None, [item.get(VALVE_MAIN)])]
         minutes = item.get(VALVE_AUTO_CLOSE)
         self._auto_close = timedelta(minutes=minutes) if minutes else None
         self._cancel_auto_close: CALLBACK_TYPE | None = None
@@ -82,7 +85,8 @@ class NexoLogicValve(NexoEntity, ValveEntity):
             await hub.async_call(hub.client.trigger_logic, command)
         except NexoError as err:
             raise HomeAssistantError(f"{self.name} was not {done}: {err}") from err
-        await self.coordinator.async_request_refresh()
+        # Watch the sections closely while the program starts or stops
+        await self.coordinator.async_boost(self._watched, BOOST_VALVE)
 
     # ------------------------------------------------------------ auto close
     #

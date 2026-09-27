@@ -8,9 +8,25 @@ DOMAIN: Final = "nexo"
 MANUFACTURER: Final = "Nexwell"
 
 DEFAULT_PORT: Final = 1024
-DEFAULT_SCAN_INTERVAL: Final = 10  # seconds
-MIN_SCAN_INTERVAL: Final = 5
-MAX_SCAN_INTERVAL: Final = 300
+# Polling. Each group of resources is read at its own interval, in seconds:
+# inputs (reed switches, motion) change often and matter at once; outputs
+# (watering sections) change on command; measurements (temperatures, analog
+# inputs) drift slowly.
+OPT_INTERVAL_INPUTS: Final = "interval_inputs"
+OPT_INTERVAL_OUTPUTS: Final = "interval_outputs"
+OPT_INTERVAL_MEASUREMENTS: Final = "interval_measurements"
+DEFAULT_INTERVAL_INPUTS: Final = 5
+DEFAULT_INTERVAL_OUTPUTS: Final = 10
+DEFAULT_INTERVAL_MEASUREMENTS: Final = 60
+MIN_INTERVAL: Final = 2
+MAX_INTERVAL: Final = 300
+# The coordinator wakes this often and reads what is due.
+POLL_TICK: Final = 1
+# After a command, the resources that show its effect are read on every tick
+# for this long: a gate's reed switch for its travel time (or the default),
+# a valve's sections and main valve for the valve time.
+BOOST_GATE_DEFAULT: Final = 60
+BOOST_VALVE: Final = 30
 
 # The LAN card closes a connection that stays silent longer than the
 # tolerance for communication breaks in its settings (5 s by default), and
@@ -27,7 +43,8 @@ OPT_ANALOG_SENSORS: Final = "analog_sensors"
 OPT_COVERS: Final = "covers"
 OPT_BUTTONS: Final = "buttons"
 OPT_VALVES: Final = "valves"
-OPT_SCAN_INTERVAL: Final = "scan_interval"
+# The single polling interval of 0.1.x and 0.2.x, replaced by the groups above
+LEGACY_OPT_SCAN_INTERVAL: Final = "scan_interval"
 
 # Keys of a configured cover or button
 ITEM_ID: Final = "id"

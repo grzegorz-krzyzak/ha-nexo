@@ -13,7 +13,7 @@ from custom_components.nexo.config_flow import PIN_MASK
 from custom_components.nexo.const import DOMAIN
 from custom_components.nexo.nexo_client import NexoAuthError
 
-from .test_init import _setup
+from .test_init import OPTIONS, _setup
 
 USER_INPUT = {"host": "192.0.2.10", "port": 1024, "password": "pw"}
 
@@ -313,3 +313,21 @@ async def test_menu_variant_when_not_answering(hass: HomeAssistant, fake_nexo) -
     assert result["description_placeholders"]["alert_open"] == '<ha-alert alert-type="warning">'
     result = await _pick(hass, result["flow_id"], "settings")
     assert result["step_id"] == "settings"
+
+
+async def test_polling_settings(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass, {**OPTIONS, "scan_interval": 10})  # as saved by 0.2.x
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    placeholders = result["description_placeholders"]
+    assert (placeholders["interval_inputs"], placeholders["interval_outputs"],
+            placeholders["interval_measurements"]) == ("5", "10", "60")
+    result = await _pick(hass, result["flow_id"], "settings")
+    result = await _submit(hass, result["flow_id"], {
+        "interval_inputs": 3, "interval_outputs": 10, "interval_measurements": 300,
+    })
+    result = await _pick(hass, result["flow_id"], "save")
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert entry.options["interval_inputs"] == 3
+    assert entry.options["interval_measurements"] == 300
+    assert "scan_interval" not in entry.options
+

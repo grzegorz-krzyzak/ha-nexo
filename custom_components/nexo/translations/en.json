@@ -64,7 +64,7 @@
           "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
-          "settings": "Polling every {scan_interval} s",
+          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
           "valves": "{valves}"
         },
@@ -86,7 +86,7 @@
           "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
-          "settings": "Polling every {scan_interval} s",
+          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
           "valves": "{valves}"
         },
@@ -108,7 +108,7 @@
           "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
-          "settings": "Polling every {scan_interval} s",
+          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
           "valves": "{valves}"
         },
@@ -912,11 +912,16 @@
       "settings": {
         "title": "Settings",
         "data": {
-          "scan_interval": "Polling interval"
+          "interval_inputs": "Inputs",
+          "interval_outputs": "Outputs",
+          "interval_measurements": "Measurements"
         },
         "data_description": {
-          "scan_interval": "Each imported sensor is one query of roughly 50 ms, so a full sweep takes longer the more you import."
-        }
+          "interval_inputs": "Reed switches and motion sensors, including the gates' reed switches.",
+          "interval_outputs": "Watering sections and the main valve.",
+          "interval_measurements": "Thermometers and analog inputs, which change slowly."
+        },
+        "description": "Each read takes about 50 ms. After a gate or valve command, the resources that show its effect are read every second for a while, whatever these intervals."
       },
       "valves": {
         "title": "Valves",

@@ -64,7 +64,7 @@
           "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
-          "settings": "Odpytywanie co {scan_interval} s",
+          "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
           "valves": "{valves}"
         },
@@ -86,7 +86,7 @@
           "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
-          "settings": "Odpytywanie co {scan_interval} s",
+          "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
           "valves": "{valves}"
         },
@@ -108,7 +108,7 @@
           "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
-          "settings": "Odpytywanie co {scan_interval} s",
+          "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
           "valves": "{valves}"
         },
@@ -912,11 +912,16 @@
       "settings": {
         "title": "Ustawienia",
         "data": {
-          "scan_interval": "Interwał odpytywania"
+          "interval_inputs": "Wejścia",
+          "interval_outputs": "Wyjścia",
+          "interval_measurements": "Pomiary"
         },
         "data_description": {
-          "scan_interval": "Każdy zaimportowany czujnik to jedno zapytanie trwające ok. 50 ms, więc pełny obieg trwa tym dłużej, im więcej importujesz."
-        }
+          "interval_inputs": "Kontaktrony i czujki ruchu, także kontaktrony bram.",
+          "interval_outputs": "Sekcje nawadniania i zawór główny.",
+          "interval_measurements": "Termometry i wejścia analogowe, które zmieniają się powoli."
+        },
+        "description": "Każdy odczyt trwa około 50 ms. Po komendzie bramy lub zaworu zasoby, które pokazują jej skutek, są przez chwilę czytane co sekundę, niezależnie od tych interwałów."
       },
       "valves": {
         "title": "Zawory",

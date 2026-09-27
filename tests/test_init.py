@@ -346,3 +346,88 @@ async def test_valve_auto_close_cancelled_when_it_ends(hass: HomeAssistant, fake
     await _tick(hass, freezer, 11)
     await _tick(hass, freezer, 31 * 60)
     fake_nexo.trigger_logic.assert_not_called()
+
+
+def _count_reads(fake_nexo) -> list[str]:
+    reads: list[str] = []
+    real = fake_nexo.get_state
+
+    def get_state(name: str) -> int:
+        reads.append(name)
+        return real(name)
+
+    fake_nexo.get_state = get_state
+    return reads
+
+
+async def test_groups_are_polled_at_their_intervals(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    await _setup(hass)
+    reads = _count_reads(fake_nexo)
+    for _ in range(4):
+        await _tick(hass, freezer, 1)
+    assert reads == []  # all read at setup, nothing due for 5 s
+    await _tick(hass, freezer, 1)
+    assert set(reads) == {"KON DOOR", "KON GATE", "PIR HALL"}  # inputs
+    reads.clear()
+    for _ in range(5):
+        await _tick(hass, freezer, 1)
+    assert {"S1", "S2", "ZG"} <= set(reads)  # outputs at 10 s
+    assert "TMP HALL" not in reads
+    for _ in range(50):
+        await _tick(hass, freezer, 1)
+    assert {"TMP HALL", "TMP OUTSIDE", "HUMIDITY"} <= set(reads)  # measurements at 60 s
+    assert reads.count("TMP HALL") == 1
+
+
+async def test_intervals_from_options(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    await _setup(hass, {**OPTIONS, "interval_inputs": 2, "interval_measurements": 300})
+    reads = _count_reads(fake_nexo)
+    await _tick(hass, freezer, 1)
+    await _tick(hass, freezer, 1)
+    assert set(reads) == {"KON DOOR", "KON GATE", "PIR HALL"}
+
+
+async def test_gate_command_boosts_its_reed_switch(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    await _setup(hass)
+    reads = _count_reads(fake_nexo)
+    await hass.services.async_call("cover", "open_cover", {"entity_id": "cover.nexo_garage"}, blocking=True)
+    reads.clear()
+    for _ in range(3):
+        await _tick(hass, freezer, 1)
+    assert reads.count("KON DOOR") == 3  # every tick, not every 5 s
+    assert "KON GATE" not in reads  # the other gate keeps its interval
+    for _ in range(30):  # past the 27 s travel time
+        await _tick(hass, freezer, 1)
+    reads.clear()
+    for _ in range(4):
+        await _tick(hass, freezer, 1)
+    assert reads.count("KON DOOR") <= 1  # back to the inputs' interval
+
+
+async def test_valve_command_boosts_its_sections(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    await _setup(hass)
+    reads = _count_reads(fake_nexo)
+    await hass.services.async_call("valve", "open_valve", {"entity_id": "valve.nexo_lawn"}, blocking=True)
+    reads.clear()
+    for _ in range(3):
+        await _tick(hass, freezer, 1)
+    assert reads.count("S1") == 3
+    assert reads.count("ZG") == 3
+
+
+async def test_a_tick_without_reads_keeps_the_failure(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    from custom_components.nexo.nexo_client import NexoConnectionError
+
+    await _setup(hass)
+    entity_id = "binary_sensor.nexo_connection_to_central_unit"
+
+    def down(name):
+        raise NexoConnectionError("gone")
+
+    fake_nexo.get_state = down
+    for _ in range(5):
+        await _tick(hass, freezer, 1)
+    assert hass.states.get(entity_id).state == "off"
+    await _tick(hass, freezer, 1)  # nothing due: proves nothing
+    assert hass.states.get(entity_id).state == "off"
+
