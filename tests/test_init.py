@@ -379,6 +379,33 @@ async def test_groups_are_polled_at_their_intervals(hass: HomeAssistant, fake_ne
     assert reads.count("TMP HALL") == 1
 
 
+async def test_a_tick_reads_the_most_urgent_first(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    await _setup(hass)
+    reads = _count_reads(fake_nexo)
+    await hass.services.async_call("valve", "open_valve", {"entity_id": "valve.nexo_lawn"}, blocking=True)
+    for _ in range(59):
+        await _tick(hass, freezer, 1)
+    reads.clear()
+    await _tick(hass, freezer, 1)  # 60 s: inputs, outputs and measurements all due
+    first = {name: reads.index(name) for name in reads}
+    assert first["KON DOOR"] < first["S2"] < first["TMP HALL"]  # inputs, outputs, measurements
+    # alphabetically HUMIDITY would come first; it is a measurement, so it comes last
+    assert first["HUMIDITY"] > first["S2"]
+
+
+async def test_boosted_resources_are_read_before_the_groups(
+    hass: HomeAssistant, fake_nexo, freezer
+) -> None:
+    await _setup(hass)
+    reads = _count_reads(fake_nexo)
+    for _ in range(4):
+        await _tick(hass, freezer, 1)
+    await hass.services.async_call("valve", "open_valve", {"entity_id": "valve.nexo_lawn"}, blocking=True)
+    reads.clear()
+    await _tick(hass, freezer, 1)  # 5 s: inputs due, the valve's sections boosted
+    assert reads.index("S1") < reads.index("KON DOOR")
+
+
 async def test_intervals_from_options(hass: HomeAssistant, fake_nexo, freezer) -> None:
     await _setup(hass, {**OPTIONS, "interval_inputs": 2, "interval_measurements": 300})
     reads = _count_reads(fake_nexo)

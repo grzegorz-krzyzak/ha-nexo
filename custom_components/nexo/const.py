@@ -10,13 +10,15 @@ MANUFACTURER: Final = "Nexwell"
 DEFAULT_PORT: Final = 1024
 # Polling. Each group of resources is read at its own interval, in seconds:
 # inputs (reed switches, motion) change often and matter at once; outputs
-# (watering sections) change on command; measurements (temperatures, analog
-# inputs) drift slowly.
+# (watering sections) change on command; lights change on command or at a wall
+# switch; measurements (temperatures, analog inputs) drift slowly.
 OPT_INTERVAL_INPUTS: Final = "interval_inputs"
 OPT_INTERVAL_OUTPUTS: Final = "interval_outputs"
+OPT_INTERVAL_LIGHTS: Final = "interval_lights"
 OPT_INTERVAL_MEASUREMENTS: Final = "interval_measurements"
 DEFAULT_INTERVAL_INPUTS: Final = 5
 DEFAULT_INTERVAL_OUTPUTS: Final = 10
+DEFAULT_INTERVAL_LIGHTS: Final = 10
 DEFAULT_INTERVAL_MEASUREMENTS: Final = 60
 MIN_INTERVAL: Final = 2
 MAX_INTERVAL: Final = 300

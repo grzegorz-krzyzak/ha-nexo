@@ -65,7 +65,7 @@
           "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors} · outputs: {output_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
-          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, measurements {interval_measurements} s",
+          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
           "valves": "{valves}",
           "analog": "Type and calibration"
@@ -89,7 +89,7 @@
           "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors} · outputs: {output_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
-          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, measurements {interval_measurements} s",
+          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
           "valves": "{valves}",
           "analog": "Type and calibration"
@@ -113,7 +113,7 @@
           "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors} · outputs: {output_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
-          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, measurements {interval_measurements} s",
+          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
           "valves": "{valves}",
           "analog": "Type and calibration"
@@ -1211,11 +1211,13 @@
         "data": {
           "interval_inputs": "Inputs",
           "interval_outputs": "Outputs",
+          "interval_lights": "Lights",
           "interval_measurements": "Measurements"
         },
         "data_description": {
           "interval_inputs": "Reed switches and motion sensors, including the gates' reed switches.",
-          "interval_outputs": "Watering sections and the main valve.",
+          "interval_outputs": "Watering sections, the main valve and the outputs shown as sensors.",
+          "interval_lights": "Lights, dimmers and switches. A change made from Home Assistant shows at once; this interval is for changes made at a wall switch or in another app.",
           "interval_measurements": "Thermometers and analog inputs, which change slowly."
         },
         "description": "Each read takes about 50 ms. After a gate or valve command, the resources that show its effect are read every second for a while, whatever these intervals."

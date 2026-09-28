@@ -14,6 +14,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .const import (
     COVER_REED_SENSOR,
     DEFAULT_INTERVAL_INPUTS,
+    DEFAULT_INTERVAL_LIGHTS,
     DEFAULT_INTERVAL_MEASUREMENTS,
     DEFAULT_INTERVAL_OUTPUTS,
     DOMAIN,
@@ -22,6 +23,7 @@ from .const import (
     OPT_BINARY_SENSORS,
     OPT_COVERS,
     OPT_INTERVAL_INPUTS,
+    OPT_INTERVAL_LIGHTS,
     OPT_INTERVAL_MEASUREMENTS,
     OPT_INTERVAL_OUTPUTS,
     OPT_OUTPUT_SENSORS,
@@ -42,10 +44,16 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
     """Reads each resource with the numeric 'system C' query.
 
     Resources fall into groups polled at their own intervals: inputs,
-    outputs and measurements. The coordinator wakes every POLL_TICK seconds
-    and reads only the groups that are due, plus any resource boosted after
-    a command. Each read runs under the hub lock on its own, so a command
-    from an entity waits for at most one read rather than a whole sweep.
+    outputs, lights and measurements. The coordinator wakes every POLL_TICK
+    seconds and reads only the groups that are due, plus any resource boosted
+    after a command. Each read runs under the hub lock on its own, so a
+    command from an entity waits for at most one read rather than a whole
+    sweep.
+
+    The central unit answers one read at a time, about 20 a second however
+    many connections ask, so a tick reads in order of urgency: boosted
+    resources, inputs, outputs, lights, measurements. A reed switch then
+    never waits behind a sweep of lights.
     """
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry, hub: NexoHub) -> None:
@@ -86,17 +94,21 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
             *options.get(OPT_THERMOMETERS, []),
             *options.get(OPT_ANALOG_SENSORS, []),
         } - inputs - outputs
-        # (interval in seconds, resources); a resource in two roles is read
-        # with the faster group
+        # Lights, dimmers and switches have no entities yet; the group and its
+        # interval are in place for them.
+        lights: set[str] = set()
+        # (interval in seconds, resources) in order of urgency; a resource in
+        # two roles is read with the more urgent group
         self._groups: list[tuple[float, list[str]]] = [
             (options.get(OPT_INTERVAL_INPUTS, DEFAULT_INTERVAL_INPUTS), sorted(inputs)),
             (options.get(OPT_INTERVAL_OUTPUTS, DEFAULT_INTERVAL_OUTPUTS), sorted(outputs)),
+            (options.get(OPT_INTERVAL_LIGHTS, DEFAULT_INTERVAL_LIGHTS), sorted(lights)),
             (
                 options.get(OPT_INTERVAL_MEASUREMENTS, DEFAULT_INTERVAL_MEASUREMENTS),
                 sorted(measurements),
             ),
         ]
-        self.resources = sorted(inputs | outputs | measurements)
+        self.resources = sorted(inputs | outputs | lights | measurements)
         self._next_due = [0.0] * len(self._groups)  # monotonic time
         self._boosted: dict[str, float] = {}  # resource -> boost ends
         self._failed_cycles = 0
@@ -118,7 +130,8 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
         await self.async_request_refresh()
 
     def _due(self) -> list[str] | None:
-        """The resources to read this tick, or None if nothing is due.
+        """The resources to read this tick, most urgent first, or None if
+        nothing is due.
 
         With no resources at all, an empty list is due at the inputs'
         interval: the tick then only pings.
@@ -129,14 +142,14 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
                 return None
             self._next_due[0] = now + self._groups[0][0]
             return []
-        due: set[str] = set()
+        self._boosted = {name: until for name, until in self._boosted.items() if until > now}
+        # dict keeps the first position of a resource due for two reasons
+        due: dict[str, None] = dict.fromkeys(sorted(self._boosted))
         for index, (interval, names) in enumerate(self._groups):
             if names and now >= self._next_due[index]:
-                due.update(names)
+                due.update(dict.fromkeys(names))
                 self._next_due[index] = now + interval
-        self._boosted = {name: until for name, until in self._boosted.items() if until > now}
-        due.update(self._boosted)
-        return sorted(due) if due else None
+        return list(due) if due else None
 
     async def _async_update_data(self) -> dict[str, int]:
         due = self._due()

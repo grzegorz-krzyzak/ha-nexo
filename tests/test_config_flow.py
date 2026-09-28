@@ -320,14 +320,17 @@ async def test_polling_settings(hass: HomeAssistant, fake_nexo) -> None:
     result = await hass.config_entries.options.async_init(entry.entry_id)
     placeholders = result["description_placeholders"]
     assert (placeholders["interval_inputs"], placeholders["interval_outputs"],
-            placeholders["interval_measurements"]) == ("5", "10", "60")
+            placeholders["interval_lights"], placeholders["interval_measurements"]) == (
+        "5", "10", "10", "60")
     result = await _pick(hass, result["flow_id"], "settings")
     result = await _submit(hass, result["flow_id"], {
-        "interval_inputs": 3, "interval_outputs": 10, "interval_measurements": 300,
+        "interval_inputs": 3, "interval_outputs": 10, "interval_lights": 7,
+        "interval_measurements": 300,
     })
     result = await _pick(hass, result["flow_id"], "save")
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert entry.options["interval_inputs"] == 3
+    assert entry.options["interval_lights"] == 7
     assert entry.options["interval_measurements"] == 300
     assert "scan_interval" not in entry.options
 

@@ -80,18 +80,24 @@ offers one only for thermometers. A percentage stays within 0-100.
 
 ### Polling
 
-Resources are read in three groups, each at its own interval:
+Resources are read in groups, each at its own interval:
 
 | Group | What | Default |
 |---|---|---|
 | Inputs | reed switches and motion sensors, including the gates' reed switches | 5 s |
 | Outputs | watering sections, the main valve, outputs read as sensors | 10 s |
+| Lights | lights, dimmers and switches (none yet; the group is ready for them) | 10 s |
 | Measurements | thermometers and analog inputs | 60 s |
 
 After a command, what shows its effect is read every second for a while:
 a gate's reed switch for its travel time (60 s without one), a valve's
 sections and main valve for 30 s. So an opened gate shows as open within
 about a second, whatever the interval.
+
+The central unit answers one read at a time, about 20 a second, however many
+connections ask. So each second's reads go in order of urgency: what a
+command boosted, then inputs, outputs, lights and measurements. A reed switch
+never waits behind a long list of lights.
 
 Updating from 0.2.x: the single polling interval is replaced by these
 groups and starts from the defaults.
