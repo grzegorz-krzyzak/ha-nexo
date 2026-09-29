@@ -473,3 +473,22 @@ async def test_no_exclusions_needed(hass: HomeAssistant, fake_nexo) -> None:
     await _pick(hass, flow_id, "save")
     assert entry.options["excluded"] == []
     assert entry.options["lights"] == []
+
+
+async def test_select_all_then_untick(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass, {**OPTIONS, "valves": []})
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await _pick(hass, flow_id, "lights")
+    result = await _submit(hass, flow_id, {"excluded": ["GATE PULSE"]})
+    assert result["step_id"] == "lights_lights"
+    # Ticking "select all" saves nothing: the same form comes back, all selected
+    result = await _submit(hass, flow_id, {"lights": [], "select_all": True})
+    assert result["step_id"] == "lights_lights"
+    field = next(f for f in result["data_schema"].schema if str(f) == "lights")
+    assert sorted(field.default()) == ["L1", "ZG"]
+    result = await _submit(hass, flow_id, {"lights": ["L1"]})  # untick ZG
+    assert result["step_id"] == "lights_dimmers"
+    await _submit(hass, flow_id, {})
+    await _submit(hass, flow_id, {})
+    await _pick(hass, flow_id, "save")
+    assert entry.options["lights"] == ["L1"]

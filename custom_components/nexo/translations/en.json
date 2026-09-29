@@ -264,14 +264,22 @@
         "title": "Lights",
         "description": "Step 2 of 4. Lighting outputs to switch on and off. Outputs already used by a valve or read as sensors are not listed.",
         "data": {
-          "lights": "Lights"
+          "lights": "Lights",
+          "select_all": "Select all"
+        },
+        "data_description": {
+          "select_all": "Shows this list again with everything selected, to untick a few."
         }
       },
       "lights_dimmers": {
         "title": "Dimmers",
         "description": "Step 3 of 4. Dimmers, with brightness. Switched on without a brightness, a dimmer gets the central unit's own \"on\" command, as from NexoVision; a brightness is written as a level.",
         "data": {
-          "dimmers": "Dimmers"
+          "dimmers": "Dimmers",
+          "select_all": "Select all"
+        },
+        "data_description": {
+          "select_all": "Shows this list again with everything selected, to untick a few."
         }
       },
       "lights_switches": {

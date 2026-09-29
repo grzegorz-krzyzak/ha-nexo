@@ -264,14 +264,22 @@
         "title": "Światła",
         "description": "Krok 2 z 4. Wyjścia oświetleniowe do włączania i wyłączania. Wyjścia użyte już przez zawór albo czytane jako czujniki nie są na liście.",
         "data": {
-          "lights": "Światła"
+          "lights": "Światła",
+          "select_all": "Zaznacz wszystkie"
+        },
+        "data_description": {
+          "select_all": "Pokazuje listę ponownie ze wszystkim zaznaczonym, żeby odznaczyć kilka pozycji."
         }
       },
       "lights_dimmers": {
         "title": "Ściemniacze",
         "description": "Krok 3 z 4. Ściemniacze z regulacją jasności. Włączony bez podania jasności ściemniacz dostaje zwykłą komendę włączenia centrali, jak z NexoVision; podana jasność jest zapisywana jako poziom.",
         "data": {
-          "dimmers": "Ściemniacze"
+          "dimmers": "Ściemniacze",
+          "select_all": "Zaznacz wszystkie"
+        },
+        "data_description": {
+          "select_all": "Pokazuje listę ponownie ze wszystkim zaznaczonym, żeby odznaczyć kilka pozycji."
         }
       },
       "lights_switches": {

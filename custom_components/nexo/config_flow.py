@@ -133,6 +133,8 @@ POLLING_INTERVALS = {
 #   connection state instead, each with plain text in the user's language.
 NONE = "—"
 
+# Ticked, a list to pick from comes back with everything selected
+SELECT_ALL = "select_all"
 MENU_STEPS = {"connected": "menu", "not_answering": "menu_offline", "unsaved": "menu_unsaved"}
 ALERT_TYPES = {"connected": "success", "not_answering": "warning", "unsaved": "info"}
 
@@ -624,15 +626,38 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             *(valve[VALVE_MAIN] for valve in valves if valve.get(VALVE_MAIN)),
         }
 
-    def _pick_form(self, step_id: str, key: str, names: list[str]) -> ConfigFlowResult:
-        schema = vol.Schema(
-            {
-                vol.Optional(
-                    key, default=[n for n in self._options.get(key, []) if n in names]
-                ): _pick_many(names)
-            }
-        )
-        return self.async_show_form(step_id=step_id, data_schema=schema)
+    def _pick_form(
+        self,
+        step_id: str,
+        key: str,
+        names: list[str],
+        offer_all: bool = False,
+        selected: list[str] | None = None,
+    ) -> ConfigFlowResult:
+        if selected is None:
+            selected = [n for n in self._options.get(key, []) if n in names]
+        fields: dict[Any, Any] = {vol.Optional(key, default=selected): _pick_many(names)}
+        if offer_all:
+            fields[vol.Optional(SELECT_ALL, default=False)] = BooleanSelector()
+        return self.async_show_form(step_id=step_id, data_schema=vol.Schema(fields))
+
+    async def _pick_step(
+        self,
+        step_id: str,
+        key: str,
+        names: list[str],
+        user_input: dict[str, Any] | None,
+        next_step: Callable[[], Coroutine[Any, Any, ConfigFlowResult]],
+    ) -> ConfigFlowResult:
+        """A list to pick from, with "select all" for long lists: ticking it
+        shows the same form again with everything selected, to untick a few -
+        nothing is saved until the list itself is submitted."""
+        if user_input is not None:
+            if user_input.get(SELECT_ALL):
+                return self._pick_form(step_id, key, names, offer_all=True, selected=names)
+            self._options[key] = user_input.get(key, [])
+            return await next_step()
+        return self._pick_form(step_id, key, names, offer_all=True)
 
     async def async_step_lights(
         self, user_input: dict[str, Any] | None = None
@@ -660,29 +685,26 @@ class NexoOptionsFlow(OptionsFlowWithReload):
     async def async_step_lights_lights(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        if user_input is not None:
-            self._options[OPT_LIGHTS] = user_input.get(OPT_LIGHTS, [])
-            return await self.async_step_lights_dimmers()
         try:
             names = await self._resources(ImportTypes.LIGHT)
         except NexoError as err:
             return self._cannot_list(err)
         in_use = self._in_use()
-        return self._pick_form(
-            "lights_lights", OPT_LIGHTS, [n for n in self._pickable(names) if n not in in_use]
+        names = [n for n in self._pickable(names) if n not in in_use]
+        return await self._pick_step(
+            "lights_lights", OPT_LIGHTS, names, user_input, self.async_step_lights_dimmers
         )
 
     async def async_step_lights_dimmers(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        if user_input is not None:
-            self._options[OPT_DIMMERS] = user_input.get(OPT_DIMMERS, [])
-            return await self.async_step_lights_switches()
         try:
-            names = await self._resources(ImportTypes.DIMMER)
+            names = self._pickable(await self._resources(ImportTypes.DIMMER))
         except NexoError as err:
             return self._cannot_list(err)
-        return self._pick_form("lights_dimmers", OPT_DIMMERS, self._pickable(names))
+        return await self._pick_step(
+            "lights_dimmers", OPT_DIMMERS, names, user_input, self.async_step_lights_switches
+        )
 
     async def async_step_lights_switches(
         self, user_input: dict[str, Any] | None = None
