@@ -255,7 +255,7 @@
       },
       "lights": {
         "title": "Excluded resources",
-        "description": "Step 1 of 4. Pick the outputs that must never be switched from Home Assistant: those that drive gates, doors or locks, such as a gate's opening pulse or a door strike. A switch would fire them in one click. Excluded resources are left out of every list of lights, switches and valve outputs.",
+        "description": "Step 1 of 4. Pick the outputs that must never be switched from Home Assistant: those that drive gates, doors or locks, such as a gate's opening pulse or a door strike. A switch would fire them in one click. Excluded resources are left out of every list of lights, switches and valve outputs. If none of your outputs drives a gate, door or lock, leave the list empty and go on.",
         "data": {
           "excluded": "Never offer"
         },

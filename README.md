@@ -78,8 +78,9 @@ would fire them in one click - or with a voice command such as "turn
 everything off in the garage". So the first screen is a list of resources
 never to offer. Put every output that drives a gate, door or lock there once;
 from then on it is left out of the lists of lights, switches and valve
-outputs. Outputs already used by a valve or read as sensors are not offered
-either.
+outputs. With no such outputs, leave the list empty and go on - the screen
+asks for nothing. Outputs already used by a valve or read as sensors are not
+offered either.
 
 The state always comes from reading the resource, never from the command: a
 command the central unit refuses, or one lost with the connection, shows an

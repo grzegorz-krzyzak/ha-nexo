@@ -255,7 +255,7 @@
       },
       "lights": {
         "title": "Zasoby wykluczone",
-        "description": "Krok 1 z 4. Wybierz wyjścia, których nigdy nie wolno przełączać z Home Assistant: te, które sterują bramami, drzwiami albo zamkami, na przykład impuls otwarcia bramy czy elektrozaczep. Przełącznik uruchomiłby je jednym kliknięciem. Wykluczone zasoby nie pojawią się na żadnej liście świateł, przełączników ani wyjść zaworów.",
+        "description": "Krok 1 z 4. Wybierz wyjścia, których nigdy nie wolno przełączać z Home Assistant: te, które sterują bramami, drzwiami albo zamkami, na przykład impuls otwarcia bramy czy elektrozaczep. Przełącznik uruchomiłby je jednym kliknięciem. Wykluczone zasoby nie pojawią się na żadnej liście świateł, przełączników ani wyjść zaworów. Jeśli żadne wyjście nie steruje bramą, drzwiami ani zamkiem, zostaw listę pustą i przejdź dalej.",
         "data": {
           "excluded": "Nigdy nie proponuj"
         },

@@ -457,3 +457,19 @@ async def test_valve_form_hides_excluded_outputs(hass: HomeAssistant, fake_nexo)
     result = await _pick(hass, flow_id, "add_valve")
     assert "GATE PULSE" not in _choices(result, "sections")
     assert "L1" in _choices(result, "sections")
+
+
+async def test_no_exclusions_needed(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass, {**OPTIONS, "valves": []})
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await _pick(hass, flow_id, "lights")
+    result = await _submit(hass, flow_id, {})  # nothing excluded
+    assert result["step_id"] == "lights_lights"
+    assert "GATE PULSE" in _choices(result, "lights")
+    await _submit(hass, flow_id, {})
+    await _submit(hass, flow_id, {})
+    result = await _submit(hass, flow_id, {})
+    assert result["type"] is FlowResultType.MENU
+    await _pick(hass, flow_id, "save")
+    assert entry.options["excluded"] == []
+    assert entry.options["lights"] == []
