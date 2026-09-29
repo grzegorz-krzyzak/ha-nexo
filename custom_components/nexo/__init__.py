@@ -25,7 +25,10 @@ from .const import (
     OPT_BINARY_SENSORS,
     OPT_BUTTONS,
     OPT_COVERS,
+    OPT_DIMMERS,
+    OPT_LIGHTS,
     OPT_OUTPUT_SENSORS,
+    OPT_SWITCHES,
     OPT_THERMOMETERS,
     OPT_VALVES,
 )
@@ -152,6 +155,9 @@ def _remove_deselected_entities(hass: HomeAssistant, entry: NexoConfigEntry) -> 
         *(f"thermometer_{name}" for name in options.get(OPT_THERMOMETERS, [])),
         *(f"analog_{name}" for name in options.get(OPT_ANALOG_SENSORS, [])),
         *(f"output_{name}" for name in options.get(OPT_OUTPUT_SENSORS, [])),
+        *(f"light_{name}" for name in options.get(OPT_LIGHTS, [])),
+        *(f"dimmer_{name}" for name in options.get(OPT_DIMMERS, [])),
+        *(f"switch_{name}" for name in options.get(OPT_SWITCHES, [])),
         *(f"cover_{item[ITEM_ID]}" for item in options.get(OPT_COVERS, [])),
         *(
             f"step_{item[ITEM_ID]}"

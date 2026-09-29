@@ -98,3 +98,36 @@ async def test_lights_are_read_with_their_group(hass: HomeAssistant, fake_nexo, 
     assert "L1" not in reads
     await _tick(hass, freezer, 1)
     assert {"L1", "DIM A", "VENT"} <= set(reads)
+
+
+async def test_reload_keeps_the_entities(hass: HomeAssistant, fake_nexo) -> None:
+    """Lights and switches are not removed from the registry and recreated on
+    every reload. (Home Assistant would restore their name, area and aliases,
+    but the entities should simply stay.)"""
+    from homeassistant.helpers.entity_registry import EVENT_ENTITY_REGISTRY_UPDATED
+
+    entry = await _setup(hass, LIGHTS)
+    removed: list[str] = []
+    hass.bus.async_listen(
+        EVENT_ENTITY_REGISTRY_UPDATED,
+        lambda event: removed.append(event.data["entity_id"])
+        if event.data["action"] == "remove"
+        else None,
+    )
+    assert await hass.config_entries.async_reload(entry.entry_id)
+    await hass.async_block_till_done()
+    assert removed == []
+
+
+async def test_deselected_light_is_removed(hass: HomeAssistant, fake_nexo) -> None:
+    from homeassistant.helpers import entity_registry as er
+
+    entry = await _setup(hass, LIGHTS)
+    registry = er.async_get(hass)
+    assert registry.async_get(LIGHT)
+    hass.config_entries.async_update_entry(entry, options={**LIGHTS, "lights": []})
+    await hass.async_block_till_done()
+    assert await hass.config_entries.async_reload(entry.entry_id)
+    await hass.async_block_till_done()
+    assert registry.async_get(LIGHT) is None
+    assert registry.async_get(DIMMER)
