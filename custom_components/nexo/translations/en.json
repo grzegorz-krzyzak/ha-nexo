@@ -272,7 +272,7 @@
       },
       "lights_dimmers": {
         "title": "Dimmers",
-        "description": "Step 3 of 4. Dimmers, with brightness. Switched on without a brightness, a dimmer comes back at the last level it was seen at.",
+        "description": "Step 3 of 4. Dimmers, with brightness. Switched on without a brightness, a dimmer gets the central unit's own \"on\" command, as from NexoVision; a brightness is written as a level.",
         "data": {
           "dimmers": "Dimmers"
         }

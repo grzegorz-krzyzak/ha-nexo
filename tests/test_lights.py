@@ -51,20 +51,23 @@ async def test_dimmer_brightness_is_written_as_a_level(hass: HomeAssistant, fake
     fake_nexo.turn_on.assert_not_called()  # 'wlacz' would mean full level
 
 
-async def test_dimmer_comes_back_at_its_last_level(hass: HomeAssistant, fake_nexo, freezer) -> None:
+async def test_dimmer_on_without_brightness_is_the_central_units_own(
+    hass: HomeAssistant, fake_nexo, freezer
+) -> None:
     await _setup(hass, LIGHTS)
     fake_nexo.states["DIM A"] = 0  # switched off at the wall
     await _tick(hass, freezer, 10)
-    assert hass.states.get(DIMMER).state == "off"
     await hass.services.async_call("light", "turn_on", {"entity_id": DIMMER}, blocking=True)
-    fake_nexo.set_level.assert_called_once_with("DIM A", 128)
+    fake_nexo.turn_on.assert_called_once_with("DIM A")
+    fake_nexo.set_level.assert_not_called()
 
 
-async def test_dimmer_never_seen_on_comes_on_at_full_level(hass: HomeAssistant, fake_nexo) -> None:
-    fake_nexo.states["DIM A"] = 0
+async def test_dimmer_level_is_at_least_one(hass: HomeAssistant, fake_nexo) -> None:
     await _setup(hass, LIGHTS)
-    await hass.services.async_call("light", "turn_on", {"entity_id": DIMMER}, blocking=True)
-    fake_nexo.set_level.assert_called_once_with("DIM A", 255)
+    await hass.services.async_call(
+        "light", "turn_on", {"entity_id": DIMMER, "brightness": 1}, blocking=True
+    )
+    fake_nexo.set_level.assert_called_once_with("DIM A", 1)
 
 
 async def test_dimmer_off_uses_the_text_command(hass: HomeAssistant, fake_nexo) -> None:

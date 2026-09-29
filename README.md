@@ -90,9 +90,9 @@ once; a change at a wall switch or in another app shows within the *Lights*
 interval.
 
 A dimmer's state carries its level (0-255) in the high byte. Switched on
-without a brightness, a dimmer comes back at the last level it was seen at -
-the central unit's own "on" command always means full level. Full level only
-when no level has been seen since Home Assistant started.
+without a brightness, a dimmer gets the central unit's own "on" command, as
+from NexoVision - the integration does not change what "on" means there. A
+brightness, from a slider or a voice command, is written as a level.
 
 ### Analog inputs
 

@@ -272,7 +272,7 @@
       },
       "lights_dimmers": {
         "title": "Ściemniacze",
-        "description": "Krok 3 z 4. Ściemniacze z regulacją jasności. Włączony bez podania jasności ściemniacz wraca do ostatnio odczytanego poziomu.",
+        "description": "Krok 3 z 4. Ściemniacze z regulacją jasności. Włączony bez podania jasności ściemniacz dostaje zwykłą komendę włączenia centrali, jak z NexoVision; podana jasność jest zapisywana jako poziom.",
         "data": {
           "dimmers": "Ściemniacze"
         }
