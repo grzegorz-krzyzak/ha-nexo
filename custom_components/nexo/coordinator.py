@@ -22,11 +22,14 @@ from .const import (
     OPT_ANALOG_SENSORS,
     OPT_BINARY_SENSORS,
     OPT_COVERS,
+    OPT_DIMMERS,
     OPT_INTERVAL_INPUTS,
     OPT_INTERVAL_LIGHTS,
     OPT_INTERVAL_MEASUREMENTS,
     OPT_INTERVAL_OUTPUTS,
+    OPT_LIGHTS,
     OPT_OUTPUT_SENSORS,
+    OPT_SWITCHES,
     OPT_THERMOMETERS,
     OPT_VALVES,
     POLL_TICK,
@@ -90,13 +93,15 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
                 if valve.get(VALVE_MAIN)
             ),
         } - inputs
+        lights = {
+            *options.get(OPT_LIGHTS, []),
+            *options.get(OPT_DIMMERS, []),
+            *options.get(OPT_SWITCHES, []),
+        } - inputs - outputs
         measurements = {
             *options.get(OPT_THERMOMETERS, []),
             *options.get(OPT_ANALOG_SENSORS, []),
-        } - inputs - outputs
-        # Lights, dimmers and switches have no entities yet; the group and its
-        # interval are in place for them.
-        lights: set[str] = set()
+        } - inputs - outputs - lights
         # (interval in seconds, resources) in order of urgency; a resource in
         # two roles is read with the more urgent group
         self._groups: list[tuple[float, list[str]]] = [

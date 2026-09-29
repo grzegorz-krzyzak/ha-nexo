@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable, Coroutine, Mapping
+from collections.abc import Callable, Coroutine, Iterable, Mapping
 import copy
 import logging
 from typing import Any
@@ -64,10 +64,14 @@ from .const import (
     OPT_BINARY_SENSORS,
     OPT_BUTTONS,
     OPT_COVERS,
+    OPT_DIMMERS,
+    OPT_EXCLUDED,
     OPT_INTERVAL_INPUTS,
     OPT_INTERVAL_LIGHTS,
     OPT_INTERVAL_MEASUREMENTS,
     OPT_INTERVAL_OUTPUTS,
+    OPT_LIGHTS,
+    OPT_SWITCHES,
     OPT_THERMOMETERS,
     OPT_VALVES,
     VALVE_AUTO_CLOSE,
@@ -388,8 +392,8 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         return self.async_show_menu(
             step_id=MENU_STEPS[status],
             menu_options=[
-                "connection", "sensors", "analog", "covers", "valves", "buttons",
-                "settings", "save",
+                "connection", "sensors", "analog", "lights", "covers", "valves",
+                "buttons", "settings", "save",
             ],
             description_placeholders={
                 "address": f"{connection[CONF_HOST]}:{connection.get(CONF_PORT, DEFAULT_PORT)}",
@@ -399,6 +403,10 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 OPT_THERMOMETERS: str(len(options.get(OPT_THERMOMETERS, []))),
                 OPT_ANALOG_SENSORS: str(len(options.get(OPT_ANALOG_SENSORS, []))),
                 OPT_OUTPUT_SENSORS: str(len(options.get(OPT_OUTPUT_SENSORS, []))),
+                **{
+                    key: str(len(options.get(key, [])))
+                    for key in (OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES, OPT_EXCLUDED)
+                },
                 OPT_COVERS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_COVERS, []))
                 or NONE,
                 OPT_BUTTONS: ", ".join(i[ITEM_NAME] for i in options.get(OPT_BUTTONS, []))
@@ -593,6 +601,107 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             errors=errors,
         )
 
+    # ---------------------------------------------------- lights and switches
+    #
+    # Four screens in a row. First the resources never to offer - the outputs
+    # that drive gates and locks, which a switch would fire in one click - so
+    # they are out of the lists before anything is picked. Then lights,
+    # dimmers and switches. Nothing is picked by default.
+
+    def _pickable(self, names: list[str], keep: Iterable[str] = ()) -> list[str]:
+        """The names minus the excluded ones, except those in keep."""
+        excluded = set(self._options.get(OPT_EXCLUDED, [])) - set(keep)
+        return [name for name in names if name not in excluded]
+
+    def _in_use(self) -> set[str]:
+        """Outputs another entity already reads or drives."""
+        valves = self._options.get(OPT_VALVES, [])
+        return {
+            *self._options.get(OPT_OUTPUT_SENSORS, []),
+            *(section for valve in valves for section in valve.get(VALVE_SECTIONS, [])),
+            *(valve[VALVE_MAIN] for valve in valves if valve.get(VALVE_MAIN)),
+        }
+
+    def _pick_form(self, step_id: str, key: str, names: list[str]) -> ConfigFlowResult:
+        schema = vol.Schema(
+            {
+                vol.Optional(
+                    key, default=[n for n in self._options.get(key, []) if n in names]
+                ): _pick_many(names)
+            }
+        )
+        return self.async_show_form(step_id=step_id, data_schema=schema)
+
+    async def async_step_lights(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        try:
+            names = sorted(
+                {
+                    *await self._resources(ImportTypes.OUTPUT),
+                    *await self._resources(ImportTypes.LIGHT),
+                    *await self._resources(ImportTypes.DIMMER),
+                }
+            )
+        except NexoError as err:
+            return self._cannot_list(err)
+        if user_input is not None:
+            excluded = set(user_input.get(OPT_EXCLUDED, []))
+            self._options[OPT_EXCLUDED] = sorted(excluded)
+            # An excluded resource stops being controlled here as well
+            for key in (OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES):
+                if key in self._options:
+                    self._options[key] = [n for n in self._options[key] if n not in excluded]
+            return await self.async_step_lights_lights()
+        return self._pick_form("lights", OPT_EXCLUDED, names)
+
+    async def async_step_lights_lights(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        if user_input is not None:
+            self._options[OPT_LIGHTS] = user_input.get(OPT_LIGHTS, [])
+            return await self.async_step_lights_dimmers()
+        try:
+            names = await self._resources(ImportTypes.LIGHT)
+        except NexoError as err:
+            return self._cannot_list(err)
+        in_use = self._in_use()
+        return self._pick_form(
+            "lights_lights", OPT_LIGHTS, [n for n in self._pickable(names) if n not in in_use]
+        )
+
+    async def async_step_lights_dimmers(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        if user_input is not None:
+            self._options[OPT_DIMMERS] = user_input.get(OPT_DIMMERS, [])
+            return await self.async_step_lights_switches()
+        try:
+            names = await self._resources(ImportTypes.DIMMER)
+        except NexoError as err:
+            return self._cannot_list(err)
+        return self._pick_form("lights_dimmers", OPT_DIMMERS, self._pickable(names))
+
+    async def async_step_lights_switches(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        if user_input is not None:
+            self._options[OPT_SWITCHES] = user_input.get(OPT_SWITCHES, [])
+            return await self.async_step_menu()
+        try:
+            names = sorted(
+                {
+                    *await self._resources(ImportTypes.OUTPUT),
+                    *await self._resources(ImportTypes.LIGHT),
+                }
+            )
+        except NexoError as err:
+            return self._cannot_list(err)
+        taken = self._in_use() | set(self._options.get(OPT_LIGHTS, []))
+        return self._pick_form(
+            "lights_switches", OPT_SWITCHES, [n for n in self._pickable(names) if n not in taken]
+        )
+
     # --------------------------------------------------------------- sensors
 
     async def async_step_sensors(
@@ -750,6 +859,10 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             return self._cannot_list(err)
 
         valves = self._options.setdefault(OPT_VALVES, [])
+        # Excluded outputs are not offered, except the ones this valve uses
+        current = valves[index] if index is not None else {}
+        used = [*current.get(VALVE_SECTIONS, []), *filter(None, [current.get(VALVE_MAIN)])]
+        outputs = self._pickable(outputs, keep=used)
         errors: dict[str, str] = {}
         if user_input is not None:
             if user_input.pop("delete", False) and index is not None:

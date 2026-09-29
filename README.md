@@ -17,12 +17,15 @@ connection the NexoVision app uses. Local polling, no cloud.
 | Thermometers | `sensor` | °C |
 | Analogue inputs | `sensor` | raw value, or humidity / soil moisture / percentage with a calibration |
 | Outputs, read only | `binary_sensor` | on while switched on; for anything a rule mirrors onto an output |
+| Lighting outputs (`LIGHT`) | `light` | on / off |
+| Dimmers (`DIMMER`) | `light` | with brightness |
+| Outputs and lighting outputs, switched | `switch` | on / off, e.g. a ventilation unit |
 | Gates and doors driven by logic commands | `cover` | closed / not closed, from a reed switch |
 | Watering programs and other start/stop command pairs | `valve` | open while any of its sections is on |
 | Any logic command | `button` | fire and forget |
 
-Controlling lights, dimmers and outputs, and thermostats, blinds and alarm
-partitions are not supported yet.
+Thermostats, blinds, alarm partitions and the central unit's lighting groups
+are not supported yet; for groups, use Home Assistant's own.
 
 ## Installation
 
@@ -54,6 +57,8 @@ shows the current settings next to each item:
   costs one query of about 50 ms each time it is read.
 - **Analog inputs** - the type and calibration of each imported analog input
   (see *Analog inputs*).
+- **Lights and switches** - four screens in a row: excluded resources, lights,
+  dimmers, switches (see *Lights and switches*).
 - **Gates and doors**, **Valves** and **Buttons** - one entry each; pick one to
   edit or delete it. Up to 20 of each.
 - **Settings** - how often each group of resources is read (see *Polling*).
@@ -61,6 +66,32 @@ shows the current settings next to each item:
 Nothing is stored until **Save and close**; closing the dialog discards the
 changes. Home Assistant forms have no back button: submitting a form without
 changes - or an empty *add* form - goes back to the menu.
+
+### Lights and switches
+
+Nothing is added on its own: every light, dimmer and switch is picked by hand.
+
+**Exclude first.** Central units often drive a gate's pulses or a door
+strike from lighting outputs, for want of free relay outputs, and the
+integration cannot tell them from lights by name. A switch in Home Assistant
+would fire them in one click - or with a voice command such as "turn
+everything off in the garage". So the first screen is a list of resources
+never to offer. Put every output that drives a gate, door or lock there once;
+from then on it is left out of the lists of lights, switches and valve
+outputs. Outputs already used by a valve or read as sensors are not offered
+either.
+
+The state always comes from reading the resource, never from the command: a
+command the central unit refuses, or one lost with the connection, shows an
+error and leaves the entity as it was. After a command the resource is read
+every second for a few seconds, so a change from Home Assistant shows at
+once; a change at a wall switch or in another app shows within the *Lights*
+interval.
+
+A dimmer's state carries its level (0-255) in the high byte. Switched on
+without a brightness, a dimmer comes back at the last level it was seen at -
+the central unit's own "on" command always means full level. Full level only
+when no level has been seen since Home Assistant started.
 
 ### Analog inputs
 
@@ -86,7 +117,7 @@ Resources are read in groups, each at its own interval:
 |---|---|---|
 | Inputs | reed switches and motion sensors, including the gates' reed switches | 5 s |
 | Outputs | watering sections, the main valve, outputs read as sensors | 10 s |
-| Lights | lights, dimmers and switches (none yet; the group is ready for them) | 10 s |
+| Lights | lights, dimmers and switches | 10 s |
 | Measurements | thermometers and analog inputs | 60 s |
 
 After a command, what shows its effect is read every second for a while:

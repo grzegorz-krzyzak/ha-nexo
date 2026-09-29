@@ -587,6 +587,29 @@ class NexoClient:
         """Switch off a relay, OC or lighting output."""
         self._control(f"wylacz {self._quote(name)}")
 
+    MAX_LEVEL = 255
+
+    def set_level(self, name: str, level: int) -> None:
+        """Switch a dimmer on at a level from 1 to 255 (full).
+
+        Not in the manufacturer's documentation; measured: a dimmer's state
+        has the level in its high byte and 01 (on) in its low byte, 50 %
+        reading 0x8201, and the numeric command takes the same encoding.
+        'wlacz' always switches a dimmer on at 255. Level 0 is not accepted
+        here: high byte 0 with the on bit is a state never observed - switch
+        off with turn_off instead.
+        """
+        if not 1 <= level <= self.MAX_LEVEL:
+            raise ValueError(f"level must be 1-{self.MAX_LEVEL}, got {level!r}")
+        reply = self._system_c(
+            name, str(level << 8 | 1), reply_timeout=self.CONTROL_REPLY_TIMEOUT
+        )
+        failure = self._strip_prefix(reply)
+        if failure:
+            raise NexoCommandError(
+                f"Central unit refused level {level} for {name!r}: {failure}"
+            )
+
     def blind_up(self, name: str) -> None:
         self._control(f"podnies {self._quote(name)}")
 

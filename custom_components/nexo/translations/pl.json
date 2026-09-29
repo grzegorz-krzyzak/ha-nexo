@@ -54,6 +54,7 @@
           "connection": "Połączenie",
           "sensors": "Czujniki",
           "analog": "Wejścia analogowe",
+          "lights": "Światła i przełączniki",
           "covers": "Bramy i drzwi",
           "valves": "Zawory",
           "buttons": "Przyciski",
@@ -68,7 +69,8 @@
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
           "valves": "{valves}",
-          "analog": "Rodzaj i kalibracja"
+          "analog": "Rodzaj i kalibracja",
+          "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}"
         },
         "description": "{alert_open}Połączono z centralą{alert_close}"
       },
@@ -78,6 +80,7 @@
           "connection": "Połączenie",
           "sensors": "Czujniki",
           "analog": "Wejścia analogowe",
+          "lights": "Światła i przełączniki",
           "covers": "Bramy i drzwi",
           "valves": "Zawory",
           "buttons": "Przyciski",
@@ -92,7 +95,8 @@
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
           "valves": "{valves}",
-          "analog": "Rodzaj i kalibracja"
+          "analog": "Rodzaj i kalibracja",
+          "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}"
         },
         "description": "{alert_open}Centrala nie odpowiada{alert_close}"
       },
@@ -102,6 +106,7 @@
           "connection": "Połączenie",
           "sensors": "Czujniki",
           "analog": "Wejścia analogowe",
+          "lights": "Światła i przełączniki",
           "covers": "Bramy i drzwi",
           "valves": "Zawory",
           "buttons": "Przyciski",
@@ -116,7 +121,8 @@
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
           "valves": "{valves}",
-          "analog": "Rodzaj i kalibracja"
+          "analog": "Rodzaj i kalibracja",
+          "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}"
         },
         "description": "{alert_open}Zmieniono połączenie – wybierz Zapisz i zamknij, żeby je zastosować{alert_close}"
       },
@@ -244,7 +250,38 @@
         "data_description": {
           "binary_sensors": "Włączone, gdy naruszone: drzwi otwarte, wykryty ruch. Co to za czujnik, ustawisz w opcji „Pokaż jako” w ustawieniach encji.",
           "analog_sensors": "Rodzaj i kalibrację każdego ustawisz w pozycji Wejścia analogowe.",
-          "output_sensors": "Włączony, gdy wyjście jest załączone. Przydatne do wszystkiego, co reguła w centrali odwzorowuje na wyjście. Tylko odczyt; sterowanie wyjściami dojdzie później."
+          "output_sensors": "Włączony, gdy wyjście jest załączone. Przydatne do wszystkiego, co reguła w centrali odwzorowuje na wyjście. Tylko odczyt; aby sterować wyjściem, wybierz je w Światłach i przełącznikach."
+        }
+      },
+      "lights": {
+        "title": "Zasoby wykluczone",
+        "description": "Krok 1 z 4. Wybierz wyjścia, których nigdy nie wolno przełączać z Home Assistant: te, które sterują bramami, drzwiami albo zamkami, na przykład impuls otwarcia bramy czy elektrozaczep. Przełącznik uruchomiłby je jednym kliknięciem. Wykluczone zasoby nie pojawią się na żadnej liście świateł, przełączników ani wyjść zaworów.",
+        "data": {
+          "excluded": "Nigdy nie proponuj"
+        },
+        "data_description": {
+          "excluded": "Integracja nie pozna po nazwie, do czego służy wyjście, więc tę listę prowadzisz sam."
+        }
+      },
+      "lights_lights": {
+        "title": "Światła",
+        "description": "Krok 2 z 4. Wyjścia oświetleniowe do włączania i wyłączania. Wyjścia użyte już przez zawór albo czytane jako czujniki nie są na liście.",
+        "data": {
+          "lights": "Światła"
+        }
+      },
+      "lights_dimmers": {
+        "title": "Ściemniacze",
+        "description": "Krok 3 z 4. Ściemniacze z regulacją jasności. Włączony bez podania jasności ściemniacz wraca do ostatnio odczytanego poziomu.",
+        "data": {
+          "dimmers": "Ściemniacze"
+        }
+      },
+      "lights_switches": {
+        "title": "Przełączniki",
+        "description": "Krok 4 z 4. Pozostałe wyjścia do włączania i wyłączania, na przykład rekuperator. Wyjścia wybrane jako światła nie są na liście.",
+        "data": {
+          "switches": "Przełączniki"
         }
       },
       "analog": {

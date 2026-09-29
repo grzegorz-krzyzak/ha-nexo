@@ -64,7 +64,8 @@ async def test_menu_summary(hass: HomeAssistant, fake_nexo) -> None:
     result = await hass.config_entries.options.async_init(entry.entry_id)
     assert result["type"] is FlowResultType.MENU
     assert result["menu_options"] == [
-        "connection", "sensors", "analog", "covers", "valves", "buttons", "settings", "save"
+        "connection", "sensors", "analog", "lights", "covers", "valves", "buttons",
+        "settings", "save",
     ]
     placeholders = result["description_placeholders"]
     assert placeholders["address"] == "192.0.2.10:1024"
@@ -390,3 +391,69 @@ async def test_outputs_offered_as_sensors(hass: HomeAssistant, fake_nexo) -> Non
     result = await _pick(hass, result["flow_id"], "save")
     assert entry.options["output_sensors"] == ["S7"]
 
+
+
+def _choices(result, key: str) -> list[str]:
+    for field in result["data_schema"].schema:
+        if str(field) == key:
+            return result["data_schema"].schema[field].config["options"]
+    raise KeyError(key)
+
+
+async def test_lights_and_switches(hass: HomeAssistant, fake_nexo) -> None:
+    valve = {"name": "Lawn", "open_command": "PST", "close_command": "PPR",
+             "sections": ["S1", "S2"], "main_valve": "ZG"}
+    entry = await _setup(hass, {**OPTIONS, "valves": [{"id": "lawn", **valve}]})
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+
+    # 1: exclusions first, offered from every output, light and dimmer
+    result = await _pick(hass, flow_id, "lights")
+    assert result["step_id"] == "lights"
+    assert {"GATE PULSE", "VENT", "L1", "DIM A", "S1"} <= set(_choices(result, "excluded"))
+    result = await _submit(hass, flow_id, {"excluded": ["GATE PULSE"]})
+
+    # 2: lights - neither the excluded pulse nor the valve's main valve
+    assert result["step_id"] == "lights_lights"
+    assert _choices(result, "lights") == ["L1"]
+    result = await _submit(hass, flow_id, {"lights": ["L1"]})
+
+    # 3: dimmers
+    assert result["step_id"] == "lights_dimmers"
+    assert _choices(result, "dimmers") == ["DIM A"]
+    result = await _submit(hass, flow_id, {"dimmers": ["DIM A"]})
+
+    # 4: switches - not the valve's sections, not what became a light
+    assert result["step_id"] == "lights_switches"
+    assert sorted(_choices(result, "switches")) == ["S7", "VENT"]
+    result = await _submit(hass, flow_id, {"switches": ["VENT"]})
+
+    assert result["type"] is FlowResultType.MENU
+    assert result["description_placeholders"]["lights"] == "1"
+    result = await _pick(hass, flow_id, "save")
+    assert entry.options["excluded"] == ["GATE PULSE"]
+    assert entry.options["lights"] == ["L1"]
+    assert entry.options["dimmers"] == ["DIM A"]
+    assert entry.options["switches"] == ["VENT"]
+
+
+async def test_excluding_a_resource_stops_controlling_it(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass, {**OPTIONS, "lights": ["L1"], "switches": ["VENT"]})
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await _pick(hass, flow_id, "lights")
+    result = await _submit(hass, flow_id, {"excluded": ["VENT"]})
+    assert "L1" in _choices(result, "lights")
+    await _submit(hass, flow_id, {"lights": ["L1"]})
+    result = await _submit(hass, flow_id, {"dimmers": []})
+    assert "VENT" not in _choices(result, "switches")
+    await _submit(hass, flow_id, {"switches": []})
+    await _pick(hass, flow_id, "save")
+    assert entry.options["switches"] == []
+
+
+async def test_valve_form_hides_excluded_outputs(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass, {**OPTIONS, "valves": [], "excluded": ["GATE PULSE"]})
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await _pick(hass, flow_id, "valves")
+    result = await _pick(hass, flow_id, "add_valve")
+    assert "GATE PULSE" not in _choices(result, "sections")
+    assert "L1" in _choices(result, "sections")

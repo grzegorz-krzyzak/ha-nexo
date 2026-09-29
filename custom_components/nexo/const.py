@@ -29,6 +29,8 @@ POLL_TICK: Final = 1
 # a valve's sections and main valve for the valve time.
 BOOST_GATE_DEFAULT: Final = 60
 BOOST_VALVE: Final = 30
+# A light or switch answers its command within a second or two
+BOOST_LIGHT: Final = 5
 
 # The LAN card closes a connection that stays silent longer than the
 # tolerance for communication breaks in its settings (5 s by default), and
@@ -47,6 +49,15 @@ OPT_ANALOG_SENSORS: Final = "analog_sensors"
 OPT_OUTPUT_SENSORS: Final = "output_sensors"
 # Per analog input, by resource name: {"kind": ..., "offset": ...}
 OPT_ANALOG_SETTINGS: Final = "analog_settings"
+# Lights (LIGHT, on/off), dimmers (DIMMER, with a level) and switches (OUTPUT
+# or LIGHT) the user picked to control. Nothing is picked by default.
+OPT_LIGHTS: Final = "lights"
+OPT_DIMMERS: Final = "dimmers"
+OPT_SWITCHES: Final = "switches"
+# Resources the user excluded from every list of outputs and lights to pick
+# from - the ones that drive gates or locks, which a switch would fire in one
+# click. Kept by the user, not named in the code.
+OPT_EXCLUDED: Final = "excluded"
 OPT_COVERS: Final = "covers"
 OPT_BUTTONS: Final = "buttons"
 OPT_VALVES: Final = "valves"

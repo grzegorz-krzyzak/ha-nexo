@@ -29,15 +29,23 @@ class FakeNexo:
             "S2": 0,
             "S7": 0,
             "ZG": 0,
+            "L1": 0,
+            "GATE PULSE": 0,
+            "VENT": 0,
+            "DIM A": 0x8001,  # on at level 128
         }
         self.listing: dict[ImportTypes, list[str]] = {
             ImportTypes.SENSOR: ["KON DOOR", "KON GATE", "PIR HALL"],
             ImportTypes.THERMOMETER: ["TMP HALL", "TMP OUTSIDE"],
             ImportTypes.ANALOGSENSOR: ["HUMIDITY"],
-            ImportTypes.OUTPUT: ["S1", "S2", "S7"],
-            ImportTypes.LIGHT: ["ZG"],
+            ImportTypes.OUTPUT: ["S1", "S2", "S7", "VENT"],
+            ImportTypes.LIGHT: ["ZG", "L1", "GATE PULSE"],
+            ImportTypes.DIMMER: ["DIM A"],
         }
         self.trigger_logic = MagicMock(return_value="")
+        self.turn_on = MagicMock()
+        self.turn_off = MagicMock()
+        self.set_level = MagicMock()
         self.disconnect = MagicMock()
 
     def ping(self) -> bool:

@@ -54,6 +54,7 @@
           "connection": "Connection",
           "sensors": "Sensors",
           "analog": "Analog inputs",
+          "lights": "Lights and switches",
           "covers": "Gates and doors",
           "valves": "Valves",
           "buttons": "Buttons",
@@ -68,7 +69,8 @@
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
           "valves": "{valves}",
-          "analog": "Type and calibration"
+          "analog": "Type and calibration",
+          "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}"
         },
         "description": "{alert_open}Connected to the central unit{alert_close}"
       },
@@ -78,6 +80,7 @@
           "connection": "Connection",
           "sensors": "Sensors",
           "analog": "Analog inputs",
+          "lights": "Lights and switches",
           "covers": "Gates and doors",
           "valves": "Valves",
           "buttons": "Buttons",
@@ -92,7 +95,8 @@
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
           "valves": "{valves}",
-          "analog": "Type and calibration"
+          "analog": "Type and calibration",
+          "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}"
         },
         "description": "{alert_open}The central unit is not answering{alert_close}"
       },
@@ -102,6 +106,7 @@
           "connection": "Connection",
           "sensors": "Sensors",
           "analog": "Analog inputs",
+          "lights": "Lights and switches",
           "covers": "Gates and doors",
           "valves": "Valves",
           "buttons": "Buttons",
@@ -116,7 +121,8 @@
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
           "valves": "{valves}",
-          "analog": "Type and calibration"
+          "analog": "Type and calibration",
+          "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}"
         },
         "description": "{alert_open}Connection changed – choose Save and close to apply it{alert_close}"
       },
@@ -244,7 +250,38 @@
         "data_description": {
           "binary_sensors": "On when violated: a door open, motion detected. Set what each one is under \"Show as\" in its entity settings.",
           "analog_sensors": "Set the type and calibration of each under Analog inputs.",
-          "output_sensors": "On while the output is switched on. Useful for anything a rule in the central unit mirrors onto an output. Read only; controlling outputs comes later."
+          "output_sensors": "On while the output is switched on. Useful for anything a rule in the central unit mirrors onto an output. Read only; to control an output, pick it under Lights and switches."
+        }
+      },
+      "lights": {
+        "title": "Excluded resources",
+        "description": "Step 1 of 4. Pick the outputs that must never be switched from Home Assistant: those that drive gates, doors or locks, such as a gate's opening pulse or a door strike. A switch would fire them in one click. Excluded resources are left out of every list of lights, switches and valve outputs.",
+        "data": {
+          "excluded": "Never offer"
+        },
+        "data_description": {
+          "excluded": "The integration cannot tell from a name what an output does, so this list is yours to keep."
+        }
+      },
+      "lights_lights": {
+        "title": "Lights",
+        "description": "Step 2 of 4. Lighting outputs to switch on and off. Outputs already used by a valve or read as sensors are not listed.",
+        "data": {
+          "lights": "Lights"
+        }
+      },
+      "lights_dimmers": {
+        "title": "Dimmers",
+        "description": "Step 3 of 4. Dimmers, with brightness. Switched on without a brightness, a dimmer comes back at the last level it was seen at.",
+        "data": {
+          "dimmers": "Dimmers"
+        }
+      },
+      "lights_switches": {
+        "title": "Switches",
+        "description": "Step 4 of 4. Other outputs to switch on and off, such as a ventilation unit. Outputs picked as lights are not listed.",
+        "data": {
+          "switches": "Switches"
         }
       },
       "analog": {
