@@ -382,7 +382,9 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         options = self._options
         connection = self._connection or self.config_entry.data
         # Shown in an ha-alert above the menu, which brings Home Assistant's
-        # own icon and colour for each type.
+        # own icon and colour for each type - only when something needs
+        # attention. Connected, the status sits next to the address instead,
+        # so the menu fits on one screen.
         if self._connection is not None:
             status = "unsaved"
         elif self.config_entry.runtime_data.coordinator.last_update_success:

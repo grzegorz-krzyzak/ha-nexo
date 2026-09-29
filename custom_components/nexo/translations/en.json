@@ -62,7 +62,7 @@
           "save": "Save and close"
         },
         "menu_option_descriptions": {
-          "connection": "{address}",
+          "connection": "{address} · connected",
           "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors} · outputs: {output_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
@@ -72,7 +72,7 @@
           "analog": "Type and calibration",
           "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}"
         },
-        "description": "{alert_open}Connected to the central unit{alert_close}"
+        "description": ""
       },
       "menu_offline": {
         "title": "Nexo",
@@ -255,12 +255,9 @@
       },
       "lights": {
         "title": "Excluded resources",
-        "description": "Step 1 of 4. Pick the outputs that must never be switched from Home Assistant: those that drive gates, doors or locks, such as a gate's opening pulse or a door strike. A switch would fire them in one click. Excluded resources are left out of every list of lights, switches and valve outputs. If none of your outputs drives a gate, door or lock, leave the list empty and go on.",
+        "description": "Step 1 of 4. Pick outputs that drive gates, doors or locks: they will never appear in the lists of lights, switches or valves. If there are none, leave this empty.",
         "data": {
           "excluded": "Never offer"
-        },
-        "data_description": {
-          "excluded": "The integration cannot tell from a name what an output does, so this list is yours to keep."
         }
       },
       "lights_lights": {

@@ -62,7 +62,7 @@
           "save": "Zapisz i zamknij"
         },
         "menu_option_descriptions": {
-          "connection": "{address}",
+          "connection": "{address} · połączono",
           "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors} · wyjścia: {output_sensors}",
           "covers": "{covers}",
           "buttons": "{buttons}",
@@ -72,7 +72,7 @@
           "analog": "Rodzaj i kalibracja",
           "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}"
         },
-        "description": "{alert_open}Połączono z centralą{alert_close}"
+        "description": ""
       },
       "menu_offline": {
         "title": "Nexo",
@@ -255,12 +255,9 @@
       },
       "lights": {
         "title": "Zasoby wykluczone",
-        "description": "Krok 1 z 4. Wybierz wyjścia, których nigdy nie wolno przełączać z Home Assistant: te, które sterują bramami, drzwiami albo zamkami, na przykład impuls otwarcia bramy czy elektrozaczep. Przełącznik uruchomiłby je jednym kliknięciem. Wykluczone zasoby nie pojawią się na żadnej liście świateł, przełączników ani wyjść zaworów. Jeśli żadne wyjście nie steruje bramą, drzwiami ani zamkiem, zostaw listę pustą i przejdź dalej.",
+        "description": "Krok 1 z 4. Wybierz wyjścia sterujące bramami, drzwiami lub zamkami: nie pojawią się na żadnej liście świateł, przełączników ani zaworów. Jeśli takich nie ma, zostaw listę pustą.",
         "data": {
           "excluded": "Nigdy nie proponuj"
-        },
-        "data_description": {
-          "excluded": "Integracja nie pozna po nazwie, do czego służy wyjście, więc tę listę prowadzisz sam."
         }
       },
       "lights_lights": {

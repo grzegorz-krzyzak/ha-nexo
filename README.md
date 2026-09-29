@@ -50,9 +50,10 @@ you rename it.
 **Everything else is in the integration's options** (*Configure*), a menu that
 shows the current settings next to each item:
 
-- **Connection** - address, port and PIN. The connection status is shown at
-  the top of the menu. Also available as *Reconfigure* in the ⋮ menu.
-  Entities are kept when the address changes.
+- **Connection** - address, port and PIN. The connection status is shown next
+  to the address, and at the top of the menu when the central unit is not
+  answering or the connection has unsaved changes. Also available as
+  *Reconfigure* in the ⋮ menu. Entities are kept when the address changes.
 - **Sensors** - the lists come from the central unit. Each imported resource
   costs one query of about 50 ms each time it is read.
 - **Analog inputs** - the type and calibration of each imported analog input
