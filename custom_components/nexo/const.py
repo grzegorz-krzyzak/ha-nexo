@@ -31,6 +31,8 @@ BOOST_GATE_DEFAULT: Final = 60
 BOOST_VALVE: Final = 30
 # A light or switch answers its command within a second or two
 BOOST_LIGHT: Final = 5
+# A thermostat's output followed a new threshold within about 4 s (measured)
+BOOST_THERMOSTAT: Final = 10
 
 # The LAN card closes a connection that stays silent longer than the
 # tolerance for communication breaks in its settings (5 s by default), and
@@ -54,6 +56,13 @@ OPT_ANALOG_SETTINGS: Final = "analog_settings"
 OPT_LIGHTS: Final = "lights"
 OPT_DIMMERS: Final = "dimmers"
 OPT_SWITCHES: Final = "switches"
+# Thermostats the user picked, each with what its list entry carries: the
+# thermometer it reads and the range of its threshold. Nothing by default.
+OPT_THERMOSTATS: Final = "thermostats"
+THERMOSTAT_NAME: Final = "name"
+THERMOSTAT_THERMOMETER: Final = "thermometer"
+THERMOSTAT_MIN: Final = "min"
+THERMOSTAT_MAX: Final = "max"
 # Resources the user excluded from every list of outputs and lights to pick
 # from - the ones that drive gates or locks, which a switch would fire in one
 # click. Kept by the user, not named in the code.

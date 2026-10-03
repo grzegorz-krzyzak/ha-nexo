@@ -73,7 +73,12 @@ from .const import (
     OPT_LIGHTS,
     OPT_SWITCHES,
     OPT_THERMOMETERS,
+    OPT_THERMOSTATS,
     OPT_VALVES,
+    THERMOSTAT_MAX,
+    THERMOSTAT_MIN,
+    THERMOSTAT_NAME,
+    THERMOSTAT_THERMOMETER,
     VALVE_AUTO_CLOSE,
     VALVE_MAIN,
     VALVE_SECTIONS,
@@ -396,8 +401,8 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         return self.async_show_menu(
             step_id=MENU_STEPS[status],
             menu_options=[
-                "connection", "sensors", "analog", "lights", "covers", "valves",
-                "buttons", "settings", "save",
+                "connection", "sensors", "analog", "lights", "thermostats", "covers",
+                "valves", "buttons", "settings", "save",
             ],
             description_placeholders={
                 "address": f"{connection[CONF_HOST]}:{connection.get(CONF_PORT, DEFAULT_PORT)}",
@@ -407,6 +412,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 OPT_THERMOMETERS: str(len(options.get(OPT_THERMOMETERS, []))),
                 OPT_ANALOG_SENSORS: str(len(options.get(OPT_ANALOG_SENSORS, []))),
                 OPT_OUTPUT_SENSORS: str(len(options.get(OPT_OUTPUT_SENSORS, []))),
+                OPT_THERMOSTATS: str(len(options.get(OPT_THERMOSTATS, []))),
                 **{
                     key: str(len(options.get(key, [])))
                     for key in (OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES, OPT_EXCLUDED)
@@ -724,6 +730,42 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         taken = self._in_use() | set(self._options.get(OPT_LIGHTS, []))
         return self._pick_form(
             "lights_switches", OPT_SWITCHES, [n for n in self._pickable(names) if n not in taken]
+        )
+
+    # ----------------------------------------------------------- thermostats
+
+    async def async_step_thermostats(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """The thermostats to import. Each keeps what its list entry carries -
+        its thermometer and range - so nothing is typed in. Nothing by default."""
+        try:
+            hub = self.config_entry.runtime_data.hub
+            available = {t.name: t for t in await hub.async_thermostats()}
+        except NexoError as err:
+            return self._cannot_list(err)
+        if user_input is not None:
+            self._options[OPT_THERMOSTATS] = [
+                {
+                    THERMOSTAT_NAME: name,
+                    THERMOSTAT_THERMOMETER: available[name].thermometer,
+                    THERMOSTAT_MIN: available[name].minimum,
+                    THERMOSTAT_MAX: available[name].maximum,
+                }
+                for name in user_input.get(OPT_THERMOSTATS, [])
+                if name in available
+            ]
+            return await self.async_step_menu()
+        selected = [
+            item[THERMOSTAT_NAME]
+            for item in self._options.get(OPT_THERMOSTATS, [])
+            if item[THERMOSTAT_NAME] in available
+        ]
+        return self.async_show_form(
+            step_id="thermostats",
+            data_schema=vol.Schema(
+                {vol.Optional(OPT_THERMOSTATS, default=selected): _pick_many(sorted(available))}
+            ),
         )
 
     # --------------------------------------------------------------- sensors

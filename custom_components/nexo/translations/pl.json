@@ -55,6 +55,7 @@
           "sensors": "Czujniki",
           "analog": "Wejścia analogowe",
           "lights": "Światła i przełączniki",
+          "thermostats": "Termostaty",
           "covers": "Bramy i drzwi",
           "valves": "Zawory",
           "buttons": "Przyciski",
@@ -70,7 +71,8 @@
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
           "valves": "{valves}",
           "analog": "Rodzaj i kalibracja",
-          "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}"
+          "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}",
+          "thermostats": "Termostaty: {thermostats}"
         },
         "description": ""
       },
@@ -81,6 +83,7 @@
           "sensors": "Czujniki",
           "analog": "Wejścia analogowe",
           "lights": "Światła i przełączniki",
+          "thermostats": "Termostaty",
           "covers": "Bramy i drzwi",
           "valves": "Zawory",
           "buttons": "Przyciski",
@@ -96,7 +99,8 @@
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
           "valves": "{valves}",
           "analog": "Rodzaj i kalibracja",
-          "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}"
+          "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}",
+          "thermostats": "Termostaty: {thermostats}"
         },
         "description": "{alert_open}Centrala nie odpowiada{alert_close}"
       },
@@ -107,6 +111,7 @@
           "sensors": "Czujniki",
           "analog": "Wejścia analogowe",
           "lights": "Światła i przełączniki",
+          "thermostats": "Termostaty",
           "covers": "Bramy i drzwi",
           "valves": "Zawory",
           "buttons": "Przyciski",
@@ -122,7 +127,8 @@
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
           "valves": "{valves}",
           "analog": "Rodzaj i kalibracja",
-          "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}"
+          "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}",
+          "thermostats": "Termostaty: {thermostats}"
         },
         "description": "{alert_open}Zmieniono połączenie – wybierz Zapisz i zamknij, żeby je zastosować{alert_close}"
       },
@@ -287,6 +293,13 @@
         "description": "Krok 4 z 4. Pozostałe wyjścia do włączania i wyłączania, na przykład rekuperator. Wyjścia wybrane jako światła nie są na liście.",
         "data": {
           "switches": "Przełączniki"
+        }
+      },
+      "thermostats": {
+        "title": "Termostaty",
+        "description": "Termostaty do zaimportowania, każdy z termometrem i zakresem ustawionymi w centrali. Termostat Nexo załącza wyjście, gdy w pomieszczeniu jest cieplej niż próg, dlatego Home Assistant pokazuje go w trybie chłodzenia: „chłodzi” oznacza, że wyjście jest załączone. Co robi wyjście, zależy od instalacji.",
+        "data": {
+          "thermostats": "Termostaty"
         }
       },
       "analog": {

@@ -40,6 +40,7 @@ import logging
 import socket
 import time
 from contextlib import contextmanager
+from dataclasses import dataclass
 from enum import Enum
 from hashlib import md5
 from threading import RLock
@@ -49,6 +50,8 @@ __all__ = [
     "NexoClient",
     "ImportTypes",
     "DeviceState",
+    "ThermostatInfo",
+    "ThermostatState",
     "NexoError",
     "NexoConnectionError",
     "NexoAuthError",
@@ -125,6 +128,40 @@ class ImportTypes(Enum):
 class DeviceState(Enum):
     ON = 1
     OFF = 0
+
+
+@dataclass(frozen=True)
+class ThermostatInfo:
+    """A thermostat's entry in the resource list: its thermometer and the
+    range its threshold may be set within, in whole degrees."""
+
+    name: str
+    thermometer: str
+    minimum: int
+    maximum: int
+
+
+@dataclass(frozen=True)
+class ThermostatState:
+    """A thermostat's numeric state, unpacked.
+
+    Measured: the high 16 bits are the threshold in tenths of a degree, then
+    a byte that is 01 while the thermostat is active and a byte that is 01
+    while its output is on. The output goes on when the room is warmer than
+    the threshold - the direction is fixed in the central unit.
+    """
+
+    threshold: float
+    active: bool
+    output_on: bool
+
+    @classmethod
+    def unpack(cls, state: int) -> ThermostatState:
+        return cls(
+            threshold=((state >> 16) & 0xFFFF) / 10,
+            active=bool((state >> 8) & 0xFF),
+            output_on=bool(state & 0xFF),
+        )
 
 
 # --------------------------------------------------------------------------
@@ -640,10 +677,43 @@ class NexoClient:
         self._control("otworz")
 
     def set_thermostat(self, temperature: int, name: str) -> None:
-        """Set a thermostat's threshold, in whole degrees."""
+        """Set a thermostat's threshold, in whole degrees.
+
+        The number goes without a sign: a bare '+' or '-' switches the
+        thermostat on or off. Setting the threshold also switches it on
+        (the manufacturer's GSM card manual).
+        """
         if isinstance(temperature, bool) or not isinstance(temperature, int):
             raise ValueError(f"temperature must be an integer, got {temperature!r}")
-        self._control(f"ustaw {temperature:+d} {self._quote(name)}")
+        self._control(
+            f"ustaw {temperature} {self._quote(name)}", reply_polls=self.CONTROL_REPLY_POLLS
+        )
+
+    def thermostat_on(self, name: str) -> None:
+        """Switch a thermostat on, keeping its threshold."""
+        self._control(f"ustaw + {self._quote(name)}", reply_polls=self.CONTROL_REPLY_POLLS)
+
+    def thermostat_off(self, name: str) -> None:
+        """Switch a thermostat off, keeping its threshold; its output goes off."""
+        self._control(f"ustaw - {self._quote(name)}", reply_polls=self.CONTROL_REPLY_POLLS)
+
+    def list_thermostats(self) -> List[ThermostatInfo]:
+        """Every thermostat with its thermometer and threshold range.
+
+        A thermostat's list entry carries them on further lines:
+        '~T 17 0 TRS HALL', 'TMP HALL', '15', '30'.
+        """
+        result: List[ThermostatInfo] = []
+        for index in range(self.MAX_RESOURCES_PER_TYPE):
+            lines = self._list_entry_lines(ImportTypes.THERMOSTAT, index)
+            if lines is None:
+                break
+            try:
+                name, thermometer, minimum, maximum = (line.strip() for line in lines[:4])
+                result.append(ThermostatInfo(name, thermometer, int(minimum), int(maximum)))
+            except ValueError:
+                log.warning("Unreadable thermostat entry %d: %r", index, lines)
+        return result
 
     def arm(self, password: str, partition: str) -> None:
         """Arm a partition with a user password, which is kept out of logs."""
@@ -768,8 +838,16 @@ class NexoClient:
         return names
 
     def _list_entry(self, rtype: ImportTypes, index: int) -> Optional[str]:
+        """Return the name at one index of a type's list, or None past its end."""
+        lines = self._list_entry_lines(rtype, index)
+        if lines is None:
+            return None
+        return lines[0].strip() if lines else ""
+
+    def _list_entry_lines(self, rtype: ImportTypes, index: int) -> Optional[List[str]]:
         """
-        Return the name at one index of a type's list, or None past its end.
+        Return the lines of one entry of a type's list - the name first - or
+        None past its end.
 
         The central unit echoes type and index back ('~T 1 0 PIR HALL', and a
         bare '~T 1 28' past the end), so an answer to another query can be
@@ -791,8 +869,7 @@ class NexoClient:
             if reply.startswith(header + " "):
                 # THERMOSTAT entries carry the linked thermometer and the
                 # allowed temperature range on further lines.
-                lines = reply[len(header) + 1:].splitlines()
-                return lines[0].strip() if lines else ""
+                return reply[len(header) + 1:].splitlines()
 
             log.debug(
                 "Listing %s at index %d got %r - resynchronising and asking again",

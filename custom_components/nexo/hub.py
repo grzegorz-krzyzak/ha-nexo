@@ -11,7 +11,7 @@ from typing import Any, TypeVar
 from homeassistant.core import HomeAssistant
 
 from .const import KEEPALIVE_IDLE
-from .nexo_client import ImportTypes, NexoClient
+from .nexo_client import ImportTypes, NexoClient, ThermostatInfo
 
 _T = TypeVar("_T")
 
@@ -33,6 +33,7 @@ class NexoHub:
         self._client: NexoClient | None = None
         self._lock = asyncio.Lock()
         self._resources: dict[ImportTypes, list[str]] = {}
+        self._thermostats: list[ThermostatInfo] | None = None
         self._last_call = time.monotonic()
 
     @property
@@ -84,4 +85,10 @@ class NexoHub:
                 self.client.list_resources, resource_type
             )
         return self._resources[resource_type]
+
+    async def async_thermostats(self) -> list[ThermostatInfo]:
+        """Return every thermostat with its thermometer and range, read once and cached."""
+        if self._thermostats is None:
+            self._thermostats = await self.async_call(self.client.list_thermostats)
+        return self._thermostats
 

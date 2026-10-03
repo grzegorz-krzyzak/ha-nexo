@@ -31,8 +31,11 @@ from .const import (
     OPT_OUTPUT_SENSORS,
     OPT_SWITCHES,
     OPT_THERMOMETERS,
+    OPT_THERMOSTATS,
     OPT_VALVES,
     POLL_TICK,
+    THERMOSTAT_NAME,
+    THERMOSTAT_THERMOMETER,
     VALVE_MAIN,
     VALVE_SECTIONS,
 )
@@ -101,6 +104,10 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
         measurements = {
             *options.get(OPT_THERMOMETERS, []),
             *options.get(OPT_ANALOG_SENSORS, []),
+            # A thermostat and the thermometer it reads: the threshold changes
+            # only on command, and what the output does acts over minutes
+            *(t[THERMOSTAT_NAME] for t in options.get(OPT_THERMOSTATS, [])),
+            *(t[THERMOSTAT_THERMOMETER] for t in options.get(OPT_THERMOSTATS, [])),
         } - inputs - outputs - lights
         # (interval in seconds, resources) in order of urgency; a resource in
         # two roles is read with the more urgent group

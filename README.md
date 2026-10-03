@@ -20,12 +20,13 @@ connection the NexoVision app uses. Local polling, no cloud.
 | Lighting outputs (`LIGHT`) | `light` | on / off |
 | Dimmers (`DIMMER`) | `light` | with brightness |
 | Outputs and lighting outputs, switched | `switch` | on / off, e.g. a ventilation unit |
+| Thermostats | `climate` | cool / off, threshold in whole degrees - see *Thermostats* |
 | Gates and doors driven by logic commands | `cover` | closed / not closed, from a reed switch |
 | Watering programs and other start/stop command pairs | `valve` | open while any of its sections is on |
 | Any logic command | `button` | fire and forget |
 
-Thermostats, blinds, alarm partitions and the central unit's lighting groups
-are not supported yet; for groups, use Home Assistant's own.
+Blinds, alarm partitions and the central unit's lighting groups are not
+supported yet; for groups, use Home Assistant's own.
 
 ## Installation
 
@@ -60,6 +61,8 @@ shows the current settings next to each item:
   (see *Analog inputs*).
 - **Lights and switches** - four screens in a row: excluded resources, lights,
   dimmers, switches (see *Lights and switches*).
+- **Thermostats** - the thermostats to import; each brings the thermometer and
+  the range set for it in the central unit (see *Thermostats*).
 - **Gates and doors**, **Valves** and **Buttons** - one entry each; pick one to
   edit or delete it. Up to 20 of each.
 - **Settings** - how often each group of resources is read (see *Polling*).
@@ -95,6 +98,28 @@ without a brightness, a dimmer gets the central unit's own "on" command, as
 from NexoVision - the integration does not change what "on" means there. A
 brightness, from a slider or a voice command, is written as a level.
 
+### Thermostats
+
+**A Nexo thermostat switches its output on when the room is warmer than its
+threshold** - the direction is fixed in the central unit; its output type
+offers only *Termostat* and *Termometr*. In Home Assistant terms that is
+cooling, so a thermostat is a `climate` entity with the modes *cool* and
+*off*: "cooling" means the output is on, "idle" that the room is below the
+threshold. What the output does is up to your installation - it may close an
+underfloor heating loop, as a room temperature limit, or run a fan.
+
+- The target temperature is the threshold, in whole degrees within the range
+  set in the central unit; the current temperature comes from the thermometer
+  the thermostat is set to read.
+- *Off* switches the thermostat off in the central unit, keeping its
+  threshold; its output goes off.
+- Setting the threshold switches a thermostat on in the central unit, so for
+  a thermostat that is off the integration switches it off again at once - Home
+  Assistant expects the mode to stay. If the room is warmer than the new
+  threshold, the output can be on for about a second.
+- Thermostats are read with the *Measurements* group (60 s by default) and
+  every second for a few seconds after a command.
+
 ### Analog inputs
 
 An analog input reads 0-100 of the range set for its sensor in the central
@@ -120,7 +145,7 @@ Resources are read in groups, each at its own interval:
 | Inputs | reed switches and motion sensors, including the gates' reed switches | 5 s |
 | Outputs | watering sections, the main valve, outputs read as sensors | 10 s |
 | Lights | lights, dimmers and switches | 10 s |
-| Measurements | thermometers and analog inputs | 60 s |
+| Measurements | thermometers, analog inputs, thermostats | 60 s |
 
 After a command, what shows its effect is read every second for a while:
 a gate's reed switch for its travel time (60 s without one), a valve's

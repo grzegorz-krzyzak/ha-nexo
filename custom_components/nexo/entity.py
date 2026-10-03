@@ -14,6 +14,16 @@ from .coordinator import NexoCoordinator
 from .nexo_client import NexoError
 
 
+def thermometer_celsius(state: int | None) -> float | None:
+    """A thermometer's state in degrees: tenths, assumed a signed 16-bit value
+    (only positive temperatures have been seen, so the sign is unverified)."""
+    if state is None:
+        return None
+    if state >= 0x8000:
+        state -= 0x10000
+    return state / 10
+
+
 class NexoEntity(CoordinatorEntity[NexoCoordinator]):
     """An entity attached to the central unit's device."""
 

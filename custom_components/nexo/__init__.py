@@ -30,7 +30,9 @@ from .const import (
     OPT_OUTPUT_SENSORS,
     OPT_SWITCHES,
     OPT_THERMOMETERS,
+    OPT_THERMOSTATS,
     OPT_VALVES,
+    THERMOSTAT_NAME,
 )
 from .coordinator import NexoCoordinator
 from .motion import Motion
@@ -40,6 +42,7 @@ from .nexo_client import NexoAuthError, NexoError
 PLATFORMS = [
     Platform.BINARY_SENSOR,
     Platform.BUTTON,
+    Platform.CLIMATE,
     Platform.COVER,
     Platform.LIGHT,
     Platform.SENSOR,
@@ -158,6 +161,7 @@ def _remove_deselected_entities(hass: HomeAssistant, entry: NexoConfigEntry) -> 
         *(f"light_{name}" for name in options.get(OPT_LIGHTS, [])),
         *(f"dimmer_{name}" for name in options.get(OPT_DIMMERS, [])),
         *(f"switch_{name}" for name in options.get(OPT_SWITCHES, [])),
+        *(f"thermostat_{item[THERMOSTAT_NAME]}" for item in options.get(OPT_THERMOSTATS, [])),
         *(f"cover_{item[ITEM_ID]}" for item in options.get(OPT_COVERS, [])),
         *(
             f"step_{item[ITEM_ID]}"

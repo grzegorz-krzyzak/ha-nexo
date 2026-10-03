@@ -55,6 +55,7 @@
           "sensors": "Sensors",
           "analog": "Analog inputs",
           "lights": "Lights and switches",
+          "thermostats": "Thermostats",
           "covers": "Gates and doors",
           "valves": "Valves",
           "buttons": "Buttons",
@@ -70,7 +71,8 @@
           "save": "Closing the window with ✕ discards the changes",
           "valves": "{valves}",
           "analog": "Type and calibration",
-          "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}"
+          "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}",
+          "thermostats": "Thermostats: {thermostats}"
         },
         "description": ""
       },
@@ -81,6 +83,7 @@
           "sensors": "Sensors",
           "analog": "Analog inputs",
           "lights": "Lights and switches",
+          "thermostats": "Thermostats",
           "covers": "Gates and doors",
           "valves": "Valves",
           "buttons": "Buttons",
@@ -96,7 +99,8 @@
           "save": "Closing the window with ✕ discards the changes",
           "valves": "{valves}",
           "analog": "Type and calibration",
-          "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}"
+          "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}",
+          "thermostats": "Thermostats: {thermostats}"
         },
         "description": "{alert_open}The central unit is not answering{alert_close}"
       },
@@ -107,6 +111,7 @@
           "sensors": "Sensors",
           "analog": "Analog inputs",
           "lights": "Lights and switches",
+          "thermostats": "Thermostats",
           "covers": "Gates and doors",
           "valves": "Valves",
           "buttons": "Buttons",
@@ -122,7 +127,8 @@
           "save": "Closing the window with ✕ discards the changes",
           "valves": "{valves}",
           "analog": "Type and calibration",
-          "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}"
+          "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}",
+          "thermostats": "Thermostats: {thermostats}"
         },
         "description": "{alert_open}Connection changed – choose Save and close to apply it{alert_close}"
       },
@@ -287,6 +293,13 @@
         "description": "Step 4 of 4. Other outputs to switch on and off, such as a ventilation unit. Outputs picked as lights are not listed.",
         "data": {
           "switches": "Switches"
+        }
+      },
+      "thermostats": {
+        "title": "Thermostats",
+        "description": "Thermostats to import, each with the thermometer and the range set in the central unit. A Nexo thermostat switches its output on when the room is warmer than its threshold, so Home Assistant shows it in cooling mode: \"cooling\" means the output is on. What the output does depends on your installation.",
+        "data": {
+          "thermostats": "Thermostats"
         }
       },
       "analog": {

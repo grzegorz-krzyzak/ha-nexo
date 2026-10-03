@@ -23,7 +23,7 @@ from .const import (
     OPT_THERMOMETERS,
 )
 from .coordinator import NexoCoordinator
-from .entity import NexoResourceEntity
+from .entity import NexoResourceEntity, thermometer_celsius
 
 
 async def async_setup_entry(
@@ -60,14 +60,7 @@ class NexoThermometer(NexoResourceEntity, SensorEntity):
 
     @property
     def native_value(self) -> float | None:
-        state = self.raw_state
-        if state is None:
-            return None
-        # Assumed to be a signed 16-bit value; only positive temperatures have
-        # been seen so far, so the sign handling is unverified.
-        if state >= 0x8000:
-            state -= 0x10000
-        return state / 10
+        return thermometer_celsius(self.raw_state)
 
 
 # Kind -> (device class, unit); every kind but raw is a percentage of range
