@@ -248,6 +248,17 @@ treats a failed read as "no news" rather than a change of state. Resource
 listings are checked the same way, by the type and index each entry echoes
 back.
 
+A command that works gets no reply: the card acknowledges it, and the central
+unit speaks only to refuse it, in the answer to a following `get`. So after
+switching an output or setting a dimmer's level the client polls `get` four
+times, 50 ms apart, before taking silence for success. In 1404 measured
+refusals - also with the remote panel open, the NexoVision app connected and a
+gate sequence running - the refusal always came by the second poll. The wait
+counts polls, not time: a busy central unit makes a command take longer but
+does not lose its refusal. Fewer than three polls would risk reporting a
+refused command as done. Logic commands, which return what the logic answers,
+keep ten polls (0.5 s).
+
 The LAN card closes a connection that has been silent longer than the
 tolerance for communication breaks set in the central unit's LAN card
 settings (5 s by default). With polling intervals longer than that, the

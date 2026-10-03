@@ -158,10 +158,25 @@ class NexoClient:
     MAX_COMMAND_DATA = 240
     MAX_LOGIC_COMMAND = 7
 
-    # How long to keep polling 'get' for a reply, and how often
+    # A reply is fetched by polling 'get'. The waits below count polls, not
+    # seconds: a slow round trip does not cut a wait short, so a busy central
+    # unit makes a command take longer but never loses its answer.
     REPLY_POLL_INTERVAL = 0.05
-    QUERY_REPLY_TIMEOUT = 2.0
-    CONTROL_REPLY_TIMEOUT = 0.5
+    # Queries: the central unit can take long to answer while running a
+    # sequence - about 2 s.
+    QUERY_REPLY_POLLS = 40
+    # Switching an output on or off, or setting a dimmer's level. Success is
+    # silent; a refusal comes in the reply to a following poll. Measured in
+    # 1404 refusals, also with the remote panel open, the phone app connected
+    # and the gate sequence running: always by the 2nd poll. 4 leaves a margin
+    # of 2 - do not go below 3, or refusals may be reported as success.
+    CONTROL_REPLY_POLLS = 4
+    # Logic commands return what the logic answers, never measured - kept at
+    # the original 0.5 s.
+    LOGIC_REPLY_POLLS = 10
+    # Other text commands (blinds, door, thermostats, alarm), not used by the
+    # integration and not measured - kept at the original 0.5 s.
+    COMMAND_REPLY_POLLS = 10
 
     # How many times to re-ask for one list entry whose answer went astray
     LISTING_ATTEMPTS = 3
@@ -447,13 +462,14 @@ class NexoClient:
         if not name:
             raise ValueError("resource name must not be empty")
 
-        response = self._system_c(name, "?", reply_timeout=self.QUERY_REPLY_TIMEOUT)
+        response = self._system_c(name, "?", reply_polls=self.QUERY_REPLY_POLLS)
         body = self._strip_prefix(response)
 
         if not body:
+            waited = self.QUERY_REPLY_POLLS * self.REPLY_POLL_INTERVAL
             raise NexoTimeoutError(
                 f"Central unit did not answer the query for {name!r} within "
-                f"{self.QUERY_REPLY_TIMEOUT}s - it may be busy running a sequence"
+                f"{waited:g}s - it may be busy running a sequence"
             )
 
         # The central unit echoes the resource name back. A reply naming
@@ -520,7 +536,7 @@ class NexoClient:
                 )
                 raise
 
-    def _system_c(self, name: str, argument: str, reply_timeout: float = 0.0) -> str:
+    def _system_c(self, name: str, argument: str, reply_polls: int = 1) -> str:
         """The 'system C' command - read or write a single resource's state."""
         if "'" in name:
             raise ValueError("resource name must not contain an apostrophe")
@@ -530,17 +546,17 @@ class NexoClient:
             raise NexoCommandError(
                 f"Central unit rejected the command for {name!r}: {ack!r}"
             )
-        return self._await_reply(reply_timeout)
+        return self._await_reply(reply_polls)
 
     def _strip_prefix(self, frame: str) -> str:
         if frame.startswith(self.RESPONSE_PREFIX):
             frame = frame[len(self.RESPONSE_PREFIX):]
         return frame.strip()
 
-    def _await_reply(self, timeout: float) -> str:
+    def _await_reply(self, polls: int) -> str:
         """
         Poll 'get' until the central unit has put its answer in the card's
-        buffer, or the timeout runs out.
+        buffer, at most `polls` times.
 
         The card acknowledges a command straight away, but the central unit
         needs a few to a few dozen milliseconds to answer - much longer while
@@ -548,10 +564,9 @@ class NexoClient:
         command instead of polling would queue a second answer and leave every
         later read reading the previous one.
 
-        A timeout of 0 reads once, for commands whose answer is not needed.
+        One poll reads once, for commands whose answer is not needed.
         """
-        attempts = max(1, int(timeout / self.REPLY_POLL_INTERVAL))
-        for remaining in range(attempts, 0, -1):
+        for remaining in range(max(1, polls), 0, -1):
             reply = self._command_retrying("get")
             if reply != self.RESPONSE_PREFIX:
                 return reply
@@ -577,15 +592,19 @@ class NexoClient:
                 f"characters, got {len(command)}"
             )
         self._reject_control_characters(command, "logic command")
-        return self._system("logic", command, reply_timeout=self.CONTROL_REPLY_TIMEOUT)
+        return self._system("logic", command, reply_polls=self.LOGIC_REPLY_POLLS)
 
     def turn_on(self, name: str) -> None:
         """Switch on a relay, OC or lighting output."""
-        self._control(f"wlacz {self._quote(name)}")
+        self._control(
+            f"wlacz {self._quote(name)}", reply_polls=self.CONTROL_REPLY_POLLS
+        )
 
     def turn_off(self, name: str) -> None:
         """Switch off a relay, OC or lighting output."""
-        self._control(f"wylacz {self._quote(name)}")
+        self._control(
+            f"wylacz {self._quote(name)}", reply_polls=self.CONTROL_REPLY_POLLS
+        )
 
     MAX_LEVEL = 255
 
@@ -602,7 +621,7 @@ class NexoClient:
         if not 1 <= level <= self.MAX_LEVEL:
             raise ValueError(f"level must be 1-{self.MAX_LEVEL}, got {level!r}")
         reply = self._system_c(
-            name, str(level << 8 | 1), reply_timeout=self.CONTROL_REPLY_TIMEOUT
+            name, str(level << 8 | 1), reply_polls=self.CONTROL_REPLY_POLLS
         )
         failure = self._strip_prefix(reply)
         if failure:
@@ -645,12 +664,12 @@ class NexoClient:
         return self._system(
             "command",
             f"stan {self._quote(name)}",
-            reply_timeout=self.QUERY_REPLY_TIMEOUT,
+            reply_polls=self.QUERY_REPLY_POLLS,
         )
 
     def system_info(self) -> str:
         """Firmware version and uptime, as the central unit reports them."""
-        return self._system("command", "system", reply_timeout=self.QUERY_REPLY_TIMEOUT)
+        return self._system("command", "system", reply_polls=self.QUERY_REPLY_POLLS)
 
     # ------------------------------------------------- text command plumbing
 
@@ -678,7 +697,12 @@ class NexoClient:
         cls._reject_control_characters(password, "password")
         return password
 
-    def _control(self, payload: str, shown_as: Optional[str] = None) -> None:
+    def _control(
+        self,
+        payload: str,
+        shown_as: Optional[str] = None,
+        reply_polls: Optional[int] = None,
+    ) -> None:
         """
         Run a control command. The central unit stays silent when it works and
         describes the failure in the reply the following 'get' picks up.
@@ -687,7 +711,9 @@ class NexoClient:
             "command",
             payload,
             shown_as=shown_as,
-            reply_timeout=self.CONTROL_REPLY_TIMEOUT,
+            reply_polls=(
+                self.COMMAND_REPLY_POLLS if reply_polls is None else reply_polls
+            ),
         )
         if failure:
             raise NexoCommandError(
@@ -699,7 +725,7 @@ class NexoClient:
         subcommand: str,
         argument: str = "",
         shown_as: Optional[str] = None,
-        reply_timeout: float = 0.0,
+        reply_polls: int = 1,
     ) -> str:
         """Send 'system <subcommand> <argument>' and return the reply payload."""
         data = f"system {subcommand} {argument}".rstrip()
@@ -714,7 +740,7 @@ class NexoClient:
         if ack != "CMD OK":
             raise NexoCommandError(f"Card rejected {safe or data!r}: {ack!r}")
 
-        return self._strip_prefix(self._await_reply(reply_timeout))
+        return self._strip_prefix(self._await_reply(reply_polls))
 
     # ---------------------------------------------------------------- resources
 
@@ -759,7 +785,7 @@ class NexoClient:
                     f"Central unit rejected listing {rtype.name} at index {index}: {ack!r}"
                 )
 
-            reply = self._strip_prefix(self._await_reply(self.QUERY_REPLY_TIMEOUT))
+            reply = self._strip_prefix(self._await_reply(self.QUERY_REPLY_POLLS))
             if reply == header:
                 return None
             if reply.startswith(header + " "):
