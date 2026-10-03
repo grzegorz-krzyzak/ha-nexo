@@ -65,7 +65,7 @@ async def test_entities_on_their_own_device(hass: HomeAssistant, fake_nexo) -> N
     assert states == {
         "sensor.weather_station_temperature": "28.8",
         "sensor.weather_station_daylight": "999",
-        "sensor.weather_station_wind_speed": "0.0",
+        "sensor.weather_station_wind_speed": "0.0",  # km/h, Home Assistant's metric default
         "sensor.weather_station_sun_south": "87",
         "binary_sensor.weather_station_sunny": "on",
         "binary_sensor.weather_station_calm": "on",
@@ -88,7 +88,7 @@ async def test_readings_follow_the_measurements(hass: HomeAssistant, fake_nexo, 
     fake_nexo.states["SP:Wiatr"] = 57
     await _tick(hass, freezer, 60)
     assert hass.states.get("binary_sensor.weather_station_rain").state == "on"
-    assert hass.states.get("sensor.weather_station_wind_speed").state == "5.7"
+    assert hass.states.get("sensor.weather_station_wind_speed").state == "20.52"  # 5.7 m/s
 
 
 async def test_nothing_without_the_option(hass: HomeAssistant, fake_nexo) -> None:

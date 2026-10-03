@@ -142,7 +142,7 @@ says so.
 |---|---|
 | Temperature | °C, one decimal place |
 | Daylight | 0-999 lx - it saturates long before full daylight |
-| Wind speed | m/s |
+| Wind speed | km/h by default; any unit Home Assistant offers - m/s, knots, Beaufort - in the entity's settings |
 | Sun west, south, east | klx, 0-99 each |
 | Frost, heat, twilight, sunny, calm, strong wind, rain | on / off, as the station judges them |
 | Conditions code | the raw bits behind the on / off conditions, diagnostic |

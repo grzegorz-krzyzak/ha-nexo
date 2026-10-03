@@ -157,8 +157,6 @@ class WeatherWind(NexoWeatherEntity, SensorEntity):
     _attr_device_class = SensorDeviceClass.WIND_SPEED
     _attr_native_unit_of_measurement = UnitOfSpeed.METERS_PER_SECOND
     _attr_state_class = SensorStateClass.MEASUREMENT
-    # As the station and the configurator show it, not converted to km/h
-    _attr_suggested_unit_of_measurement = UnitOfSpeed.METERS_PER_SECOND
     _attr_suggested_display_precision = 1
 
     @property
