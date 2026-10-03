@@ -70,6 +70,9 @@ THERMOSTAT_DIRECTION: Final = "direction"
 THERMOSTAT_HEAT: Final = "heat"
 THERMOSTAT_COOL: Final = "cool"
 THERMOSTAT_DIRECTIONS: Final = [THERMOSTAT_HEAT, THERMOSTAT_COOL]
+# The weather station card's five resources, in card order (weather.py), when
+# the user imports it; absent or empty, not imported. Nothing by default.
+OPT_WEATHER: Final = "weather_station"
 # Resources the user excluded from every list of outputs and lights to pick
 # from - the ones that drive gates or locks, which a switch would fire in one
 # click. Kept by the user, not named in the code.

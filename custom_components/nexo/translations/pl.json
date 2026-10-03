@@ -56,6 +56,7 @@
           "analog": "Wejścia analogowe",
           "lights": "Światła i przełączniki",
           "thermostats": "Termostaty",
+          "weather": "Stacja pogodowa",
           "covers": "Bramy i drzwi",
           "valves": "Zawory",
           "buttons": "Przyciski",
@@ -84,6 +85,7 @@
           "analog": "Wejścia analogowe",
           "lights": "Światła i przełączniki",
           "thermostats": "Termostaty",
+          "weather": "Stacja pogodowa",
           "covers": "Bramy i drzwi",
           "valves": "Zawory",
           "buttons": "Przyciski",
@@ -112,6 +114,7 @@
           "analog": "Wejścia analogowe",
           "lights": "Światła i przełączniki",
           "thermostats": "Termostaty",
+          "weather": "Stacja pogodowa",
           "covers": "Bramy i drzwi",
           "valves": "Zawory",
           "buttons": "Przyciski",
@@ -305,6 +308,13 @@
       "thermostats_direction": {
         "title": "Grzanie czy chłodzenie",
         "description": "Sposób działania termostatu ustala w centrali znak jego histerezy: dodatnia (domyślna) to grzanie, ujemna to chłodzenie. Centrala tego nie podaje, więc wybierz tutaj. Przy grzaniu termostat pokazuje „grzeje”, gdy żąda ciepła - jego wyjście jest wyłączone - i „bezczynny”, gdy w pomieszczeniu jest dość ciepło, a wyjście jest załączone."
+      },
+      "weather": {
+        "title": "Stacja pogodowa",
+        "description": "Odczyty karty stacji pogodowej - temperatura, światło dzienne, wiatr, słońce z trzech stron - i stany, które zgłasza stacja: mróz, upał, zmierzch, słonecznie, bezwietrznie, silny wiatr, deszcz. Trafiają na osobne urządzenie.",
+        "data": {
+          "weather_station": "Importuj stację pogodową"
+        }
       },
       "analog": {
         "title": "Wejścia analogowe",
@@ -1739,7 +1749,8 @@
       "required": "Pole wymagane.",
       "step_needs_unguarded": "Przycisk Krok wymaga wyłączenia „Otwieraj tylko przy potwierdzonym zamknięciu”: zatrzymuje jadącą bramę przeciwną komendą.",
       "main_valve_is_a_section": "Zawór główny nie może być jednocześnie sekcją.",
-      "unknown_resource": "Nie ma takiego zasobu w centrali."
+      "unknown_resource": "Nie ma takiego zasobu w centrali.",
+      "no_weather_station": "Ta centrala nie ma karty stacji pogodowej."
     },
     "abort": {
       "cannot_list": "Nie można pobrać listy zasobów z centrali.",
@@ -1773,12 +1784,61 @@
     "binary_sensor": {
       "connection": {
         "name": "Połączenie z centralą"
+      },
+      "frost": {
+        "name": "Mróz"
+      },
+      "heat": {
+        "name": "Upał"
+      },
+      "twilight": {
+        "name": "Zmierzch"
+      },
+      "sunny": {
+        "name": "Słonecznie"
+      },
+      "calm": {
+        "name": "Bezwietrznie"
+      },
+      "strong_wind": {
+        "name": "Silny wiatr"
+      },
+      "rain": {
+        "name": "Deszcz"
       }
     },
     "button": {
       "step": {
         "name": "{name} – krok"
       }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Temperatura"
+      },
+      "daylight": {
+        "name": "Światło dzienne"
+      },
+      "wind_speed": {
+        "name": "Prędkość wiatru"
+      },
+      "sun_west": {
+        "name": "Słońce zachód"
+      },
+      "sun_south": {
+        "name": "Słońce południe"
+      },
+      "sun_east": {
+        "name": "Słońce wschód"
+      },
+      "aura": {
+        "name": "Kod stanów"
+      }
+    }
+  },
+  "device": {
+    "weather_station": {
+      "name": "Stacja pogodowa"
     }
   }
 }

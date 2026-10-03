@@ -1,4 +1,5 @@
-"""Nexo SENSOR resources (reed switches, motion detectors) and outputs read as sensors."""
+"""Nexo SENSOR resources (reed switches, motion detectors), outputs read as sensors,
+and the weather station's conditions."""
 
 from __future__ import annotations
 
@@ -11,8 +12,15 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import NexoConfigEntry
-from .const import OPT_BINARY_SENSORS, OPT_OUTPUT_SENSORS, SENSOR_INTACT, SENSOR_VIOLATED
-from .entity import NexoEntity, NexoResourceEntity
+from . import weather
+from .const import (
+    OPT_BINARY_SENSORS,
+    OPT_OUTPUT_SENSORS,
+    OPT_WEATHER,
+    SENSOR_INTACT,
+    SENSOR_VIOLATED,
+)
+from .entity import NexoEntity, NexoResourceEntity, NexoWeatherEntity
 
 
 async def async_setup_entry(
@@ -21,6 +29,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     coordinator = entry.runtime_data.coordinator
+    weather_names = entry.options.get(OPT_WEATHER, [])
     async_add_entities(
         [
             NexoConnectionSensor(coordinator),
@@ -31,6 +40,11 @@ async def async_setup_entry(
             *(
                 NexoOutputSensor(coordinator, "output", name)
                 for name in entry.options.get(OPT_OUTPUT_SENSORS, [])
+            ),
+            *(
+                WeatherCondition(coordinator, condition, weather_names[weather.AURA])
+                for condition in weather.AURA_BITS
+                if len(weather_names) == weather.RESOURCES
             ),
         ]
     )
@@ -86,3 +100,34 @@ class NexoOutputSensor(NexoResourceEntity, BinarySensorEntity):
         state = self.raw_state
         return None if state is None else state != 0
 
+
+
+# A class only where its words fit: "unsafe" for strong wind or "light" for
+# twilight (on when it is dark) would read wrong in the interface and in Assist
+WEATHER_CLASSES: dict[str, BinarySensorDeviceClass] = {
+    "frost": BinarySensorDeviceClass.COLD,
+    "heat": BinarySensorDeviceClass.HEAT,
+    "rain": BinarySensorDeviceClass.MOISTURE,
+}
+WEATHER_ICONS: dict[str, str] = {
+    "twilight": "mdi:weather-night",
+    "sunny": "mdi:weather-sunny",
+    "calm": "mdi:weather-windy-variant",
+    "strong_wind": "mdi:weather-windy",
+}
+
+
+class WeatherCondition(NexoWeatherEntity, BinarySensorEntity):
+    """One bit of the station's aura: frost, heat, twilight, sunny, calm,
+    strong wind or rain, as the station itself judges them."""
+
+    def __init__(self, coordinator, condition: str, resource: str) -> None:
+        super().__init__(coordinator, condition, resource)
+        self._condition = condition
+        self._attr_device_class = WEATHER_CLASSES.get(condition)
+        self._attr_icon = WEATHER_ICONS.get(condition)
+
+    @property
+    def is_on(self) -> bool | None:
+        state = self.raw_state
+        return None if state is None else weather.aura_bit(state, self._condition)

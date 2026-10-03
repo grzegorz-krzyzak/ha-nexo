@@ -6,6 +6,7 @@ from collections.abc import Callable
 from typing import Any
 
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -89,3 +90,34 @@ class NexoSwitchedEntity(NexoResourceEntity):
             # Read back even after an error: a command may have worked
             # although its reply was lost.
             await self.coordinator.async_boost([self.resource], BOOST_LIGHT)
+
+
+class NexoWeatherEntity(NexoEntity):
+    """One reading of the weather station, on a device of its own linked to
+    the central unit's. Named by translation, keyed by its role - the
+    resource names are the card's, not the user's."""
+
+    def __init__(self, coordinator: NexoCoordinator, key: str, resource: str) -> None:
+        super().__init__(coordinator, f"weather_{key}")
+        self.resource = resource
+        self._attr_translation_key = key
+        entry = coordinator.config_entry
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, f"{entry.entry_id}_weather_station")},
+            manufacturer=MANUFACTURER,
+            model="Weather station",
+            translation_key="weather_station",
+        )
+        # The central unit's device is registered before the platforms set up
+        if central := dr.async_get(coordinator.hass).async_get_device_by_identifier(
+            (DOMAIN, entry.entry_id), entry.entry_id
+        ):
+            self._attr_device_info["via_device_id"] = central.id
+
+    @property
+    def raw_state(self) -> int | None:
+        return (self.coordinator.data or {}).get(self.resource)
+
+    @property
+    def available(self) -> bool:
+        return super().available and self.raw_state is not None

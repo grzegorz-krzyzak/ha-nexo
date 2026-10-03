@@ -33,6 +33,7 @@ from .const import (
     OPT_THERMOMETERS,
     OPT_THERMOSTATS,
     OPT_VALVES,
+    OPT_WEATHER,
     POLL_TICK,
     THERMOSTAT_NAME,
     THERMOSTAT_THERMOMETER,
@@ -108,6 +109,9 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
             # only on command, and what the output does acts over minutes
             *(t[THERMOSTAT_NAME] for t in options.get(OPT_THERMOSTATS, [])),
             *(t[THERMOSTAT_THERMOMETER] for t in options.get(OPT_THERMOSTATS, [])),
+            # The weather station: rain or a frost warning a minute late is
+            # fine, the central unit acts on them itself
+            *options.get(OPT_WEATHER, []),
         } - inputs - outputs - lights
         # (interval in seconds, resources) in order of urgency; a resource in
         # two roles is read with the more urgent group

@@ -32,6 +32,7 @@ from homeassistant.helpers.selector import (
     TextSelectorType,
 )
 
+from . import weather
 from .const import (
     ANALOG_KIND,
     ANALOG_KIND_RAW,
@@ -75,6 +76,7 @@ from .const import (
     OPT_THERMOMETERS,
     OPT_THERMOSTATS,
     OPT_VALVES,
+    OPT_WEATHER,
     THERMOSTAT_DIRECTION,
     THERMOSTAT_DIRECTIONS,
     THERMOSTAT_HEAT,
@@ -404,7 +406,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         return self.async_show_menu(
             step_id=MENU_STEPS[status],
             menu_options=[
-                "connection", "sensors", "analog", "lights", "thermostats", "covers",
+                "connection", "sensors", "analog", "lights", "thermostats", "weather", "covers",
                 "valves", "buttons", "settings", "save",
             ],
             description_placeholders={
@@ -805,6 +807,41 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                         default=item.get(THERMOSTAT_DIRECTION, THERMOSTAT_HEAT),
                     ): direction
                     for item in items
+                }
+            ),
+        )
+
+    # -------------------------------------------------------- weather station
+
+    async def async_step_weather(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Import the weather station card's readings, or not. One switch:
+        the card always has the same five resources. Off by default."""
+        try:
+            names = await self._resources(ImportTypes.WEATHER_STATION)
+        except NexoError as err:
+            return self._cannot_list(err)
+        present = len(names) == weather.RESOURCES
+        if user_input is not None:
+            if present and user_input.get(OPT_WEATHER):
+                self._options[OPT_WEATHER] = names
+            else:
+                self._options.pop(OPT_WEATHER, None)
+            return await self.async_step_menu()
+        if not present:
+            # Nothing to import: the form only says so, and goes back
+            return self.async_show_form(
+                step_id="weather", data_schema=vol.Schema({}),
+                errors={"base": "no_weather_station"},
+            )
+        return self.async_show_form(
+            step_id="weather",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        OPT_WEATHER, default=bool(self._options.get(OPT_WEATHER))
+                    ): BooleanSelector()
                 }
             ),
         )

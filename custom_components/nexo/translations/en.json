@@ -56,6 +56,7 @@
           "analog": "Analog inputs",
           "lights": "Lights and switches",
           "thermostats": "Thermostats",
+          "weather": "Weather station",
           "covers": "Gates and doors",
           "valves": "Valves",
           "buttons": "Buttons",
@@ -84,6 +85,7 @@
           "analog": "Analog inputs",
           "lights": "Lights and switches",
           "thermostats": "Thermostats",
+          "weather": "Weather station",
           "covers": "Gates and doors",
           "valves": "Valves",
           "buttons": "Buttons",
@@ -112,6 +114,7 @@
           "analog": "Analog inputs",
           "lights": "Lights and switches",
           "thermostats": "Thermostats",
+          "weather": "Weather station",
           "covers": "Gates and doors",
           "valves": "Valves",
           "buttons": "Buttons",
@@ -305,6 +308,13 @@
       "thermostats_direction": {
         "title": "Heating or cooling",
         "description": "How each thermostat works is set in the central unit by the sign of its hysteresis: positive (the default) is heating, negative is cooling. The central unit does not report it, so choose here. Heating shows \"heating\" while the thermostat asks for heat - its output off - and \"idle\" once the room is warm enough and the output is on."
+      },
+      "weather": {
+        "title": "Weather station",
+        "description": "The weather station card's readings - temperature, daylight, wind, sun from three sides - and the conditions the station reports: frost, heat, twilight, sunny, calm, strong wind, rain. They appear on a device of their own.",
+        "data": {
+          "weather_station": "Import the weather station"
+        }
       },
       "analog": {
         "title": "Analog inputs",
@@ -1739,7 +1749,8 @@
       "required": "Required.",
       "step_needs_unguarded": "The Step button needs \"Open only when confirmed closed\" off: it stops a moving gate with the opposite command.",
       "main_valve_is_a_section": "The main valve cannot also be one of the sections.",
-      "unknown_resource": "No such resource in the central unit."
+      "unknown_resource": "No such resource in the central unit.",
+      "no_weather_station": "This central unit has no weather station card."
     },
     "abort": {
       "cannot_list": "Cannot read the resource list from the central unit.",
@@ -1773,12 +1784,61 @@
     "binary_sensor": {
       "connection": {
         "name": "Connection to central unit"
+      },
+      "frost": {
+        "name": "Frost"
+      },
+      "heat": {
+        "name": "Heat"
+      },
+      "twilight": {
+        "name": "Twilight"
+      },
+      "sunny": {
+        "name": "Sunny"
+      },
+      "calm": {
+        "name": "Calm"
+      },
+      "strong_wind": {
+        "name": "Strong wind"
+      },
+      "rain": {
+        "name": "Rain"
       }
     },
     "button": {
       "step": {
         "name": "{name} step"
       }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Temperature"
+      },
+      "daylight": {
+        "name": "Daylight"
+      },
+      "wind_speed": {
+        "name": "Wind speed"
+      },
+      "sun_west": {
+        "name": "Sun west"
+      },
+      "sun_south": {
+        "name": "Sun south"
+      },
+      "sun_east": {
+        "name": "Sun east"
+      },
+      "aura": {
+        "name": "Conditions code"
+      }
+    }
+  },
+  "device": {
+    "weather_station": {
+      "name": "Weather station"
     }
   }
 }

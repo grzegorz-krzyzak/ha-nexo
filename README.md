@@ -21,6 +21,7 @@ connection the NexoVision app uses. Local polling, no cloud.
 | Dimmers (`DIMMER`) | `light` | with brightness |
 | Outputs and lighting outputs, switched | `switch` | on / off, e.g. a ventilation unit |
 | Thermostats | `climate` | heat or cool (set per thermostat) / off, threshold in tenths - see *Thermostats* |
+| Weather station card | `sensor`, `binary_sensor` | temperature, daylight, wind, sun from three sides; frost, heat, twilight, sunny, calm, strong wind, rain - see *Weather station* |
 | Gates and doors driven by logic commands | `cover` | closed / not closed, from a reed switch |
 | Watering programs and other start/stop command pairs | `valve` | open while any of its sections is on |
 | Any logic command | `button` | fire and forget |
@@ -130,6 +131,35 @@ thermostats the options ask for each one: *Heating* (the default) or
 - Thermostats are read with the *Measurements* group (60 s by default) and
   every second for a few seconds after a command.
 
+### Weather station
+
+With Nexwell's weather station card (an Elsner P03/3-RS485 station), the
+options offer *Weather station*: one switch imports all its readings, on a
+device of its own linked to the central unit. Without the card the screen
+says so.
+
+| Entity | Shown as |
+|---|---|
+| Temperature | °C, one decimal place |
+| Daylight | 0-999 lx - it saturates long before full daylight |
+| Wind speed | m/s |
+| Sun west, south, east | klx, 0-99 each |
+| Frost, heat, twilight, sunny, calm, strong wind, rain | on / off, as the station judges them |
+| Conditions code | the raw bits behind the on / off conditions, diagnostic |
+
+- The conditions use the station's own thresholds (the card manual): frost
+  below 0 °C, heat above 30 °C, twilight below 10 lx, calm below 0.3 m/s,
+  strong wind above 14.9 m/s. Calm and strong wind are therefore both off in
+  a moderate wind.
+- Frost, heat and rain carry a sensor type (cold, heat, moisture); twilight,
+  sunny, calm and strong wind do not, as no type's wording fits - "unsafe"
+  for strong wind, or the light type, which would read the wrong way round
+  at dusk.
+- The station is read with the *Measurements* group (60 s by default). Rules
+  that act on it - closing awnings in wind, say - belong in the central unit.
+- Wind is taken as tenths of m/s, as the station sends one decimal place;
+  so far only calm has been compared with the configurator.
+
 ### Analog inputs
 
 An analog input reads 0-100 of the range set for its sensor in the central
@@ -155,7 +185,7 @@ Resources are read in groups, each at its own interval:
 | Inputs | reed switches and motion sensors, including the gates' reed switches | 5 s |
 | Outputs | watering sections, the main valve, outputs read as sensors | 10 s |
 | Lights | lights, dimmers and switches | 10 s |
-| Measurements | thermometers, analog inputs, thermostats | 60 s |
+| Measurements | thermometers, analog inputs, thermostats, the weather station | 60 s |
 
 After a command, what shows its effect is read every second for a while:
 a gate's reed switch for its travel time (60 s without one), a valve's

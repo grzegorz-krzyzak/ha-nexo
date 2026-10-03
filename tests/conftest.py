@@ -35,6 +35,13 @@ class FakeNexo:
             "DIM A": 0x8001,  # on at level 128
             "TRS HALL": 0x00D20101,  # threshold 21.0, active, output on (23.3 is warmer)
             "TRS GARAGE": 0x012C0000,  # threshold 30.0, off
+            # The weather station in sunshine, as read and matched with the
+            # configurator's weather tab: sunny, calm, no rain; 28.8 °C
+            "SP:Aura": 88,
+            "SP:Temperatura": 3019,
+            "SP:Światło": 999,
+            "SP:Wiatr": 0,
+            "SP:Słońce": 0x40572400,  # west 64, south 87, east 36 klx
         }
         self.listing: dict[ImportTypes, list[str]] = {
             ImportTypes.SENSOR: ["KON DOOR", "KON GATE", "PIR HALL"],
@@ -43,6 +50,9 @@ class FakeNexo:
             ImportTypes.OUTPUT: ["S1", "S2", "S7", "VENT"],
             ImportTypes.LIGHT: ["ZG", "L1", "GATE PULSE"],
             ImportTypes.DIMMER: ["DIM A"],
+            ImportTypes.WEATHER_STATION: [
+                "SP:Aura", "SP:Temperatura", "SP:Światło", "SP:Wiatr", "SP:Słońce",
+            ],
         }
         self.trigger_logic = MagicMock(return_value="")
         self.turn_on = MagicMock()

@@ -121,6 +121,7 @@ class ImportTypes(Enum):
     THERMOMETER = 16
     THERMOSTAT = 17
     THERMOSTAT_GROUP = 18
+    WEATHER_STATION = 21
     GATE = 257
     VENTILATOR = 258
 

@@ -1,4 +1,4 @@
-"""Nexo THERMOMETER and ANALOGSENSOR resources."""
+"""Nexo THERMOMETER and ANALOGSENSOR resources, and the weather station's readings."""
 
 from __future__ import annotations
 
@@ -9,7 +9,13 @@ from homeassistant.components.sensor import (
     SensorEntity,
     SensorStateClass,
 )
-from homeassistant.const import PERCENTAGE, UnitOfTemperature
+from homeassistant.const import (
+    LIGHT_LUX,
+    PERCENTAGE,
+    EntityCategory,
+    UnitOfSpeed,
+    UnitOfTemperature,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -21,9 +27,11 @@ from .const import (
     OPT_ANALOG_SENSORS,
     OPT_ANALOG_SETTINGS,
     OPT_THERMOMETERS,
+    OPT_WEATHER,
 )
 from .coordinator import NexoCoordinator
-from .entity import NexoResourceEntity, thermometer_celsius
+from . import weather
+from .entity import NexoResourceEntity, NexoWeatherEntity, thermometer_celsius
 
 
 async def async_setup_entry(
@@ -46,6 +54,7 @@ async def async_setup_entry(
                 )
                 for name in entry.options.get(OPT_ANALOG_SENSORS, [])
             ),
+            *_weather_sensors(coordinator, entry.options.get(OPT_WEATHER, [])),
         ]
     )
 
@@ -103,3 +112,86 @@ class NexoAnalogSensor(NexoResourceEntity, SensorEntity):
         if self._attr_native_unit_of_measurement == PERCENTAGE:
             value = min(100, max(0, value))
         return value
+
+
+def _weather_sensors(coordinator: NexoCoordinator, names: list[str]) -> list[SensorEntity]:
+    if len(names) != weather.RESOURCES:
+        return []
+    return [
+        WeatherTemperature(coordinator, "temperature", names[weather.TEMPERATURE]),
+        WeatherLight(coordinator, "daylight", names[weather.LIGHT]),
+        WeatherWind(coordinator, "wind_speed", names[weather.WIND]),
+        *(
+            WeatherSun(coordinator, f"sun_{direction}", names[weather.SUN], direction)
+            for direction in weather.SUN_BYTES
+        ),
+        WeatherAura(coordinator, "aura", names[weather.AURA]),
+    ]
+
+
+class WeatherTemperature(NexoWeatherEntity, SensorEntity):
+    _attr_device_class = SensorDeviceClass.TEMPERATURE
+    _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_suggested_display_precision = 1
+
+    @property
+    def native_value(self) -> float | None:
+        state = self.raw_state
+        return None if state is None else weather.temperature_celsius(state)
+
+
+class WeatherLight(NexoWeatherEntity, SensorEntity):
+    """Daylight, 0-999 lx: it saturates long before full daylight."""
+
+    _attr_device_class = SensorDeviceClass.ILLUMINANCE
+    _attr_native_unit_of_measurement = LIGHT_LUX
+    _attr_state_class = SensorStateClass.MEASUREMENT
+
+    @property
+    def native_value(self) -> int | None:
+        return self.raw_state
+
+
+class WeatherWind(NexoWeatherEntity, SensorEntity):
+    _attr_device_class = SensorDeviceClass.WIND_SPEED
+    _attr_native_unit_of_measurement = UnitOfSpeed.METERS_PER_SECOND
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    # As the station and the configurator show it, not converted to km/h
+    _attr_suggested_unit_of_measurement = UnitOfSpeed.METERS_PER_SECOND
+    _attr_suggested_display_precision = 1
+
+    @property
+    def native_value(self) -> float | None:
+        state = self.raw_state
+        return None if state is None else weather.wind_speed(state)
+
+
+class WeatherSun(NexoWeatherEntity, SensorEntity):
+    """Sun on one side of the station, in klx - beyond the lx unit of the
+    illuminance class, so without it."""
+
+    _attr_native_unit_of_measurement = "klx"
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_icon = "mdi:weather-sunny"
+
+    def __init__(
+        self, coordinator: NexoCoordinator, key: str, resource: str, direction: str
+    ) -> None:
+        super().__init__(coordinator, key, resource)
+        self._direction = direction
+
+    @property
+    def native_value(self) -> int | None:
+        state = self.raw_state
+        return None if state is None else weather.sun_klx(state, self._direction)
+
+
+class WeatherAura(NexoWeatherEntity, SensorEntity):
+    """The raw state bits, for what the separate conditions do not show."""
+
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+
+    @property
+    def native_value(self) -> int | None:
+        return self.raw_state
