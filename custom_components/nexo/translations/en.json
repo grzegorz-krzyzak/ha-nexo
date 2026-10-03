@@ -1287,7 +1287,7 @@
           "interval_inputs": "Reed switches and motion sensors, including the gates' reed switches.",
           "interval_outputs": "Watering sections, the main valve and the outputs shown as sensors.",
           "interval_lights": "Lights, dimmers and switches. A change made from Home Assistant shows at once; this interval is for changes made at a wall switch or in another app.",
-          "interval_measurements": "Thermometers and analog inputs, which change slowly."
+          "interval_measurements": "Thermometers, analog inputs, thermostats and the weather station, which change slowly."
         },
         "description": "Each read takes about 50 ms. After a gate or valve command, the resources that show its effect are read every second for a while, whatever these intervals."
       },

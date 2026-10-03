@@ -1287,7 +1287,7 @@
           "interval_inputs": "Kontaktrony i czujki ruchu, także kontaktrony bram.",
           "interval_outputs": "Sekcje nawadniania, zawór główny i wyjścia pokazywane jako czujniki.",
           "interval_lights": "Światła, ściemniacze i przełączniki. Zmianę z Home Assistant widać od razu; ten interwał dotyczy zmian z włącznika na ścianie albo z innej aplikacji.",
-          "interval_measurements": "Termometry i wejścia analogowe, które zmieniają się powoli."
+          "interval_measurements": "Termometry, wejścia analogowe, termostaty i stacja pogodowa, które zmieniają się powoli."
         },
         "description": "Każdy odczyt trwa około 50 ms. Po komendzie bramy lub zaworu zasoby, które pokazują jej skutek, są przez chwilę czytane co sekundę, niezależnie od tych interwałów."
       },
