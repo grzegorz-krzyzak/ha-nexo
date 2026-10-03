@@ -297,10 +297,14 @@
       },
       "thermostats": {
         "title": "Termostaty",
-        "description": "Termostaty do zaimportowania, każdy z termometrem i zakresem ustawionymi w centrali. Termostat Nexo załącza wyjście, gdy w pomieszczeniu jest cieplej niż próg, dlatego Home Assistant pokazuje go w trybie chłodzenia: „chłodzi” oznacza, że wyjście jest załączone. Co robi wyjście, zależy od instalacji.",
+        "description": "Termostaty do zaimportowania, każdy z termometrem i zakresem ustawionymi w centrali. Na następnym ekranie wybierzesz, czy każdy grzeje, czy chłodzi.",
         "data": {
           "thermostats": "Termostaty"
         }
+      },
+      "thermostats_direction": {
+        "title": "Grzanie czy chłodzenie",
+        "description": "Sposób działania termostatu ustala w centrali znak jego histerezy: dodatnia (domyślna) to grzanie, ujemna to chłodzenie. Centrala tego nie podaje, więc wybierz tutaj. Przy grzaniu termostat pokazuje „grzeje”, gdy żąda ciepła - jego wyjście jest wyłączone - i „bezczynny”, gdy w pomieszczeniu jest dość ciepło, a wyjście jest załączone."
       },
       "analog": {
         "title": "Wejścia analogowe",
@@ -1756,6 +1760,12 @@
         "humidity": "Wilgotność powietrza",
         "moisture": "Wilgotność gleby",
         "percent": "Procent"
+      }
+    },
+    "thermostat_direction": {
+      "options": {
+        "heat": "Grzanie (histereza dodatnia)",
+        "cool": "Chłodzenie (histereza ujemna)"
       }
     }
   },

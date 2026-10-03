@@ -75,6 +75,9 @@ from .const import (
     OPT_THERMOMETERS,
     OPT_THERMOSTATS,
     OPT_VALVES,
+    THERMOSTAT_DIRECTION,
+    THERMOSTAT_DIRECTIONS,
+    THERMOSTAT_HEAT,
     THERMOSTAT_MAX,
     THERMOSTAT_MIN,
     THERMOSTAT_NAME,
@@ -745,17 +748,24 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         except NexoError as err:
             return self._cannot_list(err)
         if user_input is not None:
+            directions = {
+                item[THERMOSTAT_NAME]: item.get(THERMOSTAT_DIRECTION, THERMOSTAT_HEAT)
+                for item in self._options.get(OPT_THERMOSTATS, [])
+            }
             self._options[OPT_THERMOSTATS] = [
                 {
                     THERMOSTAT_NAME: name,
                     THERMOSTAT_THERMOMETER: available[name].thermometer,
                     THERMOSTAT_MIN: available[name].minimum,
                     THERMOSTAT_MAX: available[name].maximum,
+                    THERMOSTAT_DIRECTION: directions.get(name, THERMOSTAT_HEAT),
                 }
                 for name in user_input.get(OPT_THERMOSTATS, [])
                 if name in available
             ]
-            return await self.async_step_menu()
+            if not self._options[OPT_THERMOSTATS]:
+                return await self.async_step_menu()
+            return await self.async_step_thermostats_direction()
         selected = [
             item[THERMOSTAT_NAME]
             for item in self._options.get(OPT_THERMOSTATS, [])
@@ -765,6 +775,37 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             step_id="thermostats",
             data_schema=vol.Schema(
                 {vol.Optional(OPT_THERMOSTATS, default=selected): _pick_many(sorted(available))}
+            ),
+        )
+
+    async def async_step_thermostats_direction(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Heating or cooling for each picked thermostat - the central unit
+        does not reveal it (the hysteresis sign). Heating by default, as in
+        the central unit."""
+        items = self._options.get(OPT_THERMOSTATS, [])
+        if user_input is not None:
+            for item in items:
+                item[THERMOSTAT_DIRECTION] = user_input.get(item[THERMOSTAT_NAME], THERMOSTAT_HEAT)
+            return await self.async_step_menu()
+        direction = SelectSelector(
+            SelectSelectorConfig(
+                options=THERMOSTAT_DIRECTIONS,
+                mode=SelectSelectorMode.DROPDOWN,
+                translation_key="thermostat_direction",
+            )
+        )
+        return self.async_show_form(
+            step_id="thermostats_direction",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        item[THERMOSTAT_NAME],
+                        default=item.get(THERMOSTAT_DIRECTION, THERMOSTAT_HEAT),
+                    ): direction
+                    for item in items
+                }
             ),
         )
 

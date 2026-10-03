@@ -297,10 +297,14 @@
       },
       "thermostats": {
         "title": "Thermostats",
-        "description": "Thermostats to import, each with the thermometer and the range set in the central unit. A Nexo thermostat switches its output on when the room is warmer than its threshold, so Home Assistant shows it in cooling mode: \"cooling\" means the output is on. What the output does depends on your installation.",
+        "description": "Thermostats to import, each with the thermometer and the range set in the central unit. The next screen asks whether each one heats or cools.",
         "data": {
           "thermostats": "Thermostats"
         }
+      },
+      "thermostats_direction": {
+        "title": "Heating or cooling",
+        "description": "How each thermostat works is set in the central unit by the sign of its hysteresis: positive (the default) is heating, negative is cooling. The central unit does not report it, so choose here. Heating shows \"heating\" while the thermostat asks for heat - its output off - and \"idle\" once the room is warm enough and the output is on."
       },
       "analog": {
         "title": "Analog inputs",
@@ -1756,6 +1760,12 @@
         "humidity": "Air humidity",
         "moisture": "Soil moisture",
         "percent": "Percentage"
+      }
+    },
+    "thermostat_direction": {
+      "options": {
+        "heat": "Heating (positive hysteresis)",
+        "cool": "Cooling (negative hysteresis)"
       }
     }
   },

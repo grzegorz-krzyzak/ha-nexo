@@ -63,6 +63,13 @@ THERMOSTAT_NAME: Final = "name"
 THERMOSTAT_THERMOMETER: Final = "thermometer"
 THERMOSTAT_MIN: Final = "min"
 THERMOSTAT_MAX: Final = "max"
+# Which way a thermostat works. The hysteresis sign decides it in the central
+# unit - positive (the default) is heating control, negative cooling (the
+# NXW299.2 manual) - and no query reveals it, so the user says.
+THERMOSTAT_DIRECTION: Final = "direction"
+THERMOSTAT_HEAT: Final = "heat"
+THERMOSTAT_COOL: Final = "cool"
+THERMOSTAT_DIRECTIONS: Final = [THERMOSTAT_HEAT, THERMOSTAT_COOL]
 # Resources the user excluded from every list of outputs and lights to pick
 # from - the ones that drive gates or locks, which a switch would fire in one
 # click. Kept by the user, not named in the code.

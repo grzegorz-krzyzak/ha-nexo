@@ -1,11 +1,13 @@
 """Nexo thermostats.
 
-A Nexo thermostat switches its output on when the room is warmer than its
-threshold - the direction is fixed in the central unit, measured. In Home
-Assistant terms that is cooling, not heating, so the entity offers only the
-cool and off modes: the output is on ("cooling") above the threshold. What
-the output does - closing an underfloor heating loop, running a fan - is up
-to the installation.
+The hysteresis sign set in the central unit decides how a thermostat works
+(the NXW299.2 manual): positive - the default - is heating control, its
+output on above the threshold meaning "warm enough"; negative is cooling,
+the output on below the threshold. No query reveals the sign, so each
+thermostat is set to heat (the default) or cool in the options. Either way
+the output on means the room has reached the threshold, and the thermostat
+asks for heat or cold while it is off. What the output does physically is up
+to the wiring.
 """
 
 from __future__ import annotations
@@ -27,6 +29,9 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from . import NexoConfigEntry
 from .const import (
     BOOST_THERMOSTAT,
+    THERMOSTAT_COOL,
+    THERMOSTAT_DIRECTION,
+    THERMOSTAT_HEAT,
     OPT_THERMOSTATS,
     THERMOSTAT_MAX,
     THERMOSTAT_MIN,
@@ -57,7 +62,6 @@ class NexoThermostat(NexoResourceEntity, ClimateEntity):
     command.
     """
 
-    _attr_hvac_modes = [HVACMode.COOL, HVACMode.OFF]
     _attr_supported_features = (
         ClimateEntityFeature.TARGET_TEMPERATURE
         | ClimateEntityFeature.TURN_ON
@@ -72,6 +76,10 @@ class NexoThermostat(NexoResourceEntity, ClimateEntity):
         self._thermometer: str = item[THERMOSTAT_THERMOMETER]
         self._attr_min_temp = item[THERMOSTAT_MIN]
         self._attr_max_temp = item[THERMOSTAT_MAX]
+        cooling = item.get(THERMOSTAT_DIRECTION, THERMOSTAT_HEAT) == THERMOSTAT_COOL
+        self._mode = HVACMode.COOL if cooling else HVACMode.HEAT
+        self._working = HVACAction.COOLING if cooling else HVACAction.HEATING
+        self._attr_hvac_modes = [self._mode, HVACMode.OFF]
 
     @property
     def _state(self) -> ThermostatState | None:
@@ -92,7 +100,7 @@ class NexoThermostat(NexoResourceEntity, ClimateEntity):
         state = self._state
         if state is None:
             return None
-        return HVACMode.COOL if state.active else HVACMode.OFF
+        return self._mode if state.active else HVACMode.OFF
 
     @property
     def hvac_action(self) -> HVACAction | None:
@@ -101,7 +109,9 @@ class NexoThermostat(NexoResourceEntity, ClimateEntity):
             return None
         if not state.active:
             return HVACAction.OFF
-        return HVACAction.COOLING if state.output_on else HVACAction.IDLE
+        # The output on means the threshold is reached; off, the thermostat
+        # asks for heat (or cold) - whether any flows is up to its source.
+        return HVACAction.IDLE if state.output_on else self._working
 
     async def async_set_temperature(self, **kwargs: Any) -> None:
         mode = kwargs.get(ATTR_HVAC_MODE)
@@ -121,13 +131,13 @@ class NexoThermostat(NexoResourceEntity, ClimateEntity):
         client = self.coordinator.hub.client
         if hvac_mode == HVACMode.OFF:
             await self._async_command(client.thermostat_off)
-        elif hvac_mode == HVACMode.COOL:
+        elif hvac_mode == self._mode:
             await self._async_command(client.thermostat_on)
         else:
             raise HomeAssistantError(f"{self.name}: unsupported mode {hvac_mode}")
 
     async def async_turn_on(self) -> None:
-        await self.async_set_hvac_mode(HVACMode.COOL)
+        await self.async_set_hvac_mode(self._mode)
 
     async def async_turn_off(self) -> None:
         await self.async_set_hvac_mode(HVACMode.OFF)

@@ -1,4 +1,4 @@
-"""Thermostats: shown as cooling (output on above the threshold), state from reads only."""
+"""Thermostats: heating (the default) or cooling as set per thermostat, state from reads only."""
 
 from __future__ import annotations
 
@@ -39,12 +39,12 @@ def test_state_unpacks_as_measured() -> None:
 async def test_states_come_from_reads(hass: HomeAssistant, fake_nexo) -> None:
     await _setup(hass, THERMOSTATS)
     hall = hass.states.get(HALL)
-    assert hall.state == "cool"
-    assert hall.attributes["hvac_action"] == "cooling"  # 23.3 is above 21: output on
+    assert hall.state == "heat"  # no direction stored: heating, as in the central unit
+    assert hall.attributes["hvac_action"] == "idle"  # 23.3 is above 21: output on, warm enough
     assert hall.attributes["temperature"] == 21.0
     assert hall.attributes["current_temperature"] == 23.3
     assert (hall.attributes["min_temp"], hall.attributes["max_temp"]) == (15, 30)
-    assert hall.attributes["hvac_modes"] == ["cool", "off"]
+    assert hall.attributes["hvac_modes"] == ["heat", "off"]
     garage = hass.states.get(GARAGE)
     assert garage.state == "off"
     assert garage.attributes["hvac_action"] == "off"
@@ -62,7 +62,7 @@ async def test_threshold_is_set_and_read_back(hass: HomeAssistant, fake_nexo, fr
     await _tick(hass, freezer, 1)  # boosted, read within a second
     hall = hass.states.get(HALL)
     assert hall.attributes["temperature"] == 25.0
-    assert hall.attributes["hvac_action"] == "idle"  # 23.3 is below 25: output off
+    assert hall.attributes["hvac_action"] == "heating"  # 23.3 is below 25: output off
 
 
 async def test_threshold_keeps_an_off_thermostat_off(
@@ -85,15 +85,35 @@ async def test_threshold_keeps_an_off_thermostat_off(
 async def test_mode_switches_the_thermostat(hass: HomeAssistant, fake_nexo, freezer) -> None:
     await _setup(hass, THERMOSTATS)
     await hass.services.async_call(
-        "climate", "set_hvac_mode", {"entity_id": GARAGE, "hvac_mode": "cool"}, blocking=True
+        "climate", "set_hvac_mode", {"entity_id": GARAGE, "hvac_mode": "heat"}, blocking=True
     )
     fake_nexo.thermostat_on.assert_called_once_with("TRS GARAGE")
     await hass.services.async_call("climate", "turn_off", {"entity_id": HALL}, blocking=True)
     fake_nexo.thermostat_off.assert_called_once_with("TRS HALL")
     await _tick(hass, freezer, 1)
-    assert hass.states.get(GARAGE).state == "cool"
-    assert hass.states.get(GARAGE).attributes["hvac_action"] == "idle"  # -2.0 below 30
+    assert hass.states.get(GARAGE).state == "heat"
+    assert hass.states.get(GARAGE).attributes["hvac_action"] == "heating"  # -2.0 below 30
     assert hass.states.get(HALL).state == "off"
+
+
+async def test_a_cooling_thermostat(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    """Negative hysteresis in the central unit: set to cool in the options."""
+    options = {**THERMOSTATS, "thermostats": [
+        {**THERMOSTATS["thermostats"][1], "direction": "cool"},
+    ]}
+    await _setup(hass, options)
+    assert hass.states.get(GARAGE).attributes["hvac_modes"] == ["cool", "off"]
+    # Home Assistant itself refuses a mode the entity does not offer
+    with pytest.raises(HomeAssistantError, match="not valid"):
+        await hass.services.async_call(
+            "climate", "set_hvac_mode", {"entity_id": GARAGE, "hvac_mode": "heat"}, blocking=True
+        )
+    await hass.services.async_call("climate", "turn_on", {"entity_id": GARAGE}, blocking=True)
+    fake_nexo.thermostat_on.assert_called_once_with("TRS GARAGE")
+    await _tick(hass, freezer, 1)
+    garage = hass.states.get(GARAGE)
+    assert garage.state == "cool"
+    assert garage.attributes["hvac_action"] == "cooling"  # output off: asks for cold
 
 
 async def test_refusal_is_an_error_and_changes_nothing(
@@ -117,13 +137,21 @@ async def test_options_store_thermometer_and_range(hass: HomeAssistant, fake_nex
     )
     assert result["step_id"] == "thermostats"
     result = await hass.config_entries.options.async_configure(
-        flow_id, {"thermostats": ["TRS GARAGE"]}
+        flow_id, {"thermostats": ["TRS GARAGE", "TRS HALL"]}
+    )
+    assert result["step_id"] == "thermostats_direction"
+    assert [str(field) for field in result["data_schema"].schema] == ["TRS GARAGE", "TRS HALL"]
+    result = await hass.config_entries.options.async_configure(
+        flow_id, {"TRS GARAGE": "cool", "TRS HALL": "heat"}
     )
     assert result["type"] is FlowResultType.MENU
-    assert result["description_placeholders"]["thermostats"] == "1"
+    assert result["description_placeholders"]["thermostats"] == "2"
     await hass.config_entries.options.async_configure(flow_id, {"next_step_id": "save"})
     assert entry.options["thermostats"] == [
-        {"name": "TRS GARAGE", "thermometer": "TMP OUTSIDE", "min": 10, "max": 30}
+        {"name": "TRS GARAGE", "thermometer": "TMP OUTSIDE", "min": 10, "max": 30,
+         "direction": "cool"},
+        {"name": "TRS HALL", "thermometer": "TMP HALL", "min": 15, "max": 30,
+         "direction": "heat"},
     ]
 
 
