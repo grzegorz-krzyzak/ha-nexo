@@ -21,7 +21,7 @@ from homeassistant.components.climate import (
     HVACAction,
     HVACMode,
 )
-from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
+from homeassistant.const import ATTR_TEMPERATURE, PRECISION_TENTHS, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -68,8 +68,10 @@ class NexoThermostat(NexoResourceEntity, ClimateEntity):
         | ClimateEntityFeature.TURN_OFF
     )
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
-    # The central unit takes the threshold in whole degrees
-    _attr_target_temperature_step = 1
+    # The threshold is in tenths both ways: read in the state word, written as
+    # NexoVision writes it (captured; 'ustaw' would drop the fraction)
+    _attr_precision = PRECISION_TENTHS
+    _attr_target_temperature_step = 0.1
 
     def __init__(self, coordinator: NexoCoordinator, item: dict[str, Any]) -> None:
         super().__init__(coordinator, "thermostat", item[THERMOSTAT_NAME])
@@ -115,17 +117,29 @@ class NexoThermostat(NexoResourceEntity, ClimateEntity):
 
     async def async_set_temperature(self, **kwargs: Any) -> None:
         mode = kwargs.get(ATTR_HVAC_MODE)
-        if ATTR_TEMPERATURE in kwargs:
-            # Setting the threshold switches the thermostat on in the central
-            # unit; Home Assistant expects the mode to stay, so a thermostat
-            # that was off is switched off again at once.
-            was_off = self.hvac_mode == HVACMode.OFF
-            client = self.coordinator.hub.client
-            await self._async_command(client.set_thermostat, round(kwargs[ATTR_TEMPERATURE]))
-            if mode is None and was_off:
-                mode = HVACMode.OFF
-        if mode is not None:
-            await self.async_set_hvac_mode(mode)
+        if ATTR_TEMPERATURE not in kwargs:
+            if mode is not None:
+                await self.async_set_hvac_mode(mode)
+            return
+        if mode is not None and mode not in self.hvac_modes:
+            raise HomeAssistantError(f"{self.name}: unsupported mode {mode}")
+        # One command sets the threshold and whether the thermostat is on: the
+        # mode stays as it is unless one is given with the temperature
+        active = self.hvac_mode != HVACMode.OFF if mode is None else mode != HVACMode.OFF
+        threshold = round(float(kwargs[ATTR_TEMPERATURE]), 1)
+        await self._async_write(threshold, active)
+
+    async def _async_write(self, threshold: float, active: bool) -> None:
+        try:
+            await self.coordinator.hub.async_call(
+                self.coordinator.hub.client.write_thermostat, self.resource, threshold, active
+            )
+        except NexoError as err:
+            raise HomeAssistantError(
+                f"{self.name}: the central unit did not accept the command: {err}"
+            ) from err
+        finally:
+            await self.coordinator.async_boost([self.resource], BOOST_THERMOSTAT)
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         client = self.coordinator.hub.client

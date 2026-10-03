@@ -20,7 +20,7 @@ connection the NexoVision app uses. Local polling, no cloud.
 | Lighting outputs (`LIGHT`) | `light` | on / off |
 | Dimmers (`DIMMER`) | `light` | with brightness |
 | Outputs and lighting outputs, switched | `switch` | on / off, e.g. a ventilation unit |
-| Thermostats | `climate` | heat or cool (set per thermostat) / off, threshold in whole degrees - see *Thermostats* |
+| Thermostats | `climate` | heat or cool (set per thermostat) / off, threshold in tenths - see *Thermostats* |
 | Gates and doors driven by logic commands | `cover` | closed / not closed, from a reed switch |
 | Watering programs and other start/stop command pairs | `valve` | open while any of its sections is on |
 | Any logic command | `button` | fire and forget |
@@ -115,15 +115,15 @@ thermostats the options ask for each one: *Heating* (the default) or
 - What the output does physically depends on the wiring - a relay offers
   NO / COM / NC; with normally open valves on underfloor loops, for
   instance, the output on closes the room's loop.
-- The target temperature is the threshold, in whole degrees within the range
-  set in the central unit; the current temperature comes from the
-  thermometer the thermostat is set to read.
+- The target temperature is the threshold, in tenths of a degree within the
+  range set in the central unit - written the way NexoVision writes it; the
+  current temperature comes from the thermometer the thermostat is set to read.
 - *Off* switches the thermostat off in the central unit, keeping its
   threshold; its output goes off.
-- Setting the threshold switches a thermostat on in the central unit, so for
-  a thermostat that is off the integration switches it off again at once -
-  Home Assistant expects the mode to stay. The output can follow the new
-  threshold for about a second meanwhile.
+- Setting the threshold keeps the mode: the threshold and whether the
+  thermostat is on go in one command, so a thermostat that is off stays off.
+  An active thermostat applies a new threshold at once; its relay follows in a
+  few seconds.
 - After a change in the configurator - the hysteresis, say - the central unit
   keeps the output as it was until the next threshold change; set the
   threshold again to apply it.

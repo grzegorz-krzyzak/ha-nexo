@@ -53,6 +53,7 @@ class FakeNexo:
             ThermostatInfo("TRS GARAGE", "TMP OUTSIDE", 10, 30),
         ]
         self.set_thermostat = MagicMock(side_effect=self._set_thermostat)
+        self.write_thermostat = MagicMock(side_effect=self._write_thermostat)
         self.thermostat_on = MagicMock(side_effect=lambda name: self._thermostat(name, active=1))
         self.thermostat_off = MagicMock(side_effect=lambda name: self._thermostat(name, active=0))
         self.disconnect = MagicMock()
@@ -77,6 +78,10 @@ class FakeNexo:
     def _set_thermostat(self, temperature: int, name: str) -> None:
         self.states[name] = temperature * 10 << 16 | self.states[name] & 0xFFFF
         self._thermostat(name, active=1)
+
+    def _write_thermostat(self, name: str, threshold: float, active: bool) -> None:
+        self.states[name] = round(threshold * 10) << 16 | self.states[name] & 0xFFFF
+        self._thermostat(name, active=int(active))
 
     def _thermostat(self, name: str, active: int) -> None:
         state = self.states[name]

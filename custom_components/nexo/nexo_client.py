@@ -689,6 +689,31 @@ class NexoClient:
             f"ustaw {temperature} {self._quote(name)}", reply_polls=self.CONTROL_REPLY_POLLS
         )
 
+    def write_thermostat(self, name: str, threshold: float, active: bool) -> None:
+        """Set a thermostat's threshold, in tenths of a degree, and whether it
+        is on - in one command, as NexoVision does.
+
+        Captured from NexoVision and verified: 'system C' takes
+        (threshold_in_tenths << 8) | active - not the packed word it reads
+        back (writing that drops the threshold to its minimum). An active
+        thermostat re-evaluates its output at once; one written with active
+        off switches off, its output with it. The central unit keeps the
+        threshold within the thermostat's range.
+        """
+        if isinstance(threshold, bool) or not isinstance(threshold, (int, float)):
+            raise ValueError(f"threshold must be a number, got {threshold!r}")
+        tenths = round(threshold * 10)
+        if not 0 <= tenths <= 0xFFFF:
+            raise ValueError(f"threshold out of range: {threshold!r}")
+        reply = self._system_c(
+            name, str(tenths << 8 | int(bool(active))), reply_polls=self.CONTROL_REPLY_POLLS
+        )
+        failure = self._strip_prefix(reply)
+        if failure:
+            raise NexoCommandError(
+                f"Central unit refused threshold {threshold} for {name!r}: {failure}"
+            )
+
     def thermostat_on(self, name: str) -> None:
         """Switch a thermostat on, keeping its threshold."""
         self._control(f"ustaw + {self._quote(name)}", reply_polls=self.CONTROL_REPLY_POLLS)

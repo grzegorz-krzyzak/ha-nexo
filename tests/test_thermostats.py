@@ -55,31 +55,55 @@ async def test_states_come_from_reads(hass: HomeAssistant, fake_nexo) -> None:
 async def test_threshold_is_set_and_read_back(hass: HomeAssistant, fake_nexo, freezer) -> None:
     await _setup(hass, THERMOSTATS)
     await hass.services.async_call(
-        "climate", "set_temperature", {"entity_id": HALL, "temperature": 25}, blocking=True
+        "climate", "set_temperature", {"entity_id": HALL, "temperature": 24.6}, blocking=True
     )
-    fake_nexo.set_thermostat.assert_called_once_with(25, "TRS HALL")
-    fake_nexo.thermostat_off.assert_not_called()
+    # in tenths, one command, as NexoVision does; the thermostat stays on
+    fake_nexo.write_thermostat.assert_called_once_with("TRS HALL", 24.6, True)
+    fake_nexo.set_thermostat.assert_not_called()
     await _tick(hass, freezer, 1)  # boosted, read within a second
     hall = hass.states.get(HALL)
-    assert hall.attributes["temperature"] == 25.0
+    assert hall.attributes["temperature"] == 24.6
     assert hall.attributes["hvac_action"] == "heating"  # 23.3 is below 25: output off
+
+
+async def test_threshold_in_tenths_is_shown_as_read(hass: HomeAssistant, fake_nexo, freezer) -> None:
+    """NexoVision can set 18.2; Home Assistant must not round it to 18."""
+    await _setup(hass, THERMOSTATS)
+    fake_nexo.states["TRS HALL"] = 182 << 16 | 0x0101
+    await _tick(hass, freezer, 60)
+    assert hass.states.get(HALL).attributes["temperature"] == 18.2
 
 
 async def test_threshold_keeps_an_off_thermostat_off(
     hass: HomeAssistant, fake_nexo, freezer
 ) -> None:
-    """The central unit switches a thermostat on with a new threshold; Home
-    Assistant expects the mode to stay, so it is switched off again."""
+    """Home Assistant expects the mode to stay: the threshold goes with the
+    thermostat's active flag off, in the same command - never on, even briefly."""
     await _setup(hass, THERMOSTATS)
     await hass.services.async_call(
-        "climate", "set_temperature", {"entity_id": GARAGE, "temperature": 12}, blocking=True
+        "climate", "set_temperature", {"entity_id": GARAGE, "temperature": 12.5}, blocking=True
     )
-    fake_nexo.set_thermostat.assert_called_once_with(12, "TRS GARAGE")
-    fake_nexo.thermostat_off.assert_called_once_with("TRS GARAGE")
+    fake_nexo.write_thermostat.assert_called_once_with("TRS GARAGE", 12.5, False)
+    fake_nexo.thermostat_on.assert_not_called()
+    fake_nexo.thermostat_off.assert_not_called()
     await _tick(hass, freezer, 1)
     garage = hass.states.get(GARAGE)
     assert garage.state == "off"
-    assert garage.attributes["temperature"] == 12.0
+    assert garage.attributes["temperature"] == 12.5
+
+
+async def test_threshold_with_a_mode_is_one_command(
+    hass: HomeAssistant, fake_nexo, freezer
+) -> None:
+    await _setup(hass, THERMOSTATS)
+    await hass.services.async_call(
+        "climate", "set_temperature",
+        {"entity_id": GARAGE, "temperature": 21, "hvac_mode": "heat"}, blocking=True,
+    )
+    fake_nexo.write_thermostat.assert_called_once_with("TRS GARAGE", 21.0, True)
+    fake_nexo.thermostat_on.assert_not_called()
+    await _tick(hass, freezer, 1)
+    assert hass.states.get(GARAGE).state == "heat"
 
 
 async def test_mode_switches_the_thermostat(hass: HomeAssistant, fake_nexo, freezer) -> None:
@@ -120,7 +144,7 @@ async def test_refusal_is_an_error_and_changes_nothing(
     hass: HomeAssistant, fake_nexo, freezer
 ) -> None:
     await _setup(hass, THERMOSTATS)
-    fake_nexo.set_thermostat.side_effect = NexoCommandError("Nieznany obiekt")
+    fake_nexo.write_thermostat.side_effect = NexoCommandError("Nieznany obiekt")
     with pytest.raises(HomeAssistantError, match="did not accept"):
         await hass.services.async_call(
             "climate", "set_temperature", {"entity_id": HALL, "temperature": 20}, blocking=True
@@ -192,6 +216,15 @@ def test_thermostat_commands(client, call, wire) -> None:
         call(client)
     assert card.sent == [wire]
     assert card.gets == NexoClient.CONTROL_REPLY_POLLS
+
+
+def test_thermostat_written_in_tenths_with_the_active_flag(client) -> None:
+    """Captured from NexoVision: 18.4 went as system C 'TRS GARAZ' 47105 (0xB801)."""
+    card = Commands()
+    with patch.object(client, "_command_retrying", card):
+        client.write_thermostat("TRS GARAZ", 18.4, True)
+        client.write_thermostat("TRS GARAZ", 18.5, False)
+    assert card.sent == ["system C 'TRS GARAZ' 47105", "system C 'TRS GARAZ' 47360"]
 
 
 def test_thermostat_list_entries(client) -> None:
