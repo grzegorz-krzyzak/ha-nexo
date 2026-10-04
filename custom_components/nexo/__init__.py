@@ -21,6 +21,7 @@ from .const import (
     MANUFACTURER,
     entry_title,
     is_default_title,
+    OPT_ANALOG_OUTPUTS,
     OPT_ANALOG_SENSORS,
     OPT_BINARY_SENSORS,
     OPT_BUTTONS,
@@ -32,8 +33,10 @@ from .const import (
     OPT_THERMOMETERS,
     OPT_THERMOSTATS,
     OPT_VALVES,
+    OPT_WEATHER,
     THERMOSTAT_NAME,
 )
+from . import weather
 from .coordinator import NexoCoordinator
 from .motion import Motion
 from .hub import NexoHub
@@ -45,6 +48,7 @@ PLATFORMS = [
     Platform.CLIMATE,
     Platform.COVER,
     Platform.LIGHT,
+    Platform.NUMBER,
     Platform.SENSOR,
     Platform.SWITCH,
     Platform.VALVE,
@@ -170,6 +174,13 @@ def _remove_deselected_entities(hass: HomeAssistant, entry: NexoConfigEntry) -> 
         ),
         *(f"button_{item[ITEM_ID]}" for item in options.get(OPT_BUTTONS, [])),
         *(f"valve_{item[ITEM_ID]}" for item in options.get(OPT_VALVES, [])),
+        *(f"analog_output_{name}" for name in options.get(OPT_ANALOG_OUTPUTS, [])),
+        # The weather station: its readings and conditions, by role
+        *(
+            f"weather_{key}"
+            for key in (*weather.SENSOR_KEYS, *weather.AURA_BITS)
+            if options.get(OPT_WEATHER)
+        ),
     }
     expected = {f"{entry.entry_id}_{key}" for key in keys}
 

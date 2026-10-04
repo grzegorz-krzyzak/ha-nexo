@@ -54,6 +54,7 @@
           "connection": "Connection",
           "sensors": "Sensors",
           "analog": "Analog inputs",
+          "analog_outputs": "Analog outputs",
           "lights": "Lights and switches",
           "thermostats": "Thermostats",
           "weather": "Weather station",
@@ -73,7 +74,8 @@
           "valves": "{valves}",
           "analog": "Type and calibration",
           "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}",
-          "thermostats": "Thermostats: {thermostats}"
+          "thermostats": "Thermostats: {thermostats}",
+          "analog_outputs": "Outputs: {analog_outputs}"
         },
         "description": ""
       },
@@ -83,6 +85,7 @@
           "connection": "Connection",
           "sensors": "Sensors",
           "analog": "Analog inputs",
+          "analog_outputs": "Analog outputs",
           "lights": "Lights and switches",
           "thermostats": "Thermostats",
           "weather": "Weather station",
@@ -102,7 +105,8 @@
           "valves": "{valves}",
           "analog": "Type and calibration",
           "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}",
-          "thermostats": "Thermostats: {thermostats}"
+          "thermostats": "Thermostats: {thermostats}",
+          "analog_outputs": "Outputs: {analog_outputs}"
         },
         "description": "{alert_open}The central unit is not answering{alert_close}"
       },
@@ -112,6 +116,7 @@
           "connection": "Connection",
           "sensors": "Sensors",
           "analog": "Analog inputs",
+          "analog_outputs": "Analog outputs",
           "lights": "Lights and switches",
           "thermostats": "Thermostats",
           "weather": "Weather station",
@@ -131,7 +136,8 @@
           "valves": "{valves}",
           "analog": "Type and calibration",
           "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}",
-          "thermostats": "Thermostats: {thermostats}"
+          "thermostats": "Thermostats: {thermostats}",
+          "analog_outputs": "Outputs: {analog_outputs}"
         },
         "description": "{alert_open}Connection changed – choose Save and close to apply it{alert_close}"
       },
@@ -308,6 +314,13 @@
       "thermostats_direction": {
         "title": "Heating or cooling",
         "description": "How each thermostat works is set in the central unit by the sign of its hysteresis: positive (the default) is heating, negative is cooling. The central unit does not report it, so choose here. Heating shows \"heating\" while the thermostat asks for heat - its output off - and \"idle\" once the room is warm enough and the output is on."
+      },
+      "analog_outputs": {
+        "title": "Analog outputs",
+        "description": "0-10 V outputs to import, each as a level of 0-100 % - the signal, not the device: a light dimmed this way usually has its own output for power, and may still glow at 0 %.",
+        "data": {
+          "analog_outputs": "Analog outputs"
+        }
       },
       "weather": {
         "title": "Weather station",

@@ -42,6 +42,9 @@ class FakeNexo:
             "SP:Światło": 999,
             "SP:Wiatr": 0,
             "SP:Słońce": 0x40572400,  # west 64, south 87, east 36 klx
+            # Analogue outputs, as read: 50 % ("jest wlaczone (50%)") and 0
+            "SPEED": 0x8001,
+            "ROOF LEVEL": 0,
         }
         self.listing: dict[ImportTypes, list[str]] = {
             ImportTypes.SENSOR: ["KON DOOR", "KON GATE", "PIR HALL"],
@@ -50,6 +53,7 @@ class FakeNexo:
             ImportTypes.OUTPUT: ["S1", "S2", "S7", "VENT"],
             ImportTypes.LIGHT: ["ZG", "L1", "GATE PULSE"],
             ImportTypes.DIMMER: ["DIM A"],
+            ImportTypes.ANALOG_OUTPUT: ["SPEED", "ROOF LEVEL"],
             ImportTypes.WEATHER_STATION: [
                 "SP:Aura", "SP:Temperatura", "SP:Światło", "SP:Wiatr", "SP:Słońce",
             ],
@@ -58,6 +62,7 @@ class FakeNexo:
         self.turn_on = MagicMock()
         self.turn_off = MagicMock()
         self.set_level = MagicMock()
+        self.set_analog_level = MagicMock(side_effect=self._set_analog_level)
         self.thermostats = [
             ThermostatInfo("TRS HALL", "TMP HALL", 15, 30),
             ThermostatInfo("TRS GARAGE", "TMP OUTSIDE", 10, 30),
@@ -79,6 +84,9 @@ class FakeNexo:
 
     def list_resources(self, resource_type: ImportTypes) -> list[str]:
         return list(self.listing.get(resource_type, []))
+
+    def _set_analog_level(self, name: str, level: int) -> None:
+        self.states[name] = level << 8 | 1 if level else 0
 
     def list_thermostats(self) -> list[ThermostatInfo]:
         return list(self.thermostats)

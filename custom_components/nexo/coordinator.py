@@ -19,6 +19,7 @@ from .const import (
     DEFAULT_INTERVAL_OUTPUTS,
     DOMAIN,
     FAILED_CYCLES_BEFORE_RELOAD,
+    OPT_ANALOG_OUTPUTS,
     OPT_ANALOG_SENSORS,
     OPT_BINARY_SENSORS,
     OPT_COVERS,
@@ -101,6 +102,9 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
             *options.get(OPT_LIGHTS, []),
             *options.get(OPT_DIMMERS, []),
             *options.get(OPT_SWITCHES, []),
+            # Analogue outputs change on command, from the logic or a wall
+            # button - as lights do
+            *options.get(OPT_ANALOG_OUTPUTS, []),
         } - inputs - outputs
         measurements = {
             *options.get(OPT_THERMOMETERS, []),

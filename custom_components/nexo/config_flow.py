@@ -59,6 +59,7 @@ from .const import (
     LEGACY_OPT_SCAN_INTERVAL,
     MAX_INTERVAL,
     MIN_INTERVAL,
+    OPT_ANALOG_OUTPUTS,
     OPT_ANALOG_SENSORS,
     OPT_ANALOG_SETTINGS,
     OPT_OUTPUT_SENSORS,
@@ -406,8 +407,8 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         return self.async_show_menu(
             step_id=MENU_STEPS[status],
             menu_options=[
-                "connection", "sensors", "analog", "lights", "thermostats", "weather", "covers",
-                "valves", "buttons", "settings", "save",
+                "connection", "sensors", "analog", "analog_outputs", "lights", "thermostats",
+                "weather", "covers", "valves", "buttons", "settings", "save",
             ],
             description_placeholders={
                 "address": f"{connection[CONF_HOST]}:{connection.get(CONF_PORT, DEFAULT_PORT)}",
@@ -418,6 +419,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 OPT_ANALOG_SENSORS: str(len(options.get(OPT_ANALOG_SENSORS, []))),
                 OPT_OUTPUT_SENSORS: str(len(options.get(OPT_OUTPUT_SENSORS, []))),
                 OPT_THERMOSTATS: str(len(options.get(OPT_THERMOSTATS, []))),
+                OPT_ANALOG_OUTPUTS: str(len(options.get(OPT_ANALOG_OUTPUTS, []))),
                 **{
                     key: str(len(options.get(key, [])))
                     for key in (OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES, OPT_EXCLUDED)
@@ -808,6 +810,30 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                     ): direction
                     for item in items
                 }
+            ),
+        )
+
+    # -------------------------------------------------------- analogue outputs
+
+    async def async_step_analog_outputs(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """The 0-10 V outputs to import, each as a level 0-100 %. Nothing by
+        default."""
+        try:
+            names = await self._resources(ImportTypes.ANALOG_OUTPUT)
+        except NexoError as err:
+            return self._cannot_list(err)
+        if user_input is not None:
+            self._options[OPT_ANALOG_OUTPUTS] = [
+                name for name in user_input.get(OPT_ANALOG_OUTPUTS, []) if name in names
+            ]
+            return await self.async_step_menu()
+        selected = [n for n in self._options.get(OPT_ANALOG_OUTPUTS, []) if n in names]
+        return self.async_show_form(
+            step_id="analog_outputs",
+            data_schema=vol.Schema(
+                {vol.Optional(OPT_ANALOG_OUTPUTS, default=selected): _pick_many(sorted(names))}
             ),
         )
 

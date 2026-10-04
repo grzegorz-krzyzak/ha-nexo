@@ -32,6 +32,9 @@ AURA_BITS: dict[str, int] = {
 # was 0 in every read
 SUN_BYTES: dict[str, int] = {"west": 24, "south": 16, "east": 8}
 
+# The keys of the station's sensors (entity unique ids end with them)
+SENSOR_KEYS = ("temperature", "daylight", "wind_speed", *(f"sun_{d}" for d in SUN_BYTES), "aura")
+
 
 def temperature_celsius(state: int) -> float:
     """Tenths of a kelvin, in whole tenths: 2821 is 9.0 °C, as the weather tab

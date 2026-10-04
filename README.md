@@ -21,13 +21,19 @@ connection the NexoVision app uses. Local polling, no cloud.
 | Dimmers (`DIMMER`) | `light` | with brightness |
 | Outputs and lighting outputs, switched | `switch` | on / off, e.g. a ventilation unit |
 | Thermostats | `climate` | heat or cool (set per thermostat) / off, threshold in tenths - see *Thermostats* |
+| Analog outputs (0-10 V) | `number` | level 0-100 % - see *Analog outputs* |
 | Weather station card | `sensor`, `binary_sensor` | temperature, daylight, wind, sun from three sides; frost, heat, twilight, sunny, calm, strong wind, rain - see *Weather station* |
 | Gates and doors driven by logic commands | `cover` | closed / not closed, from a reed switch |
 | Watering programs and other start/stop command pairs | `valve` | open while any of its sections is on |
 | Any logic command | `button` | fire and forget |
 
-Blinds, alarm partitions and the central unit's lighting groups are not
-supported yet; for groups, use Home Assistant's own.
+Not supported:
+- **Alarm partitions** - planned.
+- **Blinds** - nothing to test them on.
+- **The central unit's lighting groups** - use Home Assistant's own; a
+  group's state in the central unit depends on its history.
+- **"Ventilation (0-10V)" resources** - overlays in the configurator that
+  name an analog output; the state lives in the output, import that.
 
 ## Installation
 
@@ -131,6 +137,24 @@ thermostats the options ask for each one: *Heating* (the default) or
 - Thermostats are read with the *Measurements* group (60 s by default) and
   every second for a few seconds after a command.
 
+### Analog outputs
+
+The options' *Analog outputs* imports 0-10 V outputs - a ventilation unit's
+speed, the level of a dimmed LED supply - each as a slider from 0 to 100 %.
+
+- The entity is **the level of the signal, not the state of the device**.
+  The level alone switches nothing on: a light dimmed through 0-10 V usually
+  has its own output for power, and may still glow at 0 %. Compose the two
+  in Home Assistant - a template light, say - if you want one entity; the
+  integration does not guess how a house is wired.
+- The percentage is the central unit's own (it rounds down: a level of 191
+  reads "74%"); a value set here reads back the same.
+- What 0 % and 100 % mean in volts, and how the device reacts, depends on
+  the output's settings in the configurator (voltage logic, function, range
+  0-10 V / 1-10 V / PWM). They are not mapped.
+- Read with the *Lights* group (10 s by default): a level changes on command,
+  from the logic or from a wall button.
+
 ### Weather station
 
 With Nexwell's weather station card (an Elsner P03/3-RS485 station), the
@@ -184,7 +208,7 @@ Resources are read in groups, each at its own interval:
 |---|---|---|
 | Inputs | reed switches and motion sensors, including the gates' reed switches | 5 s |
 | Outputs | watering sections, the main valve, outputs read as sensors | 10 s |
-| Lights | lights, dimmers and switches | 10 s |
+| Lights | lights, dimmers, switches and analog outputs | 10 s |
 | Measurements | thermometers, analog inputs, thermostats, the weather station | 60 s |
 
 After a command, what shows its effect is read every second for a while:

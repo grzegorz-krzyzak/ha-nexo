@@ -70,6 +70,9 @@ THERMOSTAT_DIRECTION: Final = "direction"
 THERMOSTAT_HEAT: Final = "heat"
 THERMOSTAT_COOL: Final = "cool"
 THERMOSTAT_DIRECTIONS: Final = [THERMOSTAT_HEAT, THERMOSTAT_COOL]
+# Analogue outputs (0-10 V) the user picked: each a level 0-100 %. Not
+# composed with the output that powers the device - that differs per house.
+OPT_ANALOG_OUTPUTS: Final = "analog_outputs"
 # The weather station card's five resources, in card order (weather.py), when
 # the user imports it; absent or empty, not imported. Nothing by default.
 OPT_WEATHER: Final = "weather_station"

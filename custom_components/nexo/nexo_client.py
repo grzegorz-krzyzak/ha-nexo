@@ -667,6 +667,28 @@ class NexoClient:
                 f"Central unit refused level {level} for {name!r}: {failure}"
             )
 
+    def set_analog_level(self, name: str, level: int) -> None:
+        """Set an analogue (0-10 V) output's level, 0-255; 0 is the bottom of
+        its range.
+
+        Measured: the state reads as a dimmer's (level in the high byte, 01 in
+        the low byte, 0 at level 0) and the numeric command takes the same
+        encoding, with a bare 0 for level 0. 'wlacz' and 'wylacz' are refused
+        for these outputs ("Nieznane wyjscie lub grupa wyjsc"). The level
+        alone switches nothing on - a device usually has its own power output.
+        """
+        if isinstance(level, bool) or not isinstance(level, int):
+            raise ValueError(f"level must be an integer, got {level!r}")
+        if not 0 <= level <= self.MAX_LEVEL:
+            raise ValueError(f"level must be 0-{self.MAX_LEVEL}, got {level!r}")
+        value = level << 8 | 1 if level else 0
+        reply = self._system_c(name, str(value), reply_polls=self.CONTROL_REPLY_POLLS)
+        failure = self._strip_prefix(reply)
+        if failure:
+            raise NexoCommandError(
+                f"Central unit refused level {level} for {name!r}: {failure}"
+            )
+
     def blind_up(self, name: str) -> None:
         self._control(f"podnies {self._quote(name)}")
 

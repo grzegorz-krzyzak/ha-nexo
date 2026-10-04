@@ -54,6 +54,7 @@
           "connection": "Połączenie",
           "sensors": "Czujniki",
           "analog": "Wejścia analogowe",
+          "analog_outputs": "Wyjścia analogowe",
           "lights": "Światła i przełączniki",
           "thermostats": "Termostaty",
           "weather": "Stacja pogodowa",
@@ -73,7 +74,8 @@
           "valves": "{valves}",
           "analog": "Rodzaj i kalibracja",
           "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}",
-          "thermostats": "Termostaty: {thermostats}"
+          "thermostats": "Termostaty: {thermostats}",
+          "analog_outputs": "Wyjść: {analog_outputs}"
         },
         "description": ""
       },
@@ -83,6 +85,7 @@
           "connection": "Połączenie",
           "sensors": "Czujniki",
           "analog": "Wejścia analogowe",
+          "analog_outputs": "Wyjścia analogowe",
           "lights": "Światła i przełączniki",
           "thermostats": "Termostaty",
           "weather": "Stacja pogodowa",
@@ -102,7 +105,8 @@
           "valves": "{valves}",
           "analog": "Rodzaj i kalibracja",
           "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}",
-          "thermostats": "Termostaty: {thermostats}"
+          "thermostats": "Termostaty: {thermostats}",
+          "analog_outputs": "Wyjść: {analog_outputs}"
         },
         "description": "{alert_open}Centrala nie odpowiada{alert_close}"
       },
@@ -112,6 +116,7 @@
           "connection": "Połączenie",
           "sensors": "Czujniki",
           "analog": "Wejścia analogowe",
+          "analog_outputs": "Wyjścia analogowe",
           "lights": "Światła i przełączniki",
           "thermostats": "Termostaty",
           "weather": "Stacja pogodowa",
@@ -131,7 +136,8 @@
           "valves": "{valves}",
           "analog": "Rodzaj i kalibracja",
           "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}",
-          "thermostats": "Termostaty: {thermostats}"
+          "thermostats": "Termostaty: {thermostats}",
+          "analog_outputs": "Wyjść: {analog_outputs}"
         },
         "description": "{alert_open}Zmieniono połączenie – wybierz Zapisz i zamknij, żeby je zastosować{alert_close}"
       },
@@ -308,6 +314,13 @@
       "thermostats_direction": {
         "title": "Grzanie czy chłodzenie",
         "description": "Sposób działania termostatu ustala w centrali znak jego histerezy: dodatnia (domyślna) to grzanie, ujemna to chłodzenie. Centrala tego nie podaje, więc wybierz tutaj. Przy grzaniu termostat pokazuje „grzeje”, gdy żąda ciepła - jego wyjście jest wyłączone - i „bezczynny”, gdy w pomieszczeniu jest dość ciepło, a wyjście jest załączone."
+      },
+      "analog_outputs": {
+        "title": "Wyjścia analogowe",
+        "description": "Wyjścia 0-10 V do zaimportowania, każde jako poziom 0-100 % - sygnał, nie urządzenie: światło ściemniane w ten sposób ma zwykle osobne wyjście zasilania i może świecić także przy 0 %.",
+        "data": {
+          "analog_outputs": "Wyjścia analogowe"
+        }
       },
       "weather": {
         "title": "Stacja pogodowa",
