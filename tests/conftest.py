@@ -14,6 +14,16 @@ def auto_enable_custom_integrations(enable_custom_integrations):
     yield
 
 
+@pytest.fixture(autouse=True)
+def no_refresh_stagger():
+    """Home Assistant schedules a coordinator's refresh at a whole second plus
+    a random 0.05-0.5 s. With the clock frozen at some fraction of a second, a
+    one-second tick then missed the refresh now and then - tests failing at
+    random. Without the stagger every tick reaches it."""
+    with patch("homeassistant.helpers.update_coordinator.randint", return_value=0):
+        yield
+
+
 class FakeNexo:
     """Stands in for NexoClient; states and listings are plain dicts."""
 

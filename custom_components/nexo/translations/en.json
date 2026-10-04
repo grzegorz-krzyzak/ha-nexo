@@ -1901,6 +1901,10 @@
     "role_conflict": {
       "title": "Nexo: a resource in two roles",
       "description": "The stored options give these resources more than one role; the safer one is used - don't offer or read only, then light, dimmer, switch: {resources}. Open the Nexo options and save the Lighting or Outputs screen to fix it."
+    },
+    "name_shared": {
+      "title": "Nexo: a name shared by two resources",
+      "description": "These resources the integration uses share their name with a resource of another type: {resources}. A read by name may then get the other one - a level of 0, a wrong state. Rename one of them in the configurator (Remote panel), then reload the integration."
     }
   }
 }

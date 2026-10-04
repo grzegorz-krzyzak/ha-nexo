@@ -118,6 +118,13 @@ restored from an old backup - setup keeps the safer role (not offered or
 read only, then light, dimmer, switch), logs a warning and raises a repair
 issue (*Settings → Repairs*) until the options are saved again.
 
+**A resource name shared by two types** - an analog output and a
+"Ventilation (0-10V)" overlay named alike, say - makes a read by name get the
+wrong one (a level of 0 while the output runs). After setup the integration
+lists every type in the background and raises a repair issue for the
+resources it uses whose name another type shares; rename one of them in the
+configurator.
+
 The state always comes from reading the resource, never from the command: a
 command the central unit refuses, or one lost with the connection, shows an
 error and leaves the entity as it was. After a command the resource is read

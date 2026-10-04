@@ -47,6 +47,8 @@ from . import weather
 from .coordinator import NexoCoordinator
 from .motion import Motion
 from .hub import NexoHub
+from .names import shared_names, used_names
+from .nexo_client import ImportTypes
 from .roles import resolve_roles
 from .nexo_client import NexoAuthError, NexoError
 
@@ -122,6 +124,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: NexoConfigEntry) -> bool
     )
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    entry.async_create_background_task(
+        hass, _async_check_names(hass, entry, hub, options), "nexo shared names"
+    )
     return True
 
 
@@ -231,5 +236,39 @@ def _report_role_conflicts(
             "resources": ", ".join(
                 f"{name} ({kept})" for name, (kept, _) in sorted(conflicts.items())
             )
+        },
+    )
+
+
+async def _async_check_names(
+    hass: HomeAssistant, entry: NexoConfigEntry, hub: NexoHub, options: Mapping[str, Any]
+) -> None:
+    """Every type listed one at a time, so polling and commands go in between;
+    a repair issue for used names another type shares (names.py)."""
+    issue_id = f"name_shared_{entry.entry_id}"
+    by_type: dict[str, list[str]] = {}
+    for resource_type in ImportTypes:
+        try:
+            by_type[resource_type.name] = await hub.async_resources(resource_type)
+        except NexoError as err:
+            _LOGGER.debug("Name check skipped type %s: %s", resource_type.name, err)
+    shared = shared_names(by_type, used_names(options))
+    if not shared:
+        ir.async_delete_issue(hass, DOMAIN, issue_id)
+        return
+    for name, types in shared.items():
+        _LOGGER.warning(
+            "%s is the name of resources of types %s; reads by name may get the wrong one",
+            name, ", ".join(types),
+        )
+    ir.async_create_issue(
+        hass,
+        DOMAIN,
+        issue_id,
+        is_fixable=False,
+        severity=ir.IssueSeverity.WARNING,
+        translation_key="name_shared",
+        translation_placeholders={
+            "resources": ", ".join(f"{n} ({', '.join(t)})" for n, t in sorted(shared.items()))
         },
     )

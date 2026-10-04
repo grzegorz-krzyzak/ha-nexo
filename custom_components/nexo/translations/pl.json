@@ -1901,6 +1901,10 @@
     "role_conflict": {
       "title": "Nexo: zasób w dwóch rolach",
       "description": "Zapisane opcje dają tym zasobom więcej niż jedną rolę; używana jest bezpieczniejsza - nie pokazuj do wyboru albo tylko odczyt, potem światło, ściemniacz, przełącznik: {resources}. Otwórz opcje Nexo i zapisz ekran Oświetlenie albo Wyjścia, żeby to naprawić."
+    },
+    "name_shared": {
+      "title": "Nexo: nazwa wspólna dla dwóch zasobów",
+      "description": "Te zasoby używane przez integrację mają tę samą nazwę co zasób innego typu: {resources}. Odczyt po nazwie może wtedy trafić w ten drugi - poziom 0, zły stan. Zmień nazwę jednego z nich w konfiguratorze (Panel zdalny), potem przeładuj integrację."
     }
   }
 }
