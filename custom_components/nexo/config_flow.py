@@ -92,6 +92,7 @@ from .const import (
     is_default_title,
 )
 from .nexo_client import ImportTypes, NexoAuthError, NexoClient, NexoError
+from .roles import CONTROLLED
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -734,15 +735,17 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             others = {n for k in keys[1:] for n in values[k]}
             values[keys[0]] = [n for n in names if n not in others]
             return self._roles_form(step_id, names, values)
-        seen: set[str] = set()
+        # Controlled in one field and nothing else; read only together with
+        # never offered is fine (roles.py)
         for key in keys:
-            for name in values[key]:
-                if name in seen:
-                    return self._roles_form(
-                        step_id, names, values,
-                        errors={"base": "role_conflict"}, placeholders={"resource": name},
-                    )
-                seen.add(name)
+            if key not in CONTROLLED:
+                continue
+            others = {n for k in keys if k != key for n in values[k]}
+            if clash := next((n for n in values[key] if n in others), None):
+                return self._roles_form(
+                    step_id, names, values,
+                    errors={"base": "role_conflict"}, placeholders={"resource": clash},
+                )
         for key in keys:
             # Keep the other types' part of the key, in its order
             old = self._options.get(key, [])

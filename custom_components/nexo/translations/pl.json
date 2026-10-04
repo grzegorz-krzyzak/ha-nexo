@@ -1897,7 +1897,7 @@
   "issues": {
     "role_conflict": {
       "title": "Nexo: zasób w dwóch rolach",
-      "description": "Zapisane opcje dają tym zasobom więcej niż jedną rolę; używana jest najbezpieczniejsza - nigdy nie proponuj, potem tylko odczyt, potem światło albo przełącznik: {resources}. Otwórz opcje Nexo i zapisz ekran Oświetlenie albo Wyjścia, żeby to naprawić."
+      "description": "Zapisane opcje dają tym zasobom więcej niż jedną rolę; używana jest bezpieczniejsza - nigdy nie proponuj albo tylko odczyt, potem światło, ściemniacz, przełącznik: {resources}. Otwórz opcje Nexo i zapisz ekran Oświetlenie albo Wyjścia, żeby to naprawić."
     }
   }
 }

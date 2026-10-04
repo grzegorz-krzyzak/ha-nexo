@@ -529,3 +529,15 @@ async def test_select_all_then_untick(hass: HomeAssistant, fake_nexo) -> None:
     assert result["type"] is FlowResultType.MENU
     await _pick(hass, flow_id, "save")
     assert entry.options["lights"] == ["L1"]
+
+
+async def test_read_only_may_also_be_excluded(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass, {**OPTIONS, "valves": []})
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await _pick(hass, flow_id, "outputs")
+    result = await _submit(hass, flow_id, {
+        "switches": [], "output_sensors": ["S7"], "excluded": ["S7"],
+    })
+    assert result["type"] is FlowResultType.MENU
+    await _pick(hass, flow_id, "save")
+    assert entry.options["output_sensors"] == ["S7"] and entry.options["excluded"] == ["S7"]

@@ -93,7 +93,8 @@ Nothing is added on its own: every light, dimmer and switch is picked by hand.
 
 *Lighting* and *Outputs* each have one screen with three fields - lights or
 read only, switches, and **never offer**. A resource goes in one field at
-most; picking it twice is refused with its name. A lighting output can be a
+most - except read only together with never offered; a controlled
+resource picked twice is refused with its name. A lighting output can be a
 switch too, for a fan wired as a light, say.
 
 **Never offer the outputs that drive a gate, door or lock.** Central units
@@ -104,10 +105,12 @@ voice command such as "turn everything off in the garage". Put them under
 *Never offer* once; they are then left out of every list, the programs'
 outputs included. Outputs a program uses as sections are not listed.
 
-If the stored options still give a resource two roles - edited by hand,
-restored from an old backup - setup uses the safest one (never offered, then
-read only, then light or switch), logs a warning and raises a repair issue
-(*Settings → Repairs*) until the options are saved again.
+*Never offer* keeps a resource from being controlled; reading it stays fine -
+an output can be both read only and never offered. If the stored options
+still give a resource a controlled role next to another one - edited by hand,
+restored from an old backup - setup keeps the safer role (never offered or
+read only, then light, dimmer, switch), logs a warning and raises a repair
+issue (*Settings → Repairs*) until the options are saved again.
 
 The state always comes from reading the resource, never from the command: a
 command the central unit refuses, or one lost with the connection, shows an

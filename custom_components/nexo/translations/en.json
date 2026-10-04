@@ -1897,7 +1897,7 @@
   "issues": {
     "role_conflict": {
       "title": "Nexo: a resource in two roles",
-      "description": "The stored options give these resources more than one role; the safest is used - never offered, then read only, then light or switch: {resources}. Open the Nexo options and save the Lighting or Outputs screen to fix it."
+      "description": "The stored options give these resources more than one role; the safer one is used - never offered or read only, then light, dimmer, switch: {resources}. Open the Nexo options and save the Lighting or Outputs screen to fix it."
     }
   }
 }

@@ -28,6 +28,13 @@ def test_the_safest_role_wins() -> None:
     }
 
 
+def test_excluded_and_read_only_is_no_conflict() -> None:
+    """The sleep-mode output: never offered as a switch, read as a sensor -
+    found in a real house when 0.11 first ran; must stay a sensor."""
+    options = {"excluded": ["STAN USPIENIA"], "output_sensors": ["STAN USPIENIA"]}
+    assert resolve_roles(options) == (options, {})
+
+
 def test_no_conflict_changes_nothing() -> None:
     options = {"lights": ["L1"], "switches": ["VENT"], "covers": []}
     assert resolve_roles(options) == (options, {})
