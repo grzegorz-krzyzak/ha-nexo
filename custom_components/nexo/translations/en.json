@@ -317,7 +317,7 @@
       },
       "analog_outputs": {
         "title": "Analog outputs",
-        "description": "0-10 V outputs to import, each as a level of 0-100 % - the signal, not the device: a light dimmed this way usually has its own output for power, and may still glow at 0 %.",
+        "description": "Analog outputs to import, each as a level of 0-100 % - the signal, not the state of the device. The voltage at a level depends on the output's settings in the central unit (range 0-10 V, 1-10 V or 0-12 V PWM, logic, processing function). A device may have its own power output and keep working at 0 %.",
         "data": {
           "analog_outputs": "Analog outputs"
         }

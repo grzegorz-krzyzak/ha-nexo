@@ -317,7 +317,7 @@
       },
       "analog_outputs": {
         "title": "Wyjścia analogowe",
-        "description": "Wyjścia 0-10 V do zaimportowania, każde jako poziom 0-100 % - sygnał, nie urządzenie: światło ściemniane w ten sposób ma zwykle osobne wyjście zasilania i może świecić także przy 0 %.",
+        "description": "Wyjścia analogowe do zaimportowania, każde jako poziom 0-100 % - sygnał, nie stan urządzenia. Napięcie przy danym poziomie zależy od ustawień wyjścia w centrali (zakres 0-10 V, 1-10 V albo 0-12 V PWM, logika, funkcja przetwarzania). Urządzenie może mieć osobne wyjście zasilania i pracować także przy 0 %.",
         "data": {
           "analog_outputs": "Wyjścia analogowe"
         }

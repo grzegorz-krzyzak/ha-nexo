@@ -21,7 +21,7 @@ connection the NexoVision app uses. Local polling, no cloud.
 | Dimmers (`DIMMER`) | `light` | with brightness |
 | Outputs and lighting outputs, switched | `switch` | on / off, e.g. a ventilation unit |
 | Thermostats | `climate` | heat or cool (set per thermostat) / off, threshold in tenths - see *Thermostats* |
-| Analog outputs (0-10 V) | `number` | level 0-100 % - see *Analog outputs* |
+| Analog outputs | `number` | level 0-100 % - see *Analog outputs* |
 | Weather station card | `sensor`, `binary_sensor` | temperature, daylight, wind, sun from three sides; frost, heat, twilight, sunny, calm, strong wind, rain - see *Weather station* |
 | Gates and doors driven by logic commands | `cover` | closed / not closed, from a reed switch |
 | Watering programs and other start/stop command pairs | `valve` | open while any of its sections is on |
@@ -139,19 +139,22 @@ thermostats the options ask for each one: *Heating* (the default) or
 
 ### Analog outputs
 
-The options' *Analog outputs* imports 0-10 V outputs - a ventilation unit's
-speed, the level of a dimmed LED supply - each as a slider from 0 to 100 %.
+The options' *Analog outputs* imports the outputs of the analog output
+module - a ventilation unit's speed, the level of a dimmed LED supply - each
+as a slider from 0 to 100 %.
 
 - The entity is **the level of the signal, not the state of the device**.
-  The level alone switches nothing on: a light dimmed through 0-10 V usually
-  has its own output for power, and may still glow at 0 %. Compose the two
+  The level alone switches nothing on: a device usually has its own output
+  for power, and may keep working at 0 % - a dimmed light glows, a
+  ventilation unit runs at its lowest speed. Compose the two
   in Home Assistant - a template light, say - if you want one entity; the
   integration does not guess how a house is wired.
 - The percentage is the central unit's own (it rounds down: a level of 191
   reads "74%"); a value set here reads back the same.
-- What 0 % and 100 % mean in volts, and how the device reacts, depends on
-  the output's settings in the configurator (voltage logic, function, range
-  0-10 V / 1-10 V / PWM). They are not mapped.
+- What 0 % and 100 % mean in volts depends on the output's settings in the
+  configurator: range 0-10 V, 1-10 V or 0-12 V PWM, positive or negative
+  logic, processing function. They are not mapped - the integration works
+  with the level only.
 - Read with the *Lights* group (10 s by default): a level changes on command,
   from the logic or from a wall button.
 
