@@ -70,9 +70,9 @@
           "sensors": "Inputs: {binary_sensors}",
           "analog": "Nexo type: Analog sensor · inputs: {analog_sensors}",
           "thermometers": "Thermometers: {thermometers}",
-          "lights": "Light, switch or never offered · lights: {lights}",
+          "lights": "Light, switch or don't offer · lights: {lights}",
           "dimmers": "Dimmers: {dimmers}",
-          "outputs": "Switch, read only or never offered · read only: {output_sensors}",
+          "outputs": "Switch, read only or don't offer · read only: {output_sensors}",
           "analog_outputs": "Outputs: {analog_outputs}",
           "thermostats": "Thermostats: {thermostats}",
           "logic": "Gates and doors, buttons, programs: {logic_items}",
@@ -103,9 +103,9 @@
           "sensors": "Inputs: {binary_sensors}",
           "analog": "Nexo type: Analog sensor · inputs: {analog_sensors}",
           "thermometers": "Thermometers: {thermometers}",
-          "lights": "Light, switch or never offered · lights: {lights}",
+          "lights": "Light, switch or don't offer · lights: {lights}",
           "dimmers": "Dimmers: {dimmers}",
-          "outputs": "Switch, read only or never offered · read only: {output_sensors}",
+          "outputs": "Switch, read only or don't offer · read only: {output_sensors}",
           "analog_outputs": "Outputs: {analog_outputs}",
           "thermostats": "Thermostats: {thermostats}",
           "logic": "Gates and doors, buttons, programs: {logic_items}",
@@ -136,9 +136,9 @@
           "sensors": "Inputs: {binary_sensors}",
           "analog": "Nexo type: Analog sensor · inputs: {analog_sensors}",
           "thermometers": "Thermometers: {thermometers}",
-          "lights": "Light, switch or never offered · lights: {lights}",
+          "lights": "Light, switch or don't offer · lights: {lights}",
           "dimmers": "Dimmers: {dimmers}",
-          "outputs": "Switch, read only or never offered · read only: {output_sensors}",
+          "outputs": "Switch, read only or don't offer · read only: {output_sensors}",
           "analog_outputs": "Outputs: {analog_outputs}",
           "thermostats": "Thermostats: {thermostats}",
           "logic": "Gates and doors, buttons, programs: {logic_items}",
@@ -271,15 +271,15 @@
       },
       "lights": {
         "title": "Lighting",
-        "description": "The central unit's lighting outputs, top down: never offered, switches (a fan wired as a light, say), lights - each list without what the fields above hold, each resource in one field at most. Outputs a program uses as sections are not listed.",
+        "description": "The central unit's lighting outputs, top down: don't offer, switches (a fan wired as a light, say), lights - each list without what the fields above hold, each resource in one field at most. Outputs a program uses as sections are not listed.",
         "data": {
-          "excluded": "Never offer",
+          "excluded": "Don't offer",
           "switches": "Switches",
           "lights": "Lights",
           "select_all": "Select all"
         },
         "data_description": {
-          "excluded": "Outputs that drive gates, doors or locks: a switch in Home Assistant would fire them in one click. They are left out of every list below and elsewhere; taken out of here, a resource is offered again once the screen is opened anew.",
+          "excluded": "Outputs Home Assistant must not control - the pulses of gates, doors and locks, or outputs driven by thermostats. They are left out of the lists below on this screen and of the sections list under Logic → Programs. Taken out of here, a resource is offered again once the screen is opened anew.",
           "select_all": "Fills Lights with everything the fields above do not hold, to untick a few."
         }
       },
@@ -1762,15 +1762,15 @@
       },
       "outputs": {
         "title": "Outputs",
-        "description": "The central unit's outputs (relay modules), top down: never offered, read only, switches - each list without what the fields above hold, each resource in one field at most. Outputs a program uses as sections are not listed.",
+        "description": "The central unit's outputs (relay modules), top down: don't offer, read only, switches - each list without what the fields above hold, each resource in one field at most. Outputs a program uses as sections are not listed.",
         "data": {
-          "excluded": "Never offer",
+          "excluded": "Don't offer",
           "output_sensors": "Read only",
           "switches": "Switches",
           "select_all": "Select all"
         },
         "data_description": {
-          "excluded": "Outputs that drive gates, doors or locks, or nothing to use: a switch in Home Assistant would fire them in one click. They are left out of every list below and elsewhere; taken out of here, a resource is offered again once the screen is opened anew.",
+          "excluded": "Outputs Home Assistant must not control - the pulses of gates, doors and locks, or outputs driven by thermostats. They are left out of the lists below on this screen and of the sections list under Logic → Programs. Taken out of here, a resource is offered again once the screen is opened anew.",
           "output_sensors": "On while the output is switched on. Useful for anything a rule in the central unit mirrors onto an output.",
           "select_all": "Fills Switches with everything the fields above do not hold, to untick a few."
         }
@@ -1897,7 +1897,7 @@
   "issues": {
     "role_conflict": {
       "title": "Nexo: a resource in two roles",
-      "description": "The stored options give these resources more than one role; the safer one is used - never offered or read only, then light, dimmer, switch: {resources}. Open the Nexo options and save the Lighting or Outputs screen to fix it."
+      "description": "The stored options give these resources more than one role; the safer one is used - don't offer or read only, then light, dimmer, switch: {resources}. Open the Nexo options and save the Lighting or Outputs screen to fix it."
     }
   }
 }

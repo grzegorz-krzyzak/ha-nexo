@@ -67,10 +67,10 @@ order of NexoVision's list - with the current settings next to each item:
 - **Analog inputs** (NexoVision: *Analog sensor*) - the inputs to import, then
   the type and calibration of each (see *Analog inputs*).
 - **Thermometers** - a thermostat's own thermometer is read with it anyway.
-- **Lighting** - lighting outputs, each as a light, a switch or never offered
+- **Lighting** - lighting outputs, each as a light, a switch or not offered
   (see *Lighting and outputs*).
 - **Dimmers** - with brightness.
-- **Outputs** - each as a switch, read only or never offered.
+- **Outputs** - each as a switch, read only or not offered.
 - **Analog outputs** - see *Analog outputs*.
 - **Thermostats** - the thermostats to import, then heating or cooling for
   each; each brings the thermometer and the range set for it in the central
@@ -92,7 +92,7 @@ changes - or an empty *add* form - goes back to the menu.
 Nothing is added on its own: every light, dimmer and switch is picked by hand.
 
 *Lighting* and *Outputs* each have one screen with three fields, top down:
-**never offer**, then switches and lights (*Lighting*) or read only and
+**don't offer**, then switches and lights (*Lighting*) or read only and
 switches (*Outputs*). Each list leaves out what the fields above hold, so the
 lowest is the shortest; a change shows in the lists below once the form comes
 back. A resource goes in one field at most - picked twice, it is refused with
@@ -100,19 +100,21 @@ its name. A lighting output can be a switch too, for a fan wired as a light,
 say. *Select all* fills the lowest field with everything the others do not
 hold, as they are when it is ticked.
 
-**Never offer the outputs that drive a gate, door or lock.** Central units
+**Don't offer the outputs Home Assistant must not control** - a gate's,
+door's or lock's pulses, or outputs driven by thermostats. Central units
 often drive a gate's pulses or a door strike from lighting outputs, for want
 of free relay outputs, and the integration cannot tell them from lights by
 name. A switch in Home Assistant would fire them in one click - or with a
 voice command such as "turn everything off in the garage". Put them under
-*Never offer* once; they are then left out of every list, the programs'
-outputs included. Outputs a program uses as sections are not listed.
+*Don't offer* once; they are then left out of the lists below it on the
+screen and of the sections list under *Logic → Programs*. Outputs a program
+already uses as sections are not listed on these screens.
 
 Options saved before 0.11.1 could hold an output both read only and never
 offered; the *Outputs* screen shows it read only and saving settles it there.
 If the stored options
 still give a resource a controlled role next to another one - edited by hand,
-restored from an old backup - setup keeps the safer role (never offered or
+restored from an old backup - setup keeps the safer role (not offered or
 read only, then light, dimmer, switch), logs a warning and raises a repair
 issue (*Settings → Repairs*) until the options are saved again.
 

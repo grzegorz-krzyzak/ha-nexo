@@ -70,9 +70,9 @@
           "sensors": "Wejść: {binary_sensors}",
           "analog": "Typ Nexo: Czujnik analogowy · wejść: {analog_sensors}",
           "thermometers": "Termometrów: {thermometers}",
-          "lights": "Światło, przełącznik albo nigdy nie proponuj · świateł: {lights}",
+          "lights": "Światło, przełącznik albo nie pokazuj do wyboru · świateł: {lights}",
           "dimmers": "Ściemniaczy: {dimmers}",
-          "outputs": "Przełącznik, tylko odczyt albo nigdy nie proponuj · tylko odczyt: {output_sensors}",
+          "outputs": "Przełącznik, tylko odczyt albo nie pokazuj do wyboru · tylko odczyt: {output_sensors}",
           "analog_outputs": "Wyjść: {analog_outputs}",
           "thermostats": "Termostaty: {thermostats}",
           "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
@@ -103,9 +103,9 @@
           "sensors": "Wejść: {binary_sensors}",
           "analog": "Typ Nexo: Czujnik analogowy · wejść: {analog_sensors}",
           "thermometers": "Termometrów: {thermometers}",
-          "lights": "Światło, przełącznik albo nigdy nie proponuj · świateł: {lights}",
+          "lights": "Światło, przełącznik albo nie pokazuj do wyboru · świateł: {lights}",
           "dimmers": "Ściemniaczy: {dimmers}",
-          "outputs": "Przełącznik, tylko odczyt albo nigdy nie proponuj · tylko odczyt: {output_sensors}",
+          "outputs": "Przełącznik, tylko odczyt albo nie pokazuj do wyboru · tylko odczyt: {output_sensors}",
           "analog_outputs": "Wyjść: {analog_outputs}",
           "thermostats": "Termostaty: {thermostats}",
           "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
@@ -136,9 +136,9 @@
           "sensors": "Wejść: {binary_sensors}",
           "analog": "Typ Nexo: Czujnik analogowy · wejść: {analog_sensors}",
           "thermometers": "Termometrów: {thermometers}",
-          "lights": "Światło, przełącznik albo nigdy nie proponuj · świateł: {lights}",
+          "lights": "Światło, przełącznik albo nie pokazuj do wyboru · świateł: {lights}",
           "dimmers": "Ściemniaczy: {dimmers}",
-          "outputs": "Przełącznik, tylko odczyt albo nigdy nie proponuj · tylko odczyt: {output_sensors}",
+          "outputs": "Przełącznik, tylko odczyt albo nie pokazuj do wyboru · tylko odczyt: {output_sensors}",
           "analog_outputs": "Wyjść: {analog_outputs}",
           "thermostats": "Termostaty: {thermostats}",
           "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
@@ -271,15 +271,15 @@
       },
       "lights": {
         "title": "Oświetlenie",
-        "description": "Wyjścia oświetleniowe centrali, od góry: nigdy nie proponuj, przełączniki (np. wentylacja wpięta w obwód światła), światła - każda lista bez tego, co zaznaczone wyżej, każdy zasób najwyżej w jednym polu. Wyjścia użyte przez program jako sekcje nie są na liście.",
+        "description": "Wyjścia oświetleniowe centrali, od góry: nie pokazuj do wyboru, przełączniki (np. wentylacja wpięta w obwód światła), światła - każda lista bez tego, co zaznaczone wyżej, każdy zasób najwyżej w jednym polu. Wyjścia użyte przez program jako sekcje nie są na liście.",
         "data": {
-          "excluded": "Nigdy nie proponuj",
+          "excluded": "Nie pokazuj do wyboru",
           "switches": "Przełączniki",
           "lights": "Światła",
           "select_all": "Zaznacz wszystkie"
         },
         "data_description": {
-          "excluded": "Wyjścia sterujące bramami, drzwiami lub zamkami: przełącznik w HA uruchomiłby je jednym kliknięciem. Nie pojawią się na listach niżej ani nigdzie indziej; wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
+          "excluded": "Wyjścia, których HA nie ma sterować - impulsy bram, drzwi i zamków albo wyjścia sterowane przez termostaty. Nie pojawią się na listach niżej na tym ekranie ani na liście sekcji w Logika → Programy. Wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
           "select_all": "Wypełnia pole Światła wszystkim, czego nie ma w polach wyżej, żeby odznaczyć kilka pozycji."
         }
       },
@@ -1762,15 +1762,15 @@
       },
       "outputs": {
         "title": "Wyjścia",
-        "description": "Wyjścia centrali (moduły przekaźników), od góry: nigdy nie proponuj, tylko odczyt, przełączniki - każda lista bez tego, co zaznaczone wyżej, każdy zasób najwyżej w jednym polu. Wyjścia użyte przez program jako sekcje nie są na liście.",
+        "description": "Wyjścia centrali (moduły przekaźników), od góry: nie pokazuj do wyboru, tylko odczyt, przełączniki - każda lista bez tego, co zaznaczone wyżej, każdy zasób najwyżej w jednym polu. Wyjścia użyte przez program jako sekcje nie są na liście.",
         "data": {
-          "excluded": "Nigdy nie proponuj",
+          "excluded": "Nie pokazuj do wyboru",
           "output_sensors": "Tylko odczyt",
           "switches": "Przełączniki",
           "select_all": "Zaznacz wszystkie"
         },
         "data_description": {
-          "excluded": "Wyjścia sterujące bramami, drzwiami lub zamkami albo niepotrzebne: przełącznik w HA uruchomiłby je jednym kliknięciem. Nie pojawią się na listach niżej ani nigdzie indziej; wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
+          "excluded": "Wyjścia, których HA nie ma sterować - impulsy bram, drzwi i zamków albo wyjścia sterowane przez termostaty. Nie pojawią się na listach niżej na tym ekranie ani na liście sekcji w Logika → Programy. Wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
           "output_sensors": "Włączony, gdy wyjście jest załączone. Przydatne do wszystkiego, co reguła w centrali odwzorowuje na wyjście.",
           "select_all": "Wypełnia pole Przełączniki wszystkim, czego nie ma w polach wyżej, żeby odznaczyć kilka pozycji."
         }
@@ -1897,7 +1897,7 @@
   "issues": {
     "role_conflict": {
       "title": "Nexo: zasób w dwóch rolach",
-      "description": "Zapisane opcje dają tym zasobom więcej niż jedną rolę; używana jest bezpieczniejsza - nigdy nie proponuj albo tylko odczyt, potem światło, ściemniacz, przełącznik: {resources}. Otwórz opcje Nexo i zapisz ekran Oświetlenie albo Wyjścia, żeby to naprawić."
+      "description": "Zapisane opcje dają tym zasobom więcej niż jedną rolę; używana jest bezpieczniejsza - nie pokazuj do wyboru albo tylko odczyt, potem światło, ściemniacz, przełącznik: {resources}. Otwórz opcje Nexo i zapisz ekran Oświetlenie albo Wyjścia, żeby to naprawić."
     }
   }
 }
