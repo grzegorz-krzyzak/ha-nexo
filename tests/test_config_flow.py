@@ -541,3 +541,17 @@ async def test_read_only_may_also_be_excluded(hass: HomeAssistant, fake_nexo) ->
     assert result["type"] is FlowResultType.MENU
     await _pick(hass, flow_id, "save")
     assert entry.options["output_sensors"] == ["S7"] and entry.options["excluded"] == ["S7"]
+
+
+async def test_never_offered_left_out_of_controlled_fields(hass: HomeAssistant, fake_nexo) -> None:
+    """The field says "never offer": the switch and light fields must not list them."""
+    entry = await _setup(hass, {**OPTIONS, "valves": [], "excluded": ["VENT", "GATE PULSE"]})
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    result = await _pick(hass, flow_id, "outputs")
+    assert "VENT" not in _choices(result, "switches")
+    assert "VENT" in _choices(result, "excluded")
+    assert "VENT" in _choices(result, "output_sensors")
+    await _submit(hass, flow_id, {"switches": [], "output_sensors": [], "excluded": ["VENT"]})
+    result = await _pick(hass, flow_id, "lights")
+    assert "GATE PULSE" not in _choices(result, "lights")
+    assert "GATE PULSE" not in _choices(result, "switches")

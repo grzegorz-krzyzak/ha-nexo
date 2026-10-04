@@ -279,7 +279,7 @@
           "select_all": "Select all"
         },
         "data_description": {
-          "excluded": "Outputs that drive gates, doors or locks: a switch in Home Assistant would fire them in one click. They are left out of every list.",
+          "excluded": "Outputs that drive gates, doors or locks: a switch in Home Assistant would fire them in one click. They are left out of every list. Taken out of here, a resource is offered again once the screen is opened anew.",
           "select_all": "Fills Lights with everything the other two fields do not hold, to untick a few."
         }
       },
@@ -1771,7 +1771,7 @@
         },
         "data_description": {
           "output_sensors": "On while the output is switched on. Useful for anything a rule in the central unit mirrors onto an output.",
-          "excluded": "Outputs that drive gates, doors or locks: a switch in Home Assistant would fire them in one click. They are left out of every list.",
+          "excluded": "Outputs that drive gates, doors or locks: a switch in Home Assistant would fire them in one click. They are left out of every list. Taken out of here, a resource is offered again once the screen is opened anew.",
           "select_all": "Fills Switches with everything the other two fields do not hold, to untick a few."
         }
       },

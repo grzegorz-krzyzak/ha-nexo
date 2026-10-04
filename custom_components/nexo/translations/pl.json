@@ -279,7 +279,7 @@
           "select_all": "Zaznacz wszystkie"
         },
         "data_description": {
-          "excluded": "Wyjścia sterujące bramami, drzwiami lub zamkami: przełącznik w HA uruchomiłby je jednym kliknięciem. Nie pojawią się na żadnej liście.",
+          "excluded": "Wyjścia sterujące bramami, drzwiami lub zamkami: przełącznik w HA uruchomiłby je jednym kliknięciem. Nie pojawią się na żadnej liście. Wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
           "select_all": "Wypełnia pole Światła wszystkim, czego nie ma w pozostałych polach, żeby odznaczyć kilka pozycji."
         }
       },
@@ -1771,7 +1771,7 @@
         },
         "data_description": {
           "output_sensors": "Włączony, gdy wyjście jest załączone. Przydatne do wszystkiego, co reguła w centrali odwzorowuje na wyjście.",
-          "excluded": "Wyjścia sterujące bramami, drzwiami lub zamkami: przełącznik w HA uruchomiłby je jednym kliknięciem. Nie pojawią się na żadnej liście.",
+          "excluded": "Wyjścia sterujące bramami, drzwiami lub zamkami: przełącznik w HA uruchomiłby je jednym kliknięciem. Nie pojawią się na żadnej liście. Wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
           "select_all": "Wypełnia pole Przełączniki wszystkim, czego nie ma w pozostałych polach, żeby odznaczyć kilka pozycji."
         }
       },

@@ -705,10 +705,15 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         errors: dict[str, str] | None = None,
         placeholders: dict[str, str] | None = None,
     ) -> ConfigFlowResult:
-        fields: dict[Any, Any] = {
-            vol.Optional(key, default=[n for n in selected if n in names]): _pick_many(names)
-            for key, selected in values.items()
-        }
+        # What is never offered is left out of the controlled fields, as the
+        # field promises - one list per field, fixed while the form is open
+        excluded = set(values.get(OPT_EXCLUDED, []))
+        fields: dict[Any, Any] = {}
+        for key, selected in values.items():
+            choices = [n for n in names if n not in excluded] if key in CONTROLLED else names
+            fields[vol.Optional(key, default=[n for n in selected if n in choices])] = (
+                _pick_many(choices)
+            )
         fields[vol.Optional(SELECT_ALL, default=False)] = BooleanSelector()
         return self.async_show_form(
             step_id=step_id,
