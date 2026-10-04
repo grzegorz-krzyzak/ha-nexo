@@ -54,28 +54,30 @@
           "connection": "Połączenie",
           "sensors": "Czujniki",
           "analog": "Wejścia analogowe",
+          "thermometers": "Termometry",
+          "lights": "Oświetlenie",
+          "dimmers": "Ściemniacze",
+          "outputs": "Wyjścia",
           "analog_outputs": "Wyjścia analogowe",
-          "lights": "Światła i przełączniki",
           "thermostats": "Termostaty",
+          "logic": "Logika",
           "weather": "Stacja pogodowa",
-          "covers": "Bramy i drzwi",
-          "valves": "Zawory",
-          "buttons": "Przyciski",
           "settings": "Ustawienia",
           "save": "Zapisz i zamknij"
         },
         "menu_option_descriptions": {
           "connection": "{address} · połączono",
-          "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors} · wyjścia: {output_sensors}",
-          "covers": "{covers}",
-          "buttons": "{buttons}",
-          "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
-          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
-          "valves": "{valves}",
-          "analog": "Rodzaj i kalibracja",
-          "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}",
+          "sensors": "Wejść: {binary_sensors}",
+          "analog": "Typ Nexo: Czujnik analogowy · wejść: {analog_sensors}",
+          "thermometers": "Termometrów: {thermometers}",
+          "lights": "Światło, przełącznik albo nigdy nie proponuj · świateł: {lights}",
+          "dimmers": "Ściemniaczy: {dimmers}",
+          "outputs": "Przełącznik, tylko odczyt albo nigdy nie proponuj · tylko odczyt: {output_sensors}",
+          "analog_outputs": "Wyjść: {analog_outputs}",
           "thermostats": "Termostaty: {thermostats}",
-          "analog_outputs": "Wyjść: {analog_outputs}"
+          "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
+          "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
+          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany"
         },
         "description": ""
       },
@@ -85,28 +87,30 @@
           "connection": "Połączenie",
           "sensors": "Czujniki",
           "analog": "Wejścia analogowe",
+          "thermometers": "Termometry",
+          "lights": "Oświetlenie",
+          "dimmers": "Ściemniacze",
+          "outputs": "Wyjścia",
           "analog_outputs": "Wyjścia analogowe",
-          "lights": "Światła i przełączniki",
           "thermostats": "Termostaty",
+          "logic": "Logika",
           "weather": "Stacja pogodowa",
-          "covers": "Bramy i drzwi",
-          "valves": "Zawory",
-          "buttons": "Przyciski",
           "settings": "Ustawienia",
           "save": "Zapisz i zamknij"
         },
         "menu_option_descriptions": {
           "connection": "{address}",
-          "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors} · wyjścia: {output_sensors}",
-          "covers": "{covers}",
-          "buttons": "{buttons}",
-          "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
-          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
-          "valves": "{valves}",
-          "analog": "Rodzaj i kalibracja",
-          "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}",
+          "sensors": "Wejść: {binary_sensors}",
+          "analog": "Typ Nexo: Czujnik analogowy · wejść: {analog_sensors}",
+          "thermometers": "Termometrów: {thermometers}",
+          "lights": "Światło, przełącznik albo nigdy nie proponuj · świateł: {lights}",
+          "dimmers": "Ściemniaczy: {dimmers}",
+          "outputs": "Przełącznik, tylko odczyt albo nigdy nie proponuj · tylko odczyt: {output_sensors}",
+          "analog_outputs": "Wyjść: {analog_outputs}",
           "thermostats": "Termostaty: {thermostats}",
-          "analog_outputs": "Wyjść: {analog_outputs}"
+          "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
+          "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
+          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany"
         },
         "description": "{alert_open}Centrala nie odpowiada{alert_close}"
       },
@@ -116,28 +120,30 @@
           "connection": "Połączenie",
           "sensors": "Czujniki",
           "analog": "Wejścia analogowe",
+          "thermometers": "Termometry",
+          "lights": "Oświetlenie",
+          "dimmers": "Ściemniacze",
+          "outputs": "Wyjścia",
           "analog_outputs": "Wyjścia analogowe",
-          "lights": "Światła i przełączniki",
           "thermostats": "Termostaty",
+          "logic": "Logika",
           "weather": "Stacja pogodowa",
-          "covers": "Bramy i drzwi",
-          "valves": "Zawory",
-          "buttons": "Przyciski",
           "settings": "Ustawienia",
           "save": "Zapisz i zamknij"
         },
         "menu_option_descriptions": {
           "connection": "{address}",
-          "sensors": "Wejścia: {binary_sensors} · termometry: {thermometers} · analogowe: {analog_sensors} · wyjścia: {output_sensors}",
-          "covers": "{covers}",
-          "buttons": "{buttons}",
-          "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
-          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
-          "valves": "{valves}",
-          "analog": "Rodzaj i kalibracja",
-          "lights": "Światła: {lights} · ściemniacze: {dimmers} · przełączniki: {switches} · wykluczone: {excluded}",
+          "sensors": "Wejść: {binary_sensors}",
+          "analog": "Typ Nexo: Czujnik analogowy · wejść: {analog_sensors}",
+          "thermometers": "Termometrów: {thermometers}",
+          "lights": "Światło, przełącznik albo nigdy nie proponuj · świateł: {lights}",
+          "dimmers": "Ściemniaczy: {dimmers}",
+          "outputs": "Przełącznik, tylko odczyt albo nigdy nie proponuj · tylko odczyt: {output_sensors}",
+          "analog_outputs": "Wyjść: {analog_outputs}",
           "thermostats": "Termostaty: {thermostats}",
-          "analog_outputs": "Wyjść: {analog_outputs}"
+          "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
+          "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
+          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany"
         },
         "description": "{alert_open}Zmieniono połączenie – wybierz Zapisz i zamknij, żeby je zastosować{alert_close}"
       },
@@ -165,7 +171,7 @@
           "cover_18": "{cover_18}",
           "cover_19": "{cover_19}",
           "add_cover": "Dodaj bramę lub drzwi",
-          "back": "Wróć"
+          "logic": "Wróć"
         },
         "menu_option_descriptions": {
           "cover_0": "{cover_0_info}",
@@ -214,7 +220,7 @@
           "button_18": "{button_18}",
           "button_19": "{button_19}",
           "add_button": "Dodaj przycisk",
-          "back": "Wróć"
+          "logic": "Wróć"
         },
         "menu_option_descriptions": {
           "button_0": "{button_0_info}",
@@ -255,53 +261,26 @@
       },
       "sensors": {
         "title": "Czujniki",
-        "description": "Listy są pobierane z centrali.",
+        "description": "Wejścia centrali: kontaktrony, czujki ruchu.",
         "data": {
-          "binary_sensors": "Wejścia (kontaktrony, czujki ruchu)",
-          "thermometers": "Termometry",
-          "analog_sensors": "Wejścia analogowe",
-          "output_sensors": "Wyjścia (tylko odczyt)"
+          "binary_sensors": "Czujniki"
         },
         "data_description": {
-          "binary_sensors": "Włączone, gdy naruszone: drzwi otwarte, wykryty ruch. Co to za czujnik, ustawisz w opcji „Pokaż jako” w ustawieniach encji.",
-          "analog_sensors": "Rodzaj i kalibrację każdego ustawisz w pozycji Wejścia analogowe.",
-          "output_sensors": "Włączony, gdy wyjście jest załączone. Przydatne do wszystkiego, co reguła w centrali odwzorowuje na wyjście. Tylko odczyt; aby sterować wyjściem, wybierz je w Światłach i przełącznikach."
+          "binary_sensors": "Włączone, gdy naruszone: drzwi otwarte, wykryty ruch. Co to za czujnik, ustawisz w opcji „Pokaż jako” w ustawieniach encji."
         }
       },
       "lights": {
-        "title": "Zasoby wykluczone",
-        "description": "Krok 1 z 4. Wybierz wyjścia sterujące bramami, drzwiami lub zamkami: nie pojawią się na żadnej liście świateł, przełączników ani zaworów. Jeśli takich nie ma, zostaw listę pustą.",
-        "data": {
-          "excluded": "Nigdy nie proponuj"
-        }
-      },
-      "lights_lights": {
-        "title": "Światła",
-        "description": "Krok 2 z 4. Wyjścia oświetleniowe do włączania i wyłączania. Wyjścia użyte już przez zawór albo czytane jako czujniki nie są na liście.",
+        "title": "Oświetlenie",
+        "description": "Wyjścia oświetleniowe centrali, każde najwyżej w jednym polu: światło, przełącznik (np. wentylacja wpięta w obwód światła) albo nigdy nie proponuj. Wyjścia użyte przez program jako sekcje nie są na liście.",
         "data": {
           "lights": "Światła",
+          "switches": "Przełączniki",
+          "excluded": "Nigdy nie proponuj",
           "select_all": "Zaznacz wszystkie"
         },
         "data_description": {
-          "select_all": "Pokazuje listę ponownie ze wszystkim zaznaczonym, żeby odznaczyć kilka pozycji."
-        }
-      },
-      "lights_dimmers": {
-        "title": "Ściemniacze",
-        "description": "Krok 3 z 4. Ściemniacze z regulacją jasności. Włączony bez podania jasności ściemniacz dostaje zwykłą komendę włączenia centrali, jak z NexoVision; podana jasność jest zapisywana jako poziom.",
-        "data": {
-          "dimmers": "Ściemniacze",
-          "select_all": "Zaznacz wszystkie"
-        },
-        "data_description": {
-          "select_all": "Pokazuje listę ponownie ze wszystkim zaznaczonym, żeby odznaczyć kilka pozycji."
-        }
-      },
-      "lights_switches": {
-        "title": "Przełączniki",
-        "description": "Krok 4 z 4. Pozostałe wyjścia do włączania i wyłączania, na przykład rekuperator. Wyjścia wybrane jako światła nie są na liście.",
-        "data": {
-          "switches": "Przełączniki"
+          "excluded": "Wyjścia sterujące bramami, drzwiami lub zamkami: przełącznik w HA uruchomiłby je jednym kliknięciem. Nie pojawią się na żadnej liście.",
+          "select_all": "Wypełnia pole Światła wszystkim, czego nie ma w pozostałych polach, żeby odznaczyć kilka pozycji."
         }
       },
       "thermostats": {
@@ -331,8 +310,9 @@
       },
       "analog": {
         "title": "Wejścia analogowe",
-        "description": "Wybierz wejście, żeby ustawić jego rodzaj i kalibrację. Lista obejmuje wejścia analogowe wybrane w Czujnikach.",
+        "description": "Typ Nexo: Czujnik analogowy. Wybierz wejścia, potem ustaw rodzaj i kalibrację każdego.",
         "menu_options": {
+          "analog_pick": "Wybierz wejścia",
           "analog_0": "{analog_0}",
           "analog_1": "{analog_1}",
           "analog_2": "{analog_2}",
@@ -1305,7 +1285,7 @@
         "description": "Każdy odczyt trwa około 50 ms. Po komendzie bramy lub zaworu zasoby, które pokazują jej skutek, są przez chwilę czytane co sekundę, niezależnie od tych interwałów."
       },
       "valves": {
-        "title": "Zawory",
+        "title": "Programy",
         "menu_options": {
           "valve_0": "{valve_0}",
           "valve_1": "{valve_1}",
@@ -1327,8 +1307,8 @@
           "valve_17": "{valve_17}",
           "valve_18": "{valve_18}",
           "valve_19": "{valve_19}",
-          "add_valve": "Dodaj zawór",
-          "back": "Wróć"
+          "add_valve": "Dodaj program",
+          "logic": "Wróć"
         },
         "menu_option_descriptions": {
           "valve_0": "{valve_0_info}",
@@ -1354,7 +1334,7 @@
         }
       },
       "add_valve": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki. Zatwierdź pusty formularz, żeby wrócić.",
         "data": {
           "name": "Nazwa",
@@ -1372,7 +1352,7 @@
         }
       },
       "valve_0": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1391,7 +1371,7 @@
         }
       },
       "valve_1": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1410,7 +1390,7 @@
         }
       },
       "valve_2": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1429,7 +1409,7 @@
         }
       },
       "valve_3": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1448,7 +1428,7 @@
         }
       },
       "valve_4": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1467,7 +1447,7 @@
         }
       },
       "valve_5": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1486,7 +1466,7 @@
         }
       },
       "valve_6": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1505,7 +1485,7 @@
         }
       },
       "valve_7": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1524,7 +1504,7 @@
         }
       },
       "valve_8": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1543,7 +1523,7 @@
         }
       },
       "valve_9": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1562,7 +1542,7 @@
         }
       },
       "valve_10": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1581,7 +1561,7 @@
         }
       },
       "valve_11": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1600,7 +1580,7 @@
         }
       },
       "valve_12": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1619,7 +1599,7 @@
         }
       },
       "valve_13": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1638,7 +1618,7 @@
         }
       },
       "valve_14": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1657,7 +1637,7 @@
         }
       },
       "valve_15": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1676,7 +1656,7 @@
         }
       },
       "valve_16": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1695,7 +1675,7 @@
         }
       },
       "valve_17": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1714,7 +1694,7 @@
         }
       },
       "valve_18": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1733,7 +1713,7 @@
         }
       },
       "valve_19": {
-        "title": "Zawór",
+        "title": "Program",
         "description": "Program podlewania albo cokolwiek innego, co uruchamia i zatrzymuje para komend logiki.",
         "data": {
           "name": "Nazwa",
@@ -1750,6 +1730,65 @@
           "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
           "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
         }
+      },
+      "analog_pick": {
+        "title": "Wejścia analogowe",
+        "description": "Wejścia analogowe do zaimportowania.",
+        "data": {
+          "analog_sensors": "Wejścia analogowe"
+        }
+      },
+      "thermometers": {
+        "title": "Termometry",
+        "description": "Termometry do zaimportowania. Termometr termostatu i tak jest czytany razem z termostatem.",
+        "data": {
+          "thermometers": "Termometry",
+          "select_all": "Zaznacz wszystkie"
+        },
+        "data_description": {
+          "select_all": "Pokazuje listę ponownie ze wszystkim zaznaczonym, żeby odznaczyć kilka pozycji."
+        }
+      },
+      "dimmers": {
+        "title": "Ściemniacze",
+        "description": "Ściemniacze z regulacją jasności. Włączony bez podania jasności ściemniacz dostaje zwykłą komendę włączenia centrali, jak z NexoVision; podana jasność jest zapisywana jako poziom.",
+        "data": {
+          "dimmers": "Ściemniacze",
+          "select_all": "Zaznacz wszystkie"
+        },
+        "data_description": {
+          "select_all": "Pokazuje listę ponownie ze wszystkim zaznaczonym, żeby odznaczyć kilka pozycji."
+        }
+      },
+      "outputs": {
+        "title": "Wyjścia",
+        "description": "Wyjścia centrali (moduły przekaźników), każde najwyżej w jednym polu: przełącznik, tylko odczyt albo nigdy nie proponuj. Wyjścia użyte przez program jako sekcje nie są na liście.",
+        "data": {
+          "switches": "Przełączniki",
+          "output_sensors": "Tylko odczyt",
+          "excluded": "Nigdy nie proponuj",
+          "select_all": "Zaznacz wszystkie"
+        },
+        "data_description": {
+          "output_sensors": "Włączony, gdy wyjście jest załączone. Przydatne do wszystkiego, co reguła w centrali odwzorowuje na wyjście.",
+          "excluded": "Wyjścia sterujące bramami, drzwiami lub zamkami: przełącznik w HA uruchomiłby je jednym kliknięciem. Nie pojawią się na żadnej liście.",
+          "select_all": "Wypełnia pole Przełączniki wszystkim, czego nie ma w pozostałych polach, żeby odznaczyć kilka pozycji."
+        }
+      },
+      "logic": {
+        "title": "Logika",
+        "description": "Encje sterowane komendami logiki centrali.",
+        "menu_options": {
+          "covers": "Bramy i drzwi",
+          "buttons": "Przyciski",
+          "valves": "Programy",
+          "back": "Wróć"
+        },
+        "menu_option_descriptions": {
+          "covers": "{covers}",
+          "buttons": "{buttons}",
+          "valves": "Uruchamiane i zatrzymywane parą komend logiki, np. nawadnianie; wyjścia przekaźników jako sekcje · {valves}"
+        }
       }
     },
     "error": {
@@ -1763,7 +1802,8 @@
       "step_needs_unguarded": "Przycisk Krok wymaga wyłączenia „Otwieraj tylko przy potwierdzonym zamknięciu”: zatrzymuje jadącą bramę przeciwną komendą.",
       "main_valve_is_a_section": "Zawór główny nie może być jednocześnie sekcją.",
       "unknown_resource": "Nie ma takiego zasobu w centrali.",
-      "no_weather_station": "Ta centrala nie ma karty stacji pogodowej."
+      "no_weather_station": "Ta centrala nie ma karty stacji pogodowej.",
+      "role_conflict": "„{resource}” jest wybrany w dwóch polach - każdy zasób może mieć tylko jedną rolę."
     },
     "abort": {
       "cannot_list": "Nie można pobrać listy zasobów z centrali.",
@@ -1852,6 +1892,12 @@
   "device": {
     "weather_station": {
       "name": "Stacja pogodowa"
+    }
+  },
+  "issues": {
+    "role_conflict": {
+      "title": "Nexo: zasób w dwóch rolach",
+      "description": "Zapisane opcje dają tym zasobom więcej niż jedną rolę; używana jest najbezpieczniejsza - nigdy nie proponuj, potem tylko odczyt, potem światło albo przełącznik: {resources}. Otwórz opcje Nexo i zapisz ekran Oświetlenie albo Wyjścia, żeby to naprawić."
     }
   }
 }

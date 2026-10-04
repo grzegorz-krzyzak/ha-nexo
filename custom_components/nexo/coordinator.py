@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from datetime import timedelta
 import logging
 import time
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -64,7 +65,13 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
     never waits behind a sweep of lights.
     """
 
-    def __init__(self, hass: HomeAssistant, entry: ConfigEntry, hub: NexoHub) -> None:
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        entry: ConfigEntry,
+        hub: NexoHub,
+        options: Mapping[str, Any] | None = None,
+    ) -> None:
         super().__init__(
             hass,
             _LOGGER,
@@ -76,7 +83,7 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
             always_update=False,
         )
         self.hub = hub
-        options = entry.options
+        options = entry.options if options is None else options
         inputs = {
             *options.get(OPT_BINARY_SENSORS, []),
             *(

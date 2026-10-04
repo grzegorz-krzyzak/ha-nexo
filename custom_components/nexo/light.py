@@ -22,10 +22,13 @@ async def async_setup_entry(
     coordinator = entry.runtime_data.coordinator
     async_add_entities(
         [
-            *(NexoLight(coordinator, "light", name) for name in entry.options.get(OPT_LIGHTS, [])),
+            *(
+                NexoLight(coordinator, "light", name)
+                for name in entry.runtime_data.options.get(OPT_LIGHTS, [])
+            ),
             *(
                 NexoDimmer(coordinator, "dimmer", name)
-                for name in entry.options.get(OPT_DIMMERS, [])
+                for name in entry.runtime_data.options.get(OPT_DIMMERS, [])
             ),
         ]
     )

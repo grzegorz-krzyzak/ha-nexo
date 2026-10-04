@@ -406,9 +406,13 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             status = "not_answering"
         return self.async_show_menu(
             step_id=MENU_STEPS[status],
+            # By the central unit's resource types, named as in the installer's
+            # manual (decision 2026-10-04): a user finds a resource where Nexo
+            # files it, not where this house happens to use it
             menu_options=[
-                "connection", "sensors", "analog", "analog_outputs", "lights", "thermostats",
-                "weather", "covers", "valves", "buttons", "settings", "save",
+                "connection", "sensors", "analog", "thermometers", "lights", "dimmers",
+                "outputs", "analog_outputs", "thermostats", "logic", "weather", "settings",
+                "save",
             ],
             description_placeholders={
                 "address": f"{connection[CONF_HOST]}:{connection.get(CONF_PORT, DEFAULT_PORT)}",
@@ -419,6 +423,9 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 OPT_ANALOG_SENSORS: str(len(options.get(OPT_ANALOG_SENSORS, []))),
                 OPT_OUTPUT_SENSORS: str(len(options.get(OPT_OUTPUT_SENSORS, []))),
                 OPT_THERMOSTATS: str(len(options.get(OPT_THERMOSTATS, []))),
+                "logic_items": str(
+                    sum(len(options.get(k, [])) for k in (OPT_COVERS, OPT_BUTTONS, OPT_VALVES))
+                ),
                 OPT_ANALOG_OUTPUTS: str(len(options.get(OPT_ANALOG_OUTPUTS, []))),
                 **{
                     key: str(len(options.get(key, [])))
@@ -454,7 +461,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         menu = [f"cover_{i}" for i in range(len(covers))]
         if len(covers) < MAX_ITEMS:
             menu.append("add_cover")
-        menu.append("back")
+        menu.append("logic")
         placeholders: dict[str, str] = {}
         for i, item in enumerate(covers):
             placeholders[f"cover_{i}"] = item[ITEM_NAME]
@@ -470,7 +477,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         menu = [f"button_{i}" for i in range(len(buttons))]
         if len(buttons) < MAX_ITEMS:
             menu.append("add_button")
-        menu.append("back")
+        menu.append("logic")
         placeholders: dict[str, str] = {}
         for i, item in enumerate(buttons):
             placeholders[f"button_{i}"] = item[ITEM_NAME]
@@ -486,7 +493,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         menu = [f"valve_{i}" for i in range(len(valves))]
         if len(valves) < MAX_ITEMS:
             menu.append("add_valve")
-        menu.append("back")
+        menu.append("logic")
         placeholders: dict[str, str] = {}
         for i, item in enumerate(valves):
             placeholders[f"valve_{i}"] = item[ITEM_NAME]
@@ -509,9 +516,25 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             placeholders.update(_analog_placeholders(i, settings.get(name, {})))
         return self.async_show_menu(
             step_id="analog",
-            menu_options=[*(f"analog_{i}" for i in range(len(names))), "back"],
+            menu_options=["analog_pick", *(f"analog_{i}" for i in range(len(names))), "back"],
             description_placeholders=placeholders,
         )
+
+    async def async_step_analog_pick(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        try:
+            names = await self._resources(ImportTypes.ANALOGSENSOR)
+        except NexoError as err:
+            return self._cannot_list(err)
+        if user_input is not None:
+            self._options[OPT_ANALOG_SENSORS] = user_input.get(OPT_ANALOG_SENSORS, [])
+            selected = set(self._options[OPT_ANALOG_SENSORS])
+            settings = self._options.get(OPT_ANALOG_SETTINGS, {})
+            for name in [n for n in settings if n not in selected]:
+                del settings[name]
+            return await self.async_step_analog()
+        return self._pick_form("analog_pick", OPT_ANALOG_SENSORS, names)
 
     async def _async_step_edit_analog(
         self, index: int, user_input: dict[str, Any] | None
@@ -618,12 +641,15 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             errors=errors,
         )
 
-    # ---------------------------------------------------- lights and switches
+    # ------------------------------------------- lights, dimmers and outputs
     #
-    # Four screens in a row. First the resources never to offer - the outputs
-    # that drive gates and locks, which a switch would fire in one click - so
-    # they are out of the lists before anything is picked. Then lights,
-    # dimmers and switches. Nothing is picked by default.
+    # Lighting outputs and outputs each have one screen with three fields:
+    # what Home Assistant controls, and the ones never to offer - outputs
+    # that drive gates and locks, which a switch would fire in one click. A
+    # resource in two fields is a form error; setup also keeps the safest
+    # role of options that arrive otherwise (roles.py). The stored keys are
+    # the same as before 0.11 - lights, switches, output_sensors, excluded -
+    # each screen edits only its own type's part of them.
 
     def _pickable(self, names: list[str], keep: Iterable[str] = ()) -> list[str]:
         """The names minus the excluded ones, except those in keep."""
@@ -631,10 +657,9 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         return [name for name in names if name not in excluded]
 
     def _in_use(self) -> set[str]:
-        """Outputs another entity already reads or drives."""
+        """Outputs a valve already reads or drives."""
         valves = self._options.get(OPT_VALVES, [])
         return {
-            *self._options.get(OPT_OUTPUT_SENSORS, []),
             *(section for valve in valves for section in valve.get(VALVE_SECTIONS, [])),
             *(valve[VALVE_MAIN] for valve in valves if valve.get(VALVE_MAIN)),
         }
@@ -660,7 +685,6 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         key: str,
         names: list[str],
         user_input: dict[str, Any] | None,
-        next_step: Callable[[], Coroutine[Any, Any, ConfigFlowResult]],
     ) -> ConfigFlowResult:
         """A list to pick from, with "select all" for long lists: ticking it
         shows the same form again with everything selected, to untick a few -
@@ -669,74 +693,126 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             if user_input.get(SELECT_ALL):
                 return self._pick_form(step_id, key, names, offer_all=True, selected=names)
             self._options[key] = user_input.get(key, [])
-            return await next_step()
+            return await self.async_step_menu()
         return self._pick_form(step_id, key, names, offer_all=True)
+
+    def _roles_form(
+        self,
+        step_id: str,
+        names: list[str],
+        values: dict[str, list[str]],
+        errors: dict[str, str] | None = None,
+        placeholders: dict[str, str] | None = None,
+    ) -> ConfigFlowResult:
+        fields: dict[Any, Any] = {
+            vol.Optional(key, default=[n for n in selected if n in names]): _pick_many(names)
+            for key, selected in values.items()
+        }
+        fields[vol.Optional(SELECT_ALL, default=False)] = BooleanSelector()
+        return self.async_show_form(
+            step_id=step_id,
+            data_schema=vol.Schema(fields),
+            errors=errors or {},
+            description_placeholders=placeholders or {"resource": ""},
+        )
+
+    async def _roles_step(
+        self,
+        step_id: str,
+        names: list[str],
+        keys: list[str],
+        user_input: dict[str, Any] | None,
+    ) -> ConfigFlowResult:
+        """Three fields over one list of resources; "select all" fills the
+        first field with everything the other two do not hold."""
+        mine = set(names)
+        if user_input is None:
+            values = {k: [n for n in self._options.get(k, []) if n in mine] for k in keys}
+            return self._roles_form(step_id, names, values)
+        values = {k: list(user_input.get(k, [])) for k in keys}
+        if user_input.get(SELECT_ALL):
+            others = {n for k in keys[1:] for n in values[k]}
+            values[keys[0]] = [n for n in names if n not in others]
+            return self._roles_form(step_id, names, values)
+        seen: set[str] = set()
+        for key in keys:
+            for name in values[key]:
+                if name in seen:
+                    return self._roles_form(
+                        step_id, names, values,
+                        errors={"base": "role_conflict"}, placeholders={"resource": name},
+                    )
+                seen.add(name)
+        for key in keys:
+            # Keep the other types' part of the key, in its order
+            old = self._options.get(key, [])
+            chosen = set(values[key])
+            self._options[key] = [
+                *(n for n in old if n not in mine or n in chosen),
+                *(n for n in values[key] if n not in old),
+            ]
+        return await self.async_step_menu()
 
     async def async_step_lights(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        try:
-            names = sorted(
-                {
-                    *await self._resources(ImportTypes.OUTPUT),
-                    *await self._resources(ImportTypes.LIGHT),
-                    *await self._resources(ImportTypes.DIMMER),
-                }
-            )
-        except NexoError as err:
-            return self._cannot_list(err)
-        if user_input is not None:
-            excluded = set(user_input.get(OPT_EXCLUDED, []))
-            self._options[OPT_EXCLUDED] = sorted(excluded)
-            # An excluded resource stops being controlled here as well
-            for key in (OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES):
-                if key in self._options:
-                    self._options[key] = [n for n in self._options[key] if n not in excluded]
-            return await self.async_step_lights_lights()
-        return self._pick_form("lights", OPT_EXCLUDED, names)
-
-    async def async_step_lights_lights(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
+        """Lighting outputs: lights, switches (a fan wired as a light), never offered."""
         try:
             names = await self._resources(ImportTypes.LIGHT)
         except NexoError as err:
             return self._cannot_list(err)
         in_use = self._in_use()
-        names = [n for n in self._pickable(names) if n not in in_use]
-        return await self._pick_step(
-            "lights_lights", OPT_LIGHTS, names, user_input, self.async_step_lights_dimmers
+        names = [n for n in names if n not in in_use]
+        return await self._roles_step(
+            "lights", names, [OPT_LIGHTS, OPT_SWITCHES, OPT_EXCLUDED], user_input
         )
 
-    async def async_step_lights_dimmers(
+    async def async_step_outputs(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Outputs: switches, read only, never offered."""
+        try:
+            names = await self._resources(ImportTypes.OUTPUT)
+        except NexoError as err:
+            return self._cannot_list(err)
+        in_use = self._in_use()
+        names = [n for n in names if n not in in_use]
+        return await self._roles_step(
+            "outputs", names, [OPT_SWITCHES, OPT_OUTPUT_SENSORS, OPT_EXCLUDED], user_input
+        )
+
+    async def async_step_dimmers(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         try:
             names = self._pickable(await self._resources(ImportTypes.DIMMER))
         except NexoError as err:
             return self._cannot_list(err)
-        return await self._pick_step(
-            "lights_dimmers", OPT_DIMMERS, names, user_input, self.async_step_lights_switches
-        )
+        return await self._pick_step("dimmers", OPT_DIMMERS, names, user_input)
 
-    async def async_step_lights_switches(
+    async def async_step_thermometers(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        if user_input is not None:
-            self._options[OPT_SWITCHES] = user_input.get(OPT_SWITCHES, [])
-            return await self.async_step_menu()
         try:
-            names = sorted(
-                {
-                    *await self._resources(ImportTypes.OUTPUT),
-                    *await self._resources(ImportTypes.LIGHT),
-                }
-            )
+            names = await self._resources(ImportTypes.THERMOMETER)
         except NexoError as err:
             return self._cannot_list(err)
-        taken = self._in_use() | set(self._options.get(OPT_LIGHTS, []))
-        return self._pick_form(
-            "lights_switches", OPT_SWITCHES, [n for n in self._pickable(names) if n not in taken]
+        return await self._pick_step("thermometers", OPT_THERMOMETERS, names, user_input)
+
+    # ------------------------------------------------------------------ logic
+
+    async def async_step_logic(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Entities driven by logic commands: gates and doors, buttons, programs."""
+        options = self._options
+        return self.async_show_menu(
+            step_id="logic",
+            menu_options=["covers", "buttons", "valves", "back"],
+            description_placeholders={
+                key: ", ".join(i[ITEM_NAME] for i in options.get(key, [])) or NONE
+                for key in (OPT_COVERS, OPT_BUTTONS, OPT_VALVES)
+            },
         )
 
     # ----------------------------------------------------------- thermostats
@@ -877,36 +953,17 @@ class NexoOptionsFlow(OptionsFlowWithReload):
     async def async_step_sensors(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
+        """Inputs - reed switches, motion detectors."""
         try:
-            available = {
-                OPT_BINARY_SENSORS: await self._resources(ImportTypes.SENSOR),
-                OPT_THERMOMETERS: await self._resources(ImportTypes.THERMOMETER),
-                OPT_ANALOG_SENSORS: await self._resources(ImportTypes.ANALOGSENSOR),
-                OPT_OUTPUT_SENSORS: await self._resources(ImportTypes.OUTPUT),
-            }
+            names = await self._resources(ImportTypes.SENSOR)
         except NexoError as err:
             return self._cannot_list(err)
-
         if user_input is not None:
-            self._options.update(user_input)
-            selected = set(self._options.get(OPT_ANALOG_SENSORS, []))
-            settings = self._options.get(OPT_ANALOG_SETTINGS, {})
-            for name in [n for n in settings if n not in selected]:
-                del settings[name]
+            self._options[OPT_BINARY_SENSORS] = user_input.get(OPT_BINARY_SENSORS, [])
             return await self.async_step_menu()
-
-        schema = vol.Schema(
-            {
-                # A resource renamed or removed in the central unit drops out
-                # of the defaults rather than failing validation.
-                vol.Optional(
-                    key,
-                    default=[n for n in self._options.get(key, []) if n in names],
-                ): _pick_many(names)
-                for key, names in available.items()
-            }
-        )
-        return self.async_show_form(step_id="sensors", data_schema=schema)
+        # A resource renamed or removed in the central unit drops out of the
+        # defaults rather than failing validation
+        return self._pick_form("sensors", OPT_BINARY_SENSORS, names)
 
     # ---------------------------------------------------------------- covers
 

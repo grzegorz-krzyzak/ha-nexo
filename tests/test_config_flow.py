@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from unittest.mock import patch
 
 from homeassistant.config_entries import SOURCE_USER
@@ -64,23 +66,27 @@ async def test_menu_summary(hass: HomeAssistant, fake_nexo) -> None:
     result = await hass.config_entries.options.async_init(entry.entry_id)
     assert result["type"] is FlowResultType.MENU
     assert result["menu_options"] == [
-        "connection", "sensors", "analog", "analog_outputs", "lights", "thermostats", "weather",
-        "covers", "valves", "buttons", "settings", "save",
+        "connection", "sensors", "analog", "thermometers", "lights", "dimmers", "outputs",
+        "analog_outputs", "thermostats", "logic", "weather", "settings", "save",
     ]
     placeholders = result["description_placeholders"]
     assert placeholders["address"] == "192.0.2.10:1024"
     assert result["step_id"] == "menu"
     assert placeholders["alert_open"] == '<ha-alert alert-type="success">'
     assert placeholders["binary_sensors"] == "2"
-    assert placeholders["covers"] == "Entry gate, Garage, Shed"
+    assert placeholders["logic_items"] == "6"  # 3 gates and doors, 1 button, 2 programs
+    result = await _pick(hass, result["flow_id"], "logic")
+    assert result["menu_options"] == ["covers", "buttons", "valves", "back"]
+    assert result["description_placeholders"]["covers"] == "Entry gate, Garage, Shed"
 
 
 async def test_add_edit_and_delete_cover(hass: HomeAssistant, fake_nexo) -> None:
     entry = await _setup(hass, options={})
     flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
 
+    await _pick(hass, flow_id, "logic")
     result = await _pick(hass, flow_id, "covers")
-    assert result["menu_options"] == ["add_cover", "back"]
+    assert result["menu_options"] == ["add_cover", "logic"]
     result = await _pick(hass, flow_id, "add_cover")
     result = await _submit(hass, flow_id, {**GATE, "reed_sensor": "TYPO"})
     assert result["errors"] == {"reed_sensor": "unknown_resource"}
@@ -93,7 +99,7 @@ async def test_add_edit_and_delete_cover(hass: HomeAssistant, fake_nexo) -> None
     assert result["errors"] == {"travel_time": "step_needs_unguarded"}
     result = await _submit(hass, flow_id, GATE)
     assert result["type"] is FlowResultType.MENU
-    assert result["menu_options"] == ["cover_0", "add_cover", "back"]
+    assert result["menu_options"] == ["cover_0", "add_cover", "logic"]
     assert result["description_placeholders"]["cover_0_info"] == "GO / GC · KON GATE"
 
     # Edit: the form comes prefilled, the change keeps the entity's id
@@ -102,6 +108,7 @@ async def test_add_edit_and_delete_cover(hass: HomeAssistant, fake_nexo) -> None
     result = await _submit(hass, flow_id, {**GATE, "close_command": "GZ"})
     assert result["description_placeholders"]["cover_0_info"] == "GO / GZ · KON GATE"
 
+    result = await _pick(hass, flow_id, "logic")
     result = await _pick(hass, flow_id, "back")
     assert result["step_id"] == "menu"
     assert entry.options == {}  # nothing stored before saving
@@ -114,10 +121,12 @@ async def test_add_edit_and_delete_cover(hass: HomeAssistant, fake_nexo) -> None
 
     # Delete
     flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await _pick(hass, flow_id, "logic")
     await _pick(hass, flow_id, "covers")
     await _pick(hass, flow_id, "cover_0")
     result = await _submit(hass, flow_id, {**GATE, "delete": True})
-    assert result["menu_options"] == ["add_cover", "back"]
+    assert result["menu_options"] == ["add_cover", "logic"]
+    await _pick(hass, flow_id, "logic")
     await _pick(hass, flow_id, "back")
     await _pick(hass, flow_id, "save")
     await hass.async_block_till_done()
@@ -129,16 +138,17 @@ async def test_add_edit_and_delete_cover(hass: HomeAssistant, fake_nexo) -> None
 async def test_buttons_and_sensors(hass: HomeAssistant, fake_nexo) -> None:
     entry = await _setup(hass, options={})
     flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await _pick(hass, flow_id, "logic")
     await _pick(hass, flow_id, "buttons")
     await _pick(hass, flow_id, "add_button")
     result = await _submit(hass, flow_id, {"name": "Wicket", "command": "WK"})
     assert result["description_placeholders"] == {"button_0": "Wicket", "button_0_info": "WK"}
+    result = await _pick(hass, flow_id, "logic")
+    assert result["description_placeholders"]["buttons"] == "Wicket"
     await _pick(hass, flow_id, "back")
     await _pick(hass, flow_id, "sensors")
-    result = await _submit(
-        hass, flow_id, {"binary_sensors": ["PIR HALL"], "thermometers": [], "analog_sensors": []}
-    )
-    assert result["description_placeholders"]["buttons"] == "Wicket"
+    result = await _submit(hass, flow_id, {"binary_sensors": ["PIR HALL"]})
+    assert result["description_placeholders"]["binary_sensors"] == "1"
     await _pick(hass, flow_id, "save")
     await hass.async_block_till_done()
     assert hass.states.get("button.nexo_wicket")
@@ -148,6 +158,7 @@ async def test_buttons_and_sensors(hass: HomeAssistant, fake_nexo) -> None:
 async def test_options_closed_without_saving(hass: HomeAssistant, fake_nexo) -> None:
     entry = await _setup(hass, options={})
     flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await _pick(hass, flow_id, "logic")
     await _pick(hass, flow_id, "buttons")
     await _pick(hass, flow_id, "add_button")
     await _submit(hass, flow_id, {"name": "Wicket", "command": "WK"})
@@ -212,6 +223,8 @@ async def test_reconfigure_keeps_entities(hass: HomeAssistant, fake_nexo) -> Non
 async def test_empty_menu_lists(hass: HomeAssistant, fake_nexo) -> None:
     entry = await _setup(hass, options={})
     result = await hass.config_entries.options.async_init(entry.entry_id)
+    assert result["description_placeholders"]["logic_items"] == "0"
+    result = await _pick(hass, result["flow_id"], "logic")
     assert result["description_placeholders"]["covers"] == "—"
     assert result["description_placeholders"]["buttons"] == "—"
 
@@ -231,13 +244,14 @@ async def test_forms_lead_back(hass: HomeAssistant, fake_nexo) -> None:
     assert result["step_id"] == "menu"
 
     # An empty add form: back to the submenu, nothing added
+    await _pick(hass, flow_id, "logic")
     await _pick(hass, flow_id, "covers")
     await _pick(hass, flow_id, "add_cover")
     result = await _submit(hass, flow_id, {"device_class": "gate", "open_only_when_closed": False})
     assert result["step_id"] == "covers"
-    assert result["menu_options"] == ["add_cover", "back"]
+    assert result["menu_options"] == ["add_cover", "logic"]
 
-    await _pick(hass, flow_id, "back")
+    await _pick(hass, flow_id, "logic")
     await _pick(hass, flow_id, "buttons")
     await _pick(hass, flow_id, "add_button")
     result = await _submit(hass, flow_id, {})
@@ -271,6 +285,7 @@ async def test_pin_is_masked_not_sent(hass: HomeAssistant, fake_nexo) -> None:
 async def test_add_and_edit_valve(hass: HomeAssistant, fake_nexo) -> None:
     entry = await _setup(hass, options={})
     flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await _pick(hass, flow_id, "logic")
     await _pick(hass, flow_id, "valves")
     await _pick(hass, flow_id, "add_valve")
     lawn = {
@@ -282,13 +297,14 @@ async def test_add_and_edit_valve(hass: HomeAssistant, fake_nexo) -> None:
     result = await _submit(hass, flow_id, {**lawn, "main_valve": "NO SUCH"})
     assert result["errors"] == {"main_valve": "unknown_resource"}
     result = await _submit(hass, flow_id, {**lawn, "main_valve": "ZG"})
-    assert result["menu_options"] == ["valve_0", "add_valve", "back"]
+    assert result["menu_options"] == ["valve_0", "add_valve", "logic"]
     assert result["description_placeholders"] == {
         "valve_0": "Lawn", "valve_0_info": "PST / PPR · S1, S2"
     }
     result = await _pick(hass, flow_id, "valve_0")
     assert result["step_id"] == "valve_0"
     await _submit(hass, flow_id, {**lawn, "main_valve": "ZG", "auto_close": 20})
+    await _pick(hass, flow_id, "logic")
     await _pick(hass, flow_id, "back")
     await _pick(hass, flow_id, "save")
     await hass.async_block_till_done()
@@ -340,7 +356,7 @@ async def test_analog_input_settings(hass: HomeAssistant, fake_nexo) -> None:
     entry = await _setup(hass)
     result = await hass.config_entries.options.async_init(entry.entry_id)
     result = await _pick(hass, result["flow_id"], "analog")
-    assert result["menu_options"] == ["analog_0", "back"]
+    assert result["menu_options"] == ["analog_pick", "analog_0", "back"]
     assert result["description_placeholders"]["analog_0"] == "HUMIDITY"
     placeholders = result["description_placeholders"]
     assert (placeholders["analog_0_unit"], placeholders["analog_0_offset"]) == ("—", "+0")
@@ -369,28 +385,29 @@ async def test_analog_default_and_deselected_leave_no_settings(hass: HomeAssista
     result = await _pick(hass, result["flow_id"], "analog")
     result = await _pick(hass, result["flow_id"], "analog_0")
     result = await _submit(hass, result["flow_id"], {"kind": "humidity", "offset": -3})
+    # Deselected: its settings go with it
+    result = await _pick(hass, result["flow_id"], "analog_pick")
+    result = await _submit(hass, result["flow_id"], {"analog_sensors": []})
+    assert result["menu_options"] == ["analog_pick", "back"]
     result = await _pick(hass, result["flow_id"], "back")
-    result = await _pick(hass, result["flow_id"], "sensors")
-    result = await _submit(hass, result["flow_id"], {
-        "binary_sensors": ["KON DOOR"], "thermometers": [], "analog_sensors": [],
-    })
     result = await _pick(hass, result["flow_id"], "save")
     assert entry.options["analog_settings"] == {}
 
 
-async def test_outputs_offered_as_sensors(hass: HomeAssistant, fake_nexo) -> None:
-    entry = await _setup(hass)
-    result = await hass.config_entries.options.async_init(entry.entry_id)
-    result = await _pick(hass, result["flow_id"], "sensors")
-    assert "output_sensors" in result["data_schema"].schema
-    result = await _submit(hass, result["flow_id"], {
-        "binary_sensors": ["KON DOOR"], "thermometers": [], "analog_sensors": [],
-        "output_sensors": ["S7"],
+async def test_outputs_screen(hass: HomeAssistant, fake_nexo) -> None:
+    """Outputs: switch, read only, never offered - the program's sections not listed."""
+    entry = await _setup(hass)  # the program Lawn uses S1 and S2
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    result = await _pick(hass, flow_id, "outputs")
+    assert sorted(_choices(result, "switches")) == ["S7", "VENT"]
+    assert sorted(_choices(result, "output_sensors")) == ["S7", "VENT"]
+    result = await _submit(hass, flow_id, {
+        "switches": ["VENT"], "output_sensors": ["S7"], "excluded": [],
     })
     assert result["description_placeholders"]["output_sensors"] == "1"
-    result = await _pick(hass, result["flow_id"], "save")
+    await _pick(hass, flow_id, "save")
     assert entry.options["output_sensors"] == ["S7"]
-
+    assert entry.options["switches"] == ["VENT"]
 
 
 def _choices(result, key: str) -> list[str]:
@@ -400,95 +417,115 @@ def _choices(result, key: str) -> list[str]:
     raise KeyError(key)
 
 
-async def test_lights_and_switches(hass: HomeAssistant, fake_nexo) -> None:
-    valve = {"name": "Lawn", "open_command": "PST", "close_command": "PPR",
-             "sections": ["S1", "S2"], "main_valve": "ZG"}
-    entry = await _setup(hass, {**OPTIONS, "valves": [{"id": "lawn", **valve}]})
+async def test_lighting_dimmers_and_thermometers(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass)  # the program Lawn uses ZG as its main valve
     flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
 
-    # 1: exclusions first, offered from every output, light and dimmer
     result = await _pick(hass, flow_id, "lights")
     assert result["step_id"] == "lights"
-    assert {"GATE PULSE", "VENT", "L1", "DIM A", "S1"} <= set(_choices(result, "excluded"))
-    result = await _submit(hass, flow_id, {"excluded": ["GATE PULSE"]})
-
-    # 2: lights - neither the excluded pulse nor the valve's main valve
-    assert result["step_id"] == "lights_lights"
-    assert _choices(result, "lights") == ["L1"]
-    result = await _submit(hass, flow_id, {"lights": ["L1"]})
-
-    # 3: dimmers
-    assert result["step_id"] == "lights_dimmers"
-    assert _choices(result, "dimmers") == ["DIM A"]
-    result = await _submit(hass, flow_id, {"dimmers": ["DIM A"]})
-
-    # 4: switches - not the valve's sections, not what became a light
-    assert result["step_id"] == "lights_switches"
-    assert sorted(_choices(result, "switches")) == ["S7", "VENT"]
-    result = await _submit(hass, flow_id, {"switches": ["VENT"]})
-
+    assert sorted(_choices(result, "lights")) == ["GATE PULSE", "L1"]
+    result = await _submit(hass, flow_id, {
+        "lights": ["L1"], "switches": [], "excluded": ["GATE PULSE"],
+    })
     assert result["type"] is FlowResultType.MENU
-    assert result["description_placeholders"]["lights"] == "1"
-    result = await _pick(hass, flow_id, "save")
-    assert entry.options["excluded"] == ["GATE PULSE"]
+
+    result = await _pick(hass, flow_id, "dimmers")
+    assert _choices(result, "dimmers") == ["DIM A"]
+    await _submit(hass, flow_id, {"dimmers": ["DIM A"]})
+    result = await _pick(hass, flow_id, "thermometers")
+    await _submit(hass, flow_id, {"thermometers": ["TMP HALL"]})
+
+    await _pick(hass, flow_id, "save")
     assert entry.options["lights"] == ["L1"]
+    assert entry.options["excluded"] == ["GATE PULSE"]
     assert entry.options["dimmers"] == ["DIM A"]
-    assert entry.options["switches"] == ["VENT"]
+    assert entry.options["thermometers"] == ["TMP HALL"]
 
 
-async def test_excluding_a_resource_stops_controlling_it(hass: HomeAssistant, fake_nexo) -> None:
-    entry = await _setup(hass, {**OPTIONS, "lights": ["L1"], "switches": ["VENT"]})
+async def test_a_light_as_a_switch(hass: HomeAssistant, fake_nexo) -> None:
+    """A fan wired as a light: picked as a switch on the Lighting screen."""
+    entry = await _setup(hass, {**OPTIONS, "valves": []})
     flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
     await _pick(hass, flow_id, "lights")
-    result = await _submit(hass, flow_id, {"excluded": ["VENT"]})
-    assert "L1" in _choices(result, "lights")
-    await _submit(hass, flow_id, {"lights": ["L1"]})
-    result = await _submit(hass, flow_id, {"dimmers": []})
-    assert "VENT" not in _choices(result, "switches")
-    await _submit(hass, flow_id, {"switches": []})
+    await _submit(hass, flow_id, {"lights": ["L1"], "switches": ["ZG"], "excluded": []})
     await _pick(hass, flow_id, "save")
-    assert entry.options["switches"] == []
+    await hass.async_block_till_done()
+    assert entry.options["switches"] == ["ZG"]
+    assert hass.states.get("switch.nexo_zg")
+
+
+@pytest.mark.parametrize(
+    ("step", "data", "resource"),
+    [
+        ("lights", {"lights": ["L1"], "switches": [], "excluded": ["L1"]}, "L1"),
+        ("outputs", {"switches": ["VENT"], "output_sensors": ["VENT"], "excluded": []}, "VENT"),
+    ],
+)
+async def test_one_role_per_resource(
+    hass: HomeAssistant, fake_nexo, step: str, data: dict, resource: str
+) -> None:
+    """The one new mechanism of 0.11: a resource in two fields is refused."""
+    entry = await _setup(hass, {**OPTIONS, "valves": []})
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await _pick(hass, flow_id, step)
+    result = await _submit(hass, flow_id, data)
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "role_conflict"}
+    assert result["description_placeholders"]["resource"] == resource
+    await _pick_menu_after_fix(hass, flow_id, step)
+    await _pick(hass, flow_id, "save")
+    assert resource not in entry.options.get("switches", [])
+
+
+async def _pick_menu_after_fix(hass: HomeAssistant, flow_id: str, step: str) -> None:
+    empty = {"lights": [], "switches": [], "excluded": []} if step == "lights" else {
+        "switches": [], "output_sensors": [], "excluded": []
+    }
+    result = await _submit(hass, flow_id, empty)
+    assert result["type"] is FlowResultType.MENU
+
+
+async def test_screens_edit_only_their_type(hass: HomeAssistant, fake_nexo) -> None:
+    """switches and excluded hold lights and outputs: each screen keeps the
+    other type's part."""
+    entry = await _setup(hass, {
+        **OPTIONS, "valves": [], "switches": ["ZG", "VENT"], "excluded": ["GATE PULSE", "S7"],
+    })
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    result = await _pick(hass, flow_id, "outputs")
+    field = next(f for f in result["data_schema"].schema if str(f) == "switches")
+    assert field.default() == ["VENT"]
+    await _submit(hass, flow_id, {"switches": [], "output_sensors": [], "excluded": ["S7"]})
+    await _pick(hass, flow_id, "save")
+    assert entry.options["switches"] == ["ZG"]
+    assert entry.options["excluded"] == ["GATE PULSE", "S7"]
 
 
 async def test_valve_form_hides_excluded_outputs(hass: HomeAssistant, fake_nexo) -> None:
     entry = await _setup(hass, {**OPTIONS, "valves": [], "excluded": ["GATE PULSE"]})
     flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await _pick(hass, flow_id, "logic")
     await _pick(hass, flow_id, "valves")
     result = await _pick(hass, flow_id, "add_valve")
     assert "GATE PULSE" not in _choices(result, "sections")
     assert "L1" in _choices(result, "sections")
 
 
-async def test_no_exclusions_needed(hass: HomeAssistant, fake_nexo) -> None:
-    entry = await _setup(hass, {**OPTIONS, "valves": []})
-    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
-    await _pick(hass, flow_id, "lights")
-    result = await _submit(hass, flow_id, {})  # nothing excluded
-    assert result["step_id"] == "lights_lights"
-    assert "GATE PULSE" in _choices(result, "lights")
-    await _submit(hass, flow_id, {})
-    await _submit(hass, flow_id, {})
-    result = await _submit(hass, flow_id, {})
-    assert result["type"] is FlowResultType.MENU
-    await _pick(hass, flow_id, "save")
-    assert entry.options["excluded"] == []
-    assert entry.options["lights"] == []
-
-
 async def test_select_all_then_untick(hass: HomeAssistant, fake_nexo) -> None:
     entry = await _setup(hass, {**OPTIONS, "valves": []})
     flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
     await _pick(hass, flow_id, "lights")
-    result = await _submit(hass, flow_id, {"excluded": ["GATE PULSE"]})
-    assert result["step_id"] == "lights_lights"
-    # Ticking "select all" saves nothing: the same form comes back, all selected
-    result = await _submit(hass, flow_id, {"lights": [], "select_all": True})
-    assert result["step_id"] == "lights_lights"
+    # Ticking "select all" saves nothing: the same form comes back, the first
+    # field holding everything the other two do not
+    result = await _submit(hass, flow_id, {
+        "lights": [], "switches": [], "excluded": ["GATE PULSE"], "select_all": True,
+    })
+    assert result["step_id"] == "lights"
     field = next(f for f in result["data_schema"].schema if str(f) == "lights")
     assert sorted(field.default()) == ["L1", "ZG"]
-    result = await _submit(hass, flow_id, {"lights": ["L1"]})  # untick ZG
-    assert result["step_id"] == "lights_dimmers"
-    await _submit(hass, flow_id, {})
-    await _submit(hass, flow_id, {})
+    result = await _submit(hass, flow_id, {
+        "lights": ["L1"], "switches": [], "excluded": ["GATE PULSE"],
+    })  # untick ZG
+    assert result["type"] is FlowResultType.MENU
     await _pick(hass, flow_id, "save")
     assert entry.options["lights"] == ["L1"]

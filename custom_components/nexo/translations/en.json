@@ -54,28 +54,30 @@
           "connection": "Connection",
           "sensors": "Sensors",
           "analog": "Analog inputs",
+          "thermometers": "Thermometers",
+          "lights": "Lighting",
+          "dimmers": "Dimmers",
+          "outputs": "Outputs",
           "analog_outputs": "Analog outputs",
-          "lights": "Lights and switches",
           "thermostats": "Thermostats",
+          "logic": "Logic",
           "weather": "Weather station",
-          "covers": "Gates and doors",
-          "valves": "Valves",
-          "buttons": "Buttons",
           "settings": "Settings",
           "save": "Save and close"
         },
         "menu_option_descriptions": {
           "connection": "{address} · connected",
-          "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors} · outputs: {output_sensors}",
-          "covers": "{covers}",
-          "buttons": "{buttons}",
-          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
-          "save": "Closing the window with ✕ discards the changes",
-          "valves": "{valves}",
-          "analog": "Type and calibration",
-          "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}",
+          "sensors": "Inputs: {binary_sensors}",
+          "analog": "Nexo type: Analog sensor · inputs: {analog_sensors}",
+          "thermometers": "Thermometers: {thermometers}",
+          "lights": "Light, switch or never offered · lights: {lights}",
+          "dimmers": "Dimmers: {dimmers}",
+          "outputs": "Switch, read only or never offered · read only: {output_sensors}",
+          "analog_outputs": "Outputs: {analog_outputs}",
           "thermostats": "Thermostats: {thermostats}",
-          "analog_outputs": "Outputs: {analog_outputs}"
+          "logic": "Gates and doors, buttons, programs: {logic_items}",
+          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
+          "save": "Closing the window with ✕ discards the changes"
         },
         "description": ""
       },
@@ -85,28 +87,30 @@
           "connection": "Connection",
           "sensors": "Sensors",
           "analog": "Analog inputs",
+          "thermometers": "Thermometers",
+          "lights": "Lighting",
+          "dimmers": "Dimmers",
+          "outputs": "Outputs",
           "analog_outputs": "Analog outputs",
-          "lights": "Lights and switches",
           "thermostats": "Thermostats",
+          "logic": "Logic",
           "weather": "Weather station",
-          "covers": "Gates and doors",
-          "valves": "Valves",
-          "buttons": "Buttons",
           "settings": "Settings",
           "save": "Save and close"
         },
         "menu_option_descriptions": {
           "connection": "{address}",
-          "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors} · outputs: {output_sensors}",
-          "covers": "{covers}",
-          "buttons": "{buttons}",
-          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
-          "save": "Closing the window with ✕ discards the changes",
-          "valves": "{valves}",
-          "analog": "Type and calibration",
-          "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}",
+          "sensors": "Inputs: {binary_sensors}",
+          "analog": "Nexo type: Analog sensor · inputs: {analog_sensors}",
+          "thermometers": "Thermometers: {thermometers}",
+          "lights": "Light, switch or never offered · lights: {lights}",
+          "dimmers": "Dimmers: {dimmers}",
+          "outputs": "Switch, read only or never offered · read only: {output_sensors}",
+          "analog_outputs": "Outputs: {analog_outputs}",
           "thermostats": "Thermostats: {thermostats}",
-          "analog_outputs": "Outputs: {analog_outputs}"
+          "logic": "Gates and doors, buttons, programs: {logic_items}",
+          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
+          "save": "Closing the window with ✕ discards the changes"
         },
         "description": "{alert_open}The central unit is not answering{alert_close}"
       },
@@ -116,28 +120,30 @@
           "connection": "Connection",
           "sensors": "Sensors",
           "analog": "Analog inputs",
+          "thermometers": "Thermometers",
+          "lights": "Lighting",
+          "dimmers": "Dimmers",
+          "outputs": "Outputs",
           "analog_outputs": "Analog outputs",
-          "lights": "Lights and switches",
           "thermostats": "Thermostats",
+          "logic": "Logic",
           "weather": "Weather station",
-          "covers": "Gates and doors",
-          "valves": "Valves",
-          "buttons": "Buttons",
           "settings": "Settings",
           "save": "Save and close"
         },
         "menu_option_descriptions": {
           "connection": "{address}",
-          "sensors": "Inputs: {binary_sensors} · thermometers: {thermometers} · analogue: {analog_sensors} · outputs: {output_sensors}",
-          "covers": "{covers}",
-          "buttons": "{buttons}",
-          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
-          "save": "Closing the window with ✕ discards the changes",
-          "valves": "{valves}",
-          "analog": "Type and calibration",
-          "lights": "Lights: {lights} · dimmers: {dimmers} · switches: {switches} · excluded: {excluded}",
+          "sensors": "Inputs: {binary_sensors}",
+          "analog": "Nexo type: Analog sensor · inputs: {analog_sensors}",
+          "thermometers": "Thermometers: {thermometers}",
+          "lights": "Light, switch or never offered · lights: {lights}",
+          "dimmers": "Dimmers: {dimmers}",
+          "outputs": "Switch, read only or never offered · read only: {output_sensors}",
+          "analog_outputs": "Outputs: {analog_outputs}",
           "thermostats": "Thermostats: {thermostats}",
-          "analog_outputs": "Outputs: {analog_outputs}"
+          "logic": "Gates and doors, buttons, programs: {logic_items}",
+          "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
+          "save": "Closing the window with ✕ discards the changes"
         },
         "description": "{alert_open}Connection changed – choose Save and close to apply it{alert_close}"
       },
@@ -165,7 +171,7 @@
           "cover_18": "{cover_18}",
           "cover_19": "{cover_19}",
           "add_cover": "Add a gate or door",
-          "back": "Back"
+          "logic": "Back"
         },
         "menu_option_descriptions": {
           "cover_0": "{cover_0_info}",
@@ -214,7 +220,7 @@
           "button_18": "{button_18}",
           "button_19": "{button_19}",
           "add_button": "Add a button",
-          "back": "Back"
+          "logic": "Back"
         },
         "menu_option_descriptions": {
           "button_0": "{button_0_info}",
@@ -255,53 +261,26 @@
       },
       "sensors": {
         "title": "Sensors",
-        "description": "The lists are read from the central unit.",
+        "description": "The central unit's inputs: reed switches, motion detectors.",
         "data": {
-          "binary_sensors": "Inputs (reed switches, motion detectors)",
-          "thermometers": "Thermometers",
-          "analog_sensors": "Analogue inputs",
-          "output_sensors": "Outputs (read only)"
+          "binary_sensors": "Sensors"
         },
         "data_description": {
-          "binary_sensors": "On when violated: a door open, motion detected. Set what each one is under \"Show as\" in its entity settings.",
-          "analog_sensors": "Set the type and calibration of each under Analog inputs.",
-          "output_sensors": "On while the output is switched on. Useful for anything a rule in the central unit mirrors onto an output. Read only; to control an output, pick it under Lights and switches."
+          "binary_sensors": "On when violated: a door open, motion detected. Set what each one is under \"Show as\" in its entity settings."
         }
       },
       "lights": {
-        "title": "Excluded resources",
-        "description": "Step 1 of 4. Pick outputs that drive gates, doors or locks: they will never appear in the lists of lights, switches or valves. If there are none, leave this empty.",
-        "data": {
-          "excluded": "Never offer"
-        }
-      },
-      "lights_lights": {
-        "title": "Lights",
-        "description": "Step 2 of 4. Lighting outputs to switch on and off. Outputs already used by a valve or read as sensors are not listed.",
+        "title": "Lighting",
+        "description": "The central unit's lighting outputs, each in one field at most: a light, a switch (a fan wired as a light, say) or never offered. Outputs a program uses as sections are not listed.",
         "data": {
           "lights": "Lights",
+          "switches": "Switches",
+          "excluded": "Never offer",
           "select_all": "Select all"
         },
         "data_description": {
-          "select_all": "Shows this list again with everything selected, to untick a few."
-        }
-      },
-      "lights_dimmers": {
-        "title": "Dimmers",
-        "description": "Step 3 of 4. Dimmers, with brightness. Switched on without a brightness, a dimmer gets the central unit's own \"on\" command, as from NexoVision; a brightness is written as a level.",
-        "data": {
-          "dimmers": "Dimmers",
-          "select_all": "Select all"
-        },
-        "data_description": {
-          "select_all": "Shows this list again with everything selected, to untick a few."
-        }
-      },
-      "lights_switches": {
-        "title": "Switches",
-        "description": "Step 4 of 4. Other outputs to switch on and off, such as a ventilation unit. Outputs picked as lights are not listed.",
-        "data": {
-          "switches": "Switches"
+          "excluded": "Outputs that drive gates, doors or locks: a switch in Home Assistant would fire them in one click. They are left out of every list.",
+          "select_all": "Fills Lights with everything the other two fields do not hold, to untick a few."
         }
       },
       "thermostats": {
@@ -331,8 +310,9 @@
       },
       "analog": {
         "title": "Analog inputs",
-        "description": "Pick an input to set its type and calibration. The list follows the analog inputs selected under Sensors.",
+        "description": "Nexo type: Analog sensor. Pick the inputs, then set the type and calibration of each.",
         "menu_options": {
+          "analog_pick": "Pick inputs",
           "analog_0": "{analog_0}",
           "analog_1": "{analog_1}",
           "analog_2": "{analog_2}",
@@ -1305,7 +1285,7 @@
         "description": "Each read takes about 50 ms. After a gate or valve command, the resources that show its effect are read every second for a while, whatever these intervals."
       },
       "valves": {
-        "title": "Valves",
+        "title": "Programs",
         "menu_options": {
           "valve_0": "{valve_0}",
           "valve_1": "{valve_1}",
@@ -1327,8 +1307,8 @@
           "valve_17": "{valve_17}",
           "valve_18": "{valve_18}",
           "valve_19": "{valve_19}",
-          "add_valve": "Add a valve",
-          "back": "Back"
+          "add_valve": "Add a program",
+          "logic": "Back"
         },
         "menu_option_descriptions": {
           "valve_0": "{valve_0_info}",
@@ -1354,7 +1334,7 @@
         }
       },
       "add_valve": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands. Submit an empty form to go back.",
         "data": {
           "name": "Name",
@@ -1372,7 +1352,7 @@
         }
       },
       "valve_0": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1391,7 +1371,7 @@
         }
       },
       "valve_1": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1410,7 +1390,7 @@
         }
       },
       "valve_2": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1429,7 +1409,7 @@
         }
       },
       "valve_3": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1448,7 +1428,7 @@
         }
       },
       "valve_4": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1467,7 +1447,7 @@
         }
       },
       "valve_5": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1486,7 +1466,7 @@
         }
       },
       "valve_6": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1505,7 +1485,7 @@
         }
       },
       "valve_7": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1524,7 +1504,7 @@
         }
       },
       "valve_8": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1543,7 +1523,7 @@
         }
       },
       "valve_9": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1562,7 +1542,7 @@
         }
       },
       "valve_10": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1581,7 +1561,7 @@
         }
       },
       "valve_11": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1600,7 +1580,7 @@
         }
       },
       "valve_12": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1619,7 +1599,7 @@
         }
       },
       "valve_13": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1638,7 +1618,7 @@
         }
       },
       "valve_14": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1657,7 +1637,7 @@
         }
       },
       "valve_15": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1676,7 +1656,7 @@
         }
       },
       "valve_16": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1695,7 +1675,7 @@
         }
       },
       "valve_17": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1714,7 +1694,7 @@
         }
       },
       "valve_18": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1733,7 +1713,7 @@
         }
       },
       "valve_19": {
-        "title": "Valve",
+        "title": "Program",
         "description": "A watering program or anything else started and stopped by a pair of logic commands.",
         "data": {
           "name": "Name",
@@ -1750,6 +1730,65 @@
           "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
           "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
         }
+      },
+      "analog_pick": {
+        "title": "Analog inputs",
+        "description": "Analog inputs to import.",
+        "data": {
+          "analog_sensors": "Analog inputs"
+        }
+      },
+      "thermometers": {
+        "title": "Thermometers",
+        "description": "Thermometers to import. A thermostat's thermometer is read with the thermostat anyway.",
+        "data": {
+          "thermometers": "Thermometers",
+          "select_all": "Select all"
+        },
+        "data_description": {
+          "select_all": "Shows this list again with everything selected, to untick a few."
+        }
+      },
+      "dimmers": {
+        "title": "Dimmers",
+        "description": "Dimmers, with brightness. Switched on without a brightness, a dimmer gets the central unit's own \"on\" command, as from NexoVision; a brightness is written as a level.",
+        "data": {
+          "dimmers": "Dimmers",
+          "select_all": "Select all"
+        },
+        "data_description": {
+          "select_all": "Shows this list again with everything selected, to untick a few."
+        }
+      },
+      "outputs": {
+        "title": "Outputs",
+        "description": "The central unit's outputs (relay modules), each in one field at most: a switch, read only or never offered. Outputs a program uses as sections are not listed.",
+        "data": {
+          "switches": "Switches",
+          "output_sensors": "Read only",
+          "excluded": "Never offer",
+          "select_all": "Select all"
+        },
+        "data_description": {
+          "output_sensors": "On while the output is switched on. Useful for anything a rule in the central unit mirrors onto an output.",
+          "excluded": "Outputs that drive gates, doors or locks: a switch in Home Assistant would fire them in one click. They are left out of every list.",
+          "select_all": "Fills Switches with everything the other two fields do not hold, to untick a few."
+        }
+      },
+      "logic": {
+        "title": "Logic",
+        "description": "Entities driven by the central unit's logic commands.",
+        "menu_options": {
+          "covers": "Gates and doors",
+          "buttons": "Buttons",
+          "valves": "Programs",
+          "back": "Back"
+        },
+        "menu_option_descriptions": {
+          "covers": "{covers}",
+          "buttons": "{buttons}",
+          "valves": "Started and stopped by a pair of logic commands, such as watering; relay outputs as sections · {valves}"
+        }
       }
     },
     "error": {
@@ -1763,7 +1802,8 @@
       "step_needs_unguarded": "The Step button needs \"Open only when confirmed closed\" off: it stops a moving gate with the opposite command.",
       "main_valve_is_a_section": "The main valve cannot also be one of the sections.",
       "unknown_resource": "No such resource in the central unit.",
-      "no_weather_station": "This central unit has no weather station card."
+      "no_weather_station": "This central unit has no weather station card.",
+      "role_conflict": "\"{resource}\" is picked in two fields - each resource takes one role."
     },
     "abort": {
       "cannot_list": "Cannot read the resource list from the central unit.",
@@ -1852,6 +1892,12 @@
   "device": {
     "weather_station": {
       "name": "Weather station"
+    }
+  },
+  "issues": {
+    "role_conflict": {
+      "title": "Nexo: a resource in two roles",
+      "description": "The stored options give these resources more than one role; the safest is used - never offered, then read only, then light or switch: {resources}. Open the Nexo options and save the Lighting or Outputs screen to fix it."
     }
   }
 }

@@ -20,7 +20,8 @@ async def async_setup_entry(
 ) -> None:
     coordinator = entry.runtime_data.coordinator
     async_add_entities(
-        NexoSwitch(coordinator, "switch", name) for name in entry.options.get(OPT_SWITCHES, [])
+        NexoSwitch(coordinator, "switch", name)
+        for name in entry.runtime_data.options.get(OPT_SWITCHES, [])
     )
 
 

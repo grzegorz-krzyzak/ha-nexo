@@ -55,44 +55,59 @@ and will not work. The entry is named after the address, e.g.
 *Nexo · 192.168.0.100:1024*, and follows it when the address changes - unless
 you rename it.
 
-**Everything else is in the integration's options** (*Configure*), a menu that
-shows the current settings next to each item:
+**Everything else is in the integration's options** (*Configure*), a menu by
+the central unit's resource types - the names of the installer's manual, the
+order of NexoVision's list - with the current settings next to each item:
 
 - **Connection** - address, port and PIN. The connection status is shown next
   to the address, and at the top of the menu when the central unit is not
   answering or the connection has unsaved changes. Also available as
   *Reconfigure* in the ⋮ menu. Entities are kept when the address changes.
-- **Sensors** - the lists come from the central unit. Each imported resource
-  costs one query of about 50 ms each time it is read.
-- **Analog inputs** - the type and calibration of each imported analog input
-  (see *Analog inputs*).
-- **Lights and switches** - four screens in a row: excluded resources, lights,
-  dimmers, switches (see *Lights and switches*).
+- **Sensors** - inputs: reed switches, motion detectors.
+- **Analog inputs** (NexoVision: *Analog sensor*) - the inputs to import, then
+  the type and calibration of each (see *Analog inputs*).
+- **Thermometers** - a thermostat's own thermometer is read with it anyway.
+- **Lighting** - lighting outputs, each as a light, a switch or never offered
+  (see *Lighting and outputs*).
+- **Dimmers** - with brightness.
+- **Outputs** - each as a switch, read only or never offered.
+- **Analog outputs** - see *Analog outputs*.
 - **Thermostats** - the thermostats to import, then heating or cooling for
   each; each brings the thermometer and the range set for it in the central
   unit (see *Thermostats*).
-- **Gates and doors**, **Valves** and **Buttons** - one entry each; pick one to
-  edit or delete it. Up to 20 of each.
+- **Logic** - entities driven by logic commands: **Gates and doors**,
+  **Buttons** and **Programs** (started and stopped by a pair of commands,
+  such as watering, with relay outputs as sections). Pick one to edit or
+  delete it. Up to 20 of each.
+- **Weather station** - see *Weather station*.
 - **Settings** - how often each group of resources is read (see *Polling*).
 
+Each listed resource costs one query of about 50 ms each time it is read.
 Nothing is stored until **Save and close**; closing the dialog discards the
 changes. Home Assistant forms have no back button: submitting a form without
 changes - or an empty *add* form - goes back to the menu.
 
-### Lights and switches
+### Lighting and outputs
 
 Nothing is added on its own: every light, dimmer and switch is picked by hand.
 
-**Exclude first.** Central units often drive a gate's pulses or a door
-strike from lighting outputs, for want of free relay outputs, and the
-integration cannot tell them from lights by name. A switch in Home Assistant
-would fire them in one click - or with a voice command such as "turn
-everything off in the garage". So the first screen is a list of resources
-never to offer. Put every output that drives a gate, door or lock there once;
-from then on it is left out of the lists of lights, switches and valve
-outputs. With no such outputs, leave the list empty and go on - the screen
-asks for nothing. Outputs already used by a valve or read as sensors are not
-offered either.
+*Lighting* and *Outputs* each have one screen with three fields - lights or
+read only, switches, and **never offer**. A resource goes in one field at
+most; picking it twice is refused with its name. A lighting output can be a
+switch too, for a fan wired as a light, say.
+
+**Never offer the outputs that drive a gate, door or lock.** Central units
+often drive a gate's pulses or a door strike from lighting outputs, for want
+of free relay outputs, and the integration cannot tell them from lights by
+name. A switch in Home Assistant would fire them in one click - or with a
+voice command such as "turn everything off in the garage". Put them under
+*Never offer* once; they are then left out of every list, the programs'
+outputs included. Outputs a program uses as sections are not listed.
+
+If the stored options still give a resource two roles - edited by hand,
+restored from an old backup - setup uses the safest one (never offered, then
+read only, then light or switch), logs a warning and raises a repair issue
+(*Settings → Repairs*) until the options are saved again.
 
 The state always comes from reading the resource, never from the command: a
 command the central unit refuses, or one lost with the connection, shows an

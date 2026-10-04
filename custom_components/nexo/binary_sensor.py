@@ -39,7 +39,7 @@ async def async_setup_entry(
             ),
             *(
                 NexoOutputSensor(coordinator, "output", name)
-                for name in entry.options.get(OPT_OUTPUT_SENSORS, [])
+                for name in entry.runtime_data.options.get(OPT_OUTPUT_SENSORS, [])
             ),
             *(
                 WeatherCondition(coordinator, condition, weather_names[weather.AURA])
