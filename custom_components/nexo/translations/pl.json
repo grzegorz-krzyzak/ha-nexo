@@ -279,7 +279,7 @@
           "select_all": "Zaznacz wszystkie"
         },
         "data_description": {
-          "excluded": "Wyjścia, których HA nie ma sterować - impulsy bram, drzwi i zamków albo wyjścia sterowane przez termostaty. Nie pojawią się na listach niżej na tym ekranie ani na liście sekcji w Logika → Programy. Wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
+          "excluded": "Wyjścia, którymi HA nie ma sterować - impulsy bram, drzwi i zamków albo wyjścia sterowane przez termostaty. Nie pojawią się na listach niżej na tym ekranie ani na liście sekcji w Logika → Programy. Wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
           "select_all": "Wypełnia pole Światła wszystkim, czego nie ma w polach wyżej, żeby odznaczyć kilka pozycji."
         }
       },
@@ -1770,7 +1770,7 @@
           "select_all": "Zaznacz wszystkie"
         },
         "data_description": {
-          "excluded": "Wyjścia, których HA nie ma sterować - impulsy bram, drzwi i zamków albo wyjścia sterowane przez termostaty. Nie pojawią się na listach niżej na tym ekranie ani na liście sekcji w Logika → Programy. Wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
+          "excluded": "Wyjścia, którymi HA nie ma sterować - impulsy bram, drzwi i zamków albo wyjścia sterowane przez termostaty. Nie pojawią się na listach niżej na tym ekranie ani na liście sekcji w Logika → Programy. Wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
           "output_sensors": "Włączony, gdy wyjście jest załączone. Przydatne do wszystkiego, co reguła w centrali odwzorowuje na wyjście.",
           "select_all": "Wypełnia pole Przełączniki wszystkim, czego nie ma w polach wyżej, żeby odznaczyć kilka pozycji."
         }
