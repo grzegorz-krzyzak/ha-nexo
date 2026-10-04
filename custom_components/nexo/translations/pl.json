@@ -280,6 +280,8 @@
         },
         "data_description": {
           "excluded": "Wyjścia, którymi HA nie ma sterować - impulsy bram, drzwi i zamków albo wyjścia sterowane przez termostaty. Nie pojawią się na listach niżej na tym ekranie ani na liście sekcji w Logika → Programy. Wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
+          "switches": "Wyjście oświetleniowe, które steruje czymś innym niż światło, np. wentylacją. W HA będzie przełącznikiem, nie światłem.",
+          "lights": "Włącz i wyłącz. Ściemniacze wybierasz osobno, w pozycji Ściemniacze.",
           "select_all": "Wypełnia pole Światła wszystkim, czego nie ma w polach wyżej, żeby odznaczyć kilka pozycji."
         }
       },
@@ -1772,6 +1774,7 @@
         "data_description": {
           "excluded": "Wyjścia, którymi HA nie ma sterować - impulsy bram, drzwi i zamków albo wyjścia sterowane przez termostaty. Nie pojawią się na listach niżej na tym ekranie ani na liście sekcji w Logika → Programy. Wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
           "output_sensors": "Włączony, gdy wyjście jest załączone. Przydatne do wszystkiego, co reguła w centrali odwzorowuje na wyjście.",
+          "switches": "Wyjście, którym HA steruje włącz/wyłącz, np. rekuperator. Wyjść bram i zamków tu nie wybieraj.",
           "select_all": "Wypełnia pole Przełączniki wszystkim, czego nie ma w polach wyżej, żeby odznaczyć kilka pozycji."
         }
       },

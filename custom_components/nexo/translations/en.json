@@ -280,6 +280,8 @@
         },
         "data_description": {
           "excluded": "Outputs Home Assistant must not control - the pulses of gates, doors and locks, or outputs driven by thermostats. They are left out of the lists below on this screen and of the sections list under Logic → Programs. Taken out of here, a resource is offered again once the screen is opened anew.",
+          "switches": "A lighting output that drives something other than a light, such as ventilation. In Home Assistant it becomes a switch, not a light.",
+          "lights": "On and off. Dimmers are picked separately, under Dimmers.",
           "select_all": "Fills Lights with everything the fields above do not hold, to untick a few."
         }
       },
@@ -1772,6 +1774,7 @@
         "data_description": {
           "excluded": "Outputs Home Assistant must not control - the pulses of gates, doors and locks, or outputs driven by thermostats. They are left out of the lists below on this screen and of the sections list under Logic → Programs. Taken out of here, a resource is offered again once the screen is opened anew.",
           "output_sensors": "On while the output is switched on. Useful for anything a rule in the central unit mirrors onto an output.",
+          "switches": "An output Home Assistant switches on and off, such as a ventilation unit. Do not pick the outputs of gates and locks here.",
           "select_all": "Fills Switches with everything the fields above do not hold, to untick a few."
         }
       },
