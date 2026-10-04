@@ -92,7 +92,6 @@ from .const import (
     is_default_title,
 )
 from .nexo_client import ImportTypes, NexoAuthError, NexoClient, NexoError
-from .roles import CONTROLLED
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -705,15 +704,17 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         errors: dict[str, str] | None = None,
         placeholders: dict[str, str] | None = None,
     ) -> ConfigFlowResult:
-        # What is never offered is left out of the controlled fields, as the
-        # field promises - one list per field, fixed while the form is open
-        excluded = set(values.get(OPT_EXCLUDED, []))
+        """The fields top down, each listing what the fields above do not
+        hold - fixed while the form is open, so a change shows in the lists
+        below once the form comes back."""
         fields: dict[Any, Any] = {}
+        above: set[str] = set()
         for key, selected in values.items():
-            choices = [n for n in names if n not in excluded] if key in CONTROLLED else names
+            choices = [n for n in names if n not in above]
             fields[vol.Optional(key, default=[n for n in selected if n in choices])] = (
                 _pick_many(choices)
             )
+            above |= set(selected)
         fields[vol.Optional(SELECT_ALL, default=False)] = BooleanSelector()
         return self.async_show_form(
             step_id=step_id,
@@ -729,28 +730,36 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         keys: list[str],
         user_input: dict[str, Any] | None,
     ) -> ConfigFlowResult:
-        """Three fields over one list of resources; "select all" fills the
-        first field with everything the other two do not hold."""
+        """Three fields over one list of resources, top down: never offered,
+        then the safer role, then the last. Each resource in one field at
+        most; "select all" fills the last field with what the others do not
+        hold, as they are when it is ticked."""
         mine = set(names)
         if user_input is None:
-            values = {k: [n for n in self._options.get(k, []) if n in mine] for k in keys}
-            return self._roles_form(step_id, names, values)
+            values: dict[str, list[str]] = {}
+            later: set[str] = set()
+            for key in reversed(keys):
+                # A resource stored in two fields shows in the lower one - the
+                # role it is used in (an output read as a sensor and also never
+                # offered, as before 0.11.1, stays read only)
+                values[key] = [
+                    n for n in self._options.get(key, []) if n in mine and n not in later
+                ]
+                later |= set(values[key])
+            return self._roles_form(step_id, names, {k: values[k] for k in keys})
         values = {k: list(user_input.get(k, [])) for k in keys}
         if user_input.get(SELECT_ALL):
-            others = {n for k in keys[1:] for n in values[k]}
-            values[keys[0]] = [n for n in names if n not in others]
+            others = {n for k in keys[:-1] for n in values[k]}
+            values[keys[-1]] = [n for n in names if n not in others]
             return self._roles_form(step_id, names, values)
-        # Controlled in one field and nothing else; read only together with
-        # never offered is fine (roles.py)
+        seen: set[str] = set()
         for key in keys:
-            if key not in CONTROLLED:
-                continue
-            others = {n for k in keys if k != key for n in values[k]}
-            if clash := next((n for n in values[key] if n in others), None):
+            if clash := next((n for n in values[key] if n in seen), None):
                 return self._roles_form(
                     step_id, names, values,
                     errors={"base": "role_conflict"}, placeholders={"resource": clash},
                 )
+            seen |= set(values[key])
         for key in keys:
             # Keep the other types' part of the key, in its order
             old = self._options.get(key, [])
@@ -772,7 +781,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         in_use = self._in_use()
         names = [n for n in names if n not in in_use]
         return await self._roles_step(
-            "lights", names, [OPT_LIGHTS, OPT_SWITCHES, OPT_EXCLUDED], user_input
+            "lights", names, [OPT_EXCLUDED, OPT_SWITCHES, OPT_LIGHTS], user_input
         )
 
     async def async_step_outputs(
@@ -786,7 +795,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         in_use = self._in_use()
         names = [n for n in names if n not in in_use]
         return await self._roles_step(
-            "outputs", names, [OPT_SWITCHES, OPT_OUTPUT_SENSORS, OPT_EXCLUDED], user_input
+            "outputs", names, [OPT_EXCLUDED, OPT_OUTPUT_SENSORS, OPT_SWITCHES], user_input
         )
 
     async def async_step_dimmers(

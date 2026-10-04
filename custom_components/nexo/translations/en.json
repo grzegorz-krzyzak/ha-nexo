@@ -271,16 +271,16 @@
       },
       "lights": {
         "title": "Lighting",
-        "description": "The central unit's lighting outputs, each in one field at most: a light, a switch (a fan wired as a light, say) or never offered. Outputs a program uses as sections are not listed.",
+        "description": "The central unit's lighting outputs, top down: never offered, switches (a fan wired as a light, say), lights - each list without what the fields above hold, each resource in one field at most. Outputs a program uses as sections are not listed.",
         "data": {
-          "lights": "Lights",
-          "switches": "Switches",
           "excluded": "Never offer",
+          "switches": "Switches",
+          "lights": "Lights",
           "select_all": "Select all"
         },
         "data_description": {
-          "excluded": "Outputs that drive gates, doors or locks: a switch in Home Assistant would fire them in one click. They are left out of every list. Taken out of here, a resource is offered again once the screen is opened anew.",
-          "select_all": "Fills Lights with everything the other two fields do not hold, to untick a few."
+          "excluded": "Outputs that drive gates, doors or locks: a switch in Home Assistant would fire them in one click. They are left out of every list below and elsewhere; taken out of here, a resource is offered again once the screen is opened anew.",
+          "select_all": "Fills Lights with everything the fields above do not hold, to untick a few."
         }
       },
       "thermostats": {
@@ -1762,17 +1762,17 @@
       },
       "outputs": {
         "title": "Outputs",
-        "description": "The central unit's outputs (relay modules), each in one field at most: a switch, read only or never offered. Outputs a program uses as sections are not listed.",
+        "description": "The central unit's outputs (relay modules), top down: never offered, read only, switches - each list without what the fields above hold, each resource in one field at most. Outputs a program uses as sections are not listed.",
         "data": {
-          "switches": "Switches",
-          "output_sensors": "Read only",
           "excluded": "Never offer",
+          "output_sensors": "Read only",
+          "switches": "Switches",
           "select_all": "Select all"
         },
         "data_description": {
+          "excluded": "Outputs that drive gates, doors or locks, or nothing to use: a switch in Home Assistant would fire them in one click. They are left out of every list below and elsewhere; taken out of here, a resource is offered again once the screen is opened anew.",
           "output_sensors": "On while the output is switched on. Useful for anything a rule in the central unit mirrors onto an output.",
-          "excluded": "Outputs that drive gates, doors or locks: a switch in Home Assistant would fire them in one click. They are left out of every list. Taken out of here, a resource is offered again once the screen is opened anew.",
-          "select_all": "Fills Switches with everything the other two fields do not hold, to untick a few."
+          "select_all": "Fills Switches with everything the fields above do not hold, to untick a few."
         }
       },
       "logic": {

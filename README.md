@@ -91,11 +91,14 @@ changes - or an empty *add* form - goes back to the menu.
 
 Nothing is added on its own: every light, dimmer and switch is picked by hand.
 
-*Lighting* and *Outputs* each have one screen with three fields - lights or
-read only, switches, and **never offer**. A resource goes in one field at
-most - except read only together with never offered; a controlled
-resource picked twice is refused with its name. A lighting output can be a
-switch too, for a fan wired as a light, say.
+*Lighting* and *Outputs* each have one screen with three fields, top down:
+**never offer**, then switches and lights (*Lighting*) or read only and
+switches (*Outputs*). Each list leaves out what the fields above hold, so the
+lowest is the shortest; a change shows in the lists below once the form comes
+back. A resource goes in one field at most - picked twice, it is refused with
+its name. A lighting output can be a switch too, for a fan wired as a light,
+say. *Select all* fills the lowest field with everything the others do not
+hold, as they are when it is ticked.
 
 **Never offer the outputs that drive a gate, door or lock.** Central units
 often drive a gate's pulses or a door strike from lighting outputs, for want
@@ -105,8 +108,9 @@ voice command such as "turn everything off in the garage". Put them under
 *Never offer* once; they are then left out of every list, the programs'
 outputs included. Outputs a program uses as sections are not listed.
 
-*Never offer* keeps a resource from being controlled; reading it stays fine -
-an output can be both read only and never offered. If the stored options
+Options saved before 0.11.1 could hold an output both read only and never
+offered; the *Outputs* screen shows it read only and saving settles it there.
+If the stored options
 still give a resource a controlled role next to another one - edited by hand,
 restored from an old backup - setup keeps the safer role (never offered or
 read only, then light, dimmer, switch), logs a warning and raises a repair

@@ -271,16 +271,16 @@
       },
       "lights": {
         "title": "Oświetlenie",
-        "description": "Wyjścia oświetleniowe centrali, każde najwyżej w jednym polu: światło, przełącznik (np. wentylacja wpięta w obwód światła) albo nigdy nie proponuj. Wyjścia użyte przez program jako sekcje nie są na liście.",
+        "description": "Wyjścia oświetleniowe centrali, od góry: nigdy nie proponuj, przełączniki (np. wentylacja wpięta w obwód światła), światła - każda lista bez tego, co zaznaczone wyżej, każdy zasób najwyżej w jednym polu. Wyjścia użyte przez program jako sekcje nie są na liście.",
         "data": {
-          "lights": "Światła",
-          "switches": "Przełączniki",
           "excluded": "Nigdy nie proponuj",
+          "switches": "Przełączniki",
+          "lights": "Światła",
           "select_all": "Zaznacz wszystkie"
         },
         "data_description": {
-          "excluded": "Wyjścia sterujące bramami, drzwiami lub zamkami: przełącznik w HA uruchomiłby je jednym kliknięciem. Nie pojawią się na żadnej liście. Wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
-          "select_all": "Wypełnia pole Światła wszystkim, czego nie ma w pozostałych polach, żeby odznaczyć kilka pozycji."
+          "excluded": "Wyjścia sterujące bramami, drzwiami lub zamkami: przełącznik w HA uruchomiłby je jednym kliknięciem. Nie pojawią się na listach niżej ani nigdzie indziej; wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
+          "select_all": "Wypełnia pole Światła wszystkim, czego nie ma w polach wyżej, żeby odznaczyć kilka pozycji."
         }
       },
       "thermostats": {
@@ -1762,17 +1762,17 @@
       },
       "outputs": {
         "title": "Wyjścia",
-        "description": "Wyjścia centrali (moduły przekaźników), każde najwyżej w jednym polu: przełącznik, tylko odczyt albo nigdy nie proponuj. Wyjścia użyte przez program jako sekcje nie są na liście.",
+        "description": "Wyjścia centrali (moduły przekaźników), od góry: nigdy nie proponuj, tylko odczyt, przełączniki - każda lista bez tego, co zaznaczone wyżej, każdy zasób najwyżej w jednym polu. Wyjścia użyte przez program jako sekcje nie są na liście.",
         "data": {
-          "switches": "Przełączniki",
-          "output_sensors": "Tylko odczyt",
           "excluded": "Nigdy nie proponuj",
+          "output_sensors": "Tylko odczyt",
+          "switches": "Przełączniki",
           "select_all": "Zaznacz wszystkie"
         },
         "data_description": {
+          "excluded": "Wyjścia sterujące bramami, drzwiami lub zamkami albo niepotrzebne: przełącznik w HA uruchomiłby je jednym kliknięciem. Nie pojawią się na listach niżej ani nigdzie indziej; wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
           "output_sensors": "Włączony, gdy wyjście jest załączone. Przydatne do wszystkiego, co reguła w centrali odwzorowuje na wyjście.",
-          "excluded": "Wyjścia sterujące bramami, drzwiami lub zamkami: przełącznik w HA uruchomiłby je jednym kliknięciem. Nie pojawią się na żadnej liście. Wyjęte stąd wrócą do wyboru po ponownym otwarciu ekranu.",
-          "select_all": "Wypełnia pole Przełączniki wszystkim, czego nie ma w pozostałych polach, żeby odznaczyć kilka pozycji."
+          "select_all": "Wypełnia pole Przełączniki wszystkim, czego nie ma w polach wyżej, żeby odznaczyć kilka pozycji."
         }
       },
       "logic": {

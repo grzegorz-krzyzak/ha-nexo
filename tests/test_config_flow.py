@@ -531,27 +531,47 @@ async def test_select_all_then_untick(hass: HomeAssistant, fake_nexo) -> None:
     assert entry.options["lights"] == ["L1"]
 
 
-async def test_read_only_may_also_be_excluded(hass: HomeAssistant, fake_nexo) -> None:
-    entry = await _setup(hass, {**OPTIONS, "valves": []})
-    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
-    await _pick(hass, flow_id, "outputs")
-    result = await _submit(hass, flow_id, {
-        "switches": [], "output_sensors": ["S7"], "excluded": ["S7"],
+async def test_read_only_and_never_offered_settle_on_read_only(
+    hass: HomeAssistant, fake_nexo
+) -> None:
+    """Before 0.11.1 an output could be read and also never offered (the
+    sleep-mode output). The screen shows it read only and saving takes it
+    out of never offered - the sensor stays."""
+    entry = await _setup(hass, {
+        **OPTIONS, "valves": [], "output_sensors": ["S7"], "excluded": ["S7", "GATE PULSE"],
     })
-    assert result["type"] is FlowResultType.MENU
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    result = await _pick(hass, flow_id, "outputs")
+    defaults = {str(f): f.default() for f in result["data_schema"].schema if str(f) != "select_all"}
+    assert defaults == {"excluded": [], "output_sensors": ["S7"], "switches": []}
+    await _submit(hass, flow_id, defaults)
     await _pick(hass, flow_id, "save")
-    assert entry.options["output_sensors"] == ["S7"] and entry.options["excluded"] == ["S7"]
+    await hass.async_block_till_done()
+    assert entry.options["output_sensors"] == ["S7"]
+    assert entry.options["excluded"] == ["GATE PULSE"]  # the lighting part untouched
+    assert hass.states.get("binary_sensor.nexo_s7")
 
 
 async def test_never_offered_left_out_of_controlled_fields(hass: HomeAssistant, fake_nexo) -> None:
-    """The field says "never offer": the switch and light fields must not list them."""
+    """Top down, each list without what the fields above hold."""
     entry = await _setup(hass, {**OPTIONS, "valves": [], "excluded": ["VENT", "GATE PULSE"]})
     flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
     result = await _pick(hass, flow_id, "outputs")
     assert "VENT" not in _choices(result, "switches")
+    assert "VENT" not in _choices(result, "output_sensors")
     assert "VENT" in _choices(result, "excluded")
-    assert "VENT" in _choices(result, "output_sensors")
     await _submit(hass, flow_id, {"switches": [], "output_sensors": [], "excluded": ["VENT"]})
     result = await _pick(hass, flow_id, "lights")
     assert "GATE PULSE" not in _choices(result, "lights")
     assert "GATE PULSE" not in _choices(result, "switches")
+
+
+async def test_each_field_lists_what_is_not_above(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass, {**OPTIONS, "valves": [], "output_sensors": ["S7"], "switches": ["ZG"]})
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    result = await _pick(hass, flow_id, "outputs")
+    assert sorted(_choices(result, "output_sensors")) == ["S1", "S2", "S7", "VENT"]
+    assert sorted(_choices(result, "switches")) == ["S1", "S2", "VENT"]
+    await _submit(hass, flow_id, {"excluded": [], "output_sensors": ["S7"], "switches": []})
+    result = await _pick(hass, flow_id, "lights")
+    assert sorted(_choices(result, "lights")) == ["GATE PULSE", "L1"]  # ZG is a switch above
