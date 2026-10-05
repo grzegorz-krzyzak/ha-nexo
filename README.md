@@ -429,11 +429,13 @@ keep ten polls (0.5 s).
 **The connection is not encrypted.** At the start the client chooses the
 card's mode, and the integration asks for `plain`; the card's answer
 `NO uSSL` agrees to it. The LAN card also has *Enable RSA encryption* in its
-settings - the `uSSL` mode - but its handshake is not documented by Nexwell,
-so the integration does not support it: keep that option off, or the
-integration is not expected to log in (not tested). Keep the central unit
-and Home Assistant on a network of their own, such as a separate VLAN.
-Encryption comes back only with a specification from Nexwell.
+settings - the `uSSL` mode, which Nexwell describes as RSA (raw) 256 bit,
+RC4 240 bit and MD5, all long outdated - but its handshake is not
+documented, so the integration does not support it: keep that option off,
+or the integration is not expected to log in (not tested). The PIN and
+every state cross the network in plain text, so never expose port 1024 to
+the internet, and put the central unit on a separate network or VLAN if
+your setup allows it.
 
 The LAN card closes a connection that has been silent longer than the
 tolerance for communication breaks set in the central unit's LAN card
