@@ -258,8 +258,9 @@ says so.
   at dusk.
 - The station is read with the *Measurements* group (60 s by default). Rules
   that act on it - closing awnings in wind, say - belong in the central unit.
-- Wind is taken as tenths of m/s, as the station sends one decimal place;
-  so far only calm has been compared with the configurator.
+- Wind is in tenths of m/s. Confirmed against the station's own calm state
+  (below 0.3 m/s): over two days of light wind, up to 1.8 m/s, calm was on
+  at every reading up to 0.2 m/s and off from 0.3 m/s.
 
 ### Analog inputs
 

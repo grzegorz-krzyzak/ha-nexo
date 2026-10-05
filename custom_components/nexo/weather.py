@@ -43,8 +43,9 @@ def temperature_celsius(state: int) -> float:
 
 
 def wind_speed(state: int) -> float:
-    """Metres per second. The station sends one decimal place and the weather
-    tab shows one, so tenths are assumed; only calm has been read so far."""
+    """Metres per second, from tenths. Confirmed with the station's own calm
+    bit (below 0.3 m/s): on at every reading up to 0.2 m/s, off from 0.3
+    (2026-10-04 to 05, wind up to 1.8 m/s)."""
     return state / 10
 
 
