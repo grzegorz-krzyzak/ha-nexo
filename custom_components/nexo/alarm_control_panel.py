@@ -73,6 +73,7 @@ class NexoPartition(NexoResourceEntity, AlarmControlPanelEntity):
     A 24h partition is shown without buttons: it is not disarmed.
     """
 
+    _group = "partitions"
     _attr_code_arm_required = True
 
     def __init__(

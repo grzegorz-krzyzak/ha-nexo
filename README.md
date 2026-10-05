@@ -85,6 +85,14 @@ the alphabetical order of the Polish names between *Connection* and
 - **Analog outputs** - see *Analog outputs*.
 - **Settings** - how often each group of resources is read (see *Polling*).
 
+**Devices follow the menu.** Each item with entities gets a device of its
+own - *Sensors*, *Lighting*, *Partitions*, *Logic* and so on - linked to the
+central unit's device, which keeps the connection sensor. Entity ids stay
+`nexo_<name>`. A switch made from a lighting output sits under *Lighting*,
+one made from an output under *Outputs*. Since 0.13; an entity named by the
+integration shows its device's name in front of its own (*Partitions ALARM
+DOM*), so give it a name of your own if you prefer it without.
+
 Each listed resource costs one query of about 50 ms each time it is read.
 Nothing is stored until **Save and close**; closing the dialog discards the
 changes. Home Assistant forms have no back button: submitting a form without

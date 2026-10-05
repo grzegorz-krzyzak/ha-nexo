@@ -80,6 +80,7 @@ class NexoLogicCover(NexoEntity, CoverEntity):
     confirms that the gate moved; only the reed switch changing does.
     """
 
+    _group = "logic"
     _attr_supported_features = CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE
 
     def __init__(

@@ -62,6 +62,7 @@ async def async_setup_entry(
 class NexoThermometer(NexoResourceEntity, SensorEntity):
     """Temperature, read numerically in tenths of a degree (233 = 23.3 °C)."""
 
+    _group = "thermometers"
     _attr_device_class = SensorDeviceClass.TEMPERATURE
     _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
     _attr_state_class = SensorStateClass.MEASUREMENT
@@ -90,6 +91,7 @@ class NexoAnalogSensor(NexoResourceEntity, SensorEntity):
     Kinds in percent are clamped to 0-100 after the offset.
     """
 
+    _group = "analog"
     _attr_state_class = SensorStateClass.MEASUREMENT
 
     def __init__(

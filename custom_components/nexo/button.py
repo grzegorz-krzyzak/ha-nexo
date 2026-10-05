@@ -68,6 +68,8 @@ class NexoLogicButton(NexoEntity, ButtonEntity):
     was sent.
     """
 
+    _group = "logic"
+
     def __init__(self, coordinator: NexoCoordinator, item: dict[str, Any]) -> None:
         super().__init__(coordinator, f"button_{item[ITEM_ID]}", item[ITEM_NAME])
         self._command: str = item[ITEM_COMMAND]
@@ -92,12 +94,14 @@ class NexoStepButton(NexoEntity, ButtonEntity):
     button.
     """
 
+    _group = "logic"
     _attr_translation_key = "step"
 
     def __init__(
         self, coordinator: NexoCoordinator, item: dict[str, Any], motion: Motion
     ) -> None:
         super().__init__(coordinator, f"step_{item[ITEM_ID]}")
+        self._suggest_entity_id(f"{item[ITEM_NAME]} step")  # named by translation
         self._item = item
         self._motion = motion
         self._attr_translation_placeholders = {"name": item[ITEM_NAME]}

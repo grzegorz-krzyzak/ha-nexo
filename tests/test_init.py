@@ -155,11 +155,58 @@ async def test_cover_without_reed_switch(hass: HomeAssistant, fake_nexo) -> None
 
 async def test_device_shows_firmware(hass: HomeAssistant, fake_nexo) -> None:
     entry = await _setup(hass)
-    [device] = dr.async_entries_for_config_entry(dr.async_get(hass), entry.entry_id)
-    assert device.identifiers == {(DOMAIN, entry.entry_id)}
+    device = dr.async_get(hass).async_get_device_by_identifier((DOMAIN, entry.entry_id), entry.entry_id)
     assert device.sw_version == "5.53 R1PLX1H2"
     assert device.manufacturer == "Nexwell"
 
+
+
+async def test_devices_by_resource_type(hass: HomeAssistant, fake_nexo, caplog) -> None:
+    """One device per item of the options menu, linked to the central unit's;
+    entity ids stay nexo_<name>."""
+    entry = await _setup(hass, {**OPTIONS, "switches": ["ZG", "VENT"], "output_sensors": ["S7"]})
+    devices = dr.async_get(hass)
+    entities = er.async_get(hass)
+    central = devices.async_get_device_by_identifier((DOMAIN, entry.entry_id), entry.entry_id)
+
+    def group(entity_id: str) -> str:
+        device = devices.async_get(entities.async_get(entity_id).device_id)
+        if device.id == central.id:
+            return "central"
+        assert device.via_device_id == central.id
+        [(_, identifier)] = device.identifiers
+        return identifier.removeprefix(f"{entry.entry_id}_")
+
+    assert {
+        entity_id: group(entity_id)
+        for entity_id in (
+            "binary_sensor.nexo_connection_to_central_unit",
+            "binary_sensor.nexo_kon_door",
+            "binary_sensor.nexo_s7",
+            "sensor.nexo_tmp_hall",
+            "sensor.nexo_humidity",
+            "switch.nexo_zg",
+            "switch.nexo_vent",
+            "cover.nexo_garage",
+            "button.nexo_garage_step",
+            "button.nexo_wicket",
+            "valve.nexo_lawn",
+        )
+    } == {
+        "binary_sensor.nexo_connection_to_central_unit": "central",
+        "binary_sensor.nexo_kon_door": "sensors",
+        "binary_sensor.nexo_s7": "outputs",
+        "sensor.nexo_tmp_hall": "thermometers",
+        "sensor.nexo_humidity": "analog",
+        "switch.nexo_zg": "lights",  # a lighting output, set on Lighting
+        "switch.nexo_vent": "outputs",
+        "cover.nexo_garage": "logic",
+        "button.nexo_garage_step": "logic",
+        "button.nexo_wicket": "logic",
+        "valve.nexo_lawn": "logic",
+    }
+    assert hass.states.get("binary_sensor.nexo_kon_door").name == "Sensors KON DOOR"
+    assert "via_device" not in caplog.text  # linked by id, as Home Assistant asks
 
 @pytest.mark.parametrize(
     ("info", "version"),

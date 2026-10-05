@@ -77,6 +77,8 @@ class NexoBinarySensor(NexoResourceEntity, BinarySensorEntity):
     Pick one in Home Assistant under "Show as".
     """
 
+    _group = "sensors"
+
     @property
     def is_on(self) -> bool | None:
         state = self.raw_state
@@ -94,6 +96,8 @@ class NexoOutputSensor(NexoResourceEntity, BinarySensorEntity):
     unit may switch it to mirror a mode or a variable. Name it and pick a
     class in Home Assistant.
     """
+
+    _group = "outputs"
 
     @property
     def is_on(self) -> bool | None:

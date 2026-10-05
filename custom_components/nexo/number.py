@@ -45,6 +45,7 @@ class NexoAnalogOutput(NexoSwitchedEntity, NumberEntity):
     and may glow at level 0. Compose the two in Home Assistant if wanted.
     """
 
+    _group = "analog_outputs"
     _attr_native_min_value = 0
     _attr_native_max_value = 100
     _attr_native_step = 1

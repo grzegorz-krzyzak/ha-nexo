@@ -1929,6 +1929,36 @@
   "device": {
     "weather_station": {
       "name": "Stacja pogodowa"
+    },
+    "sensors": {
+      "name": "Czujniki"
+    },
+    "analog": {
+      "name": "Wejścia analogowe"
+    },
+    "thermometers": {
+      "name": "Termometry"
+    },
+    "lights": {
+      "name": "Oświetlenie"
+    },
+    "dimmers": {
+      "name": "Ściemniacze"
+    },
+    "outputs": {
+      "name": "Wyjścia"
+    },
+    "analog_outputs": {
+      "name": "Wyjścia analogowe"
+    },
+    "thermostats": {
+      "name": "Termostaty"
+    },
+    "partitions": {
+      "name": "Partycje"
+    },
+    "logic": {
+      "name": "Logika"
     }
   },
   "issues": {

@@ -50,6 +50,7 @@ class NexoLogicValve(NexoEntity, ValveEntity):
     """A watering program: opened and closed by logic commands, its state
     read from the section outputs it switches (see valve_state)."""
 
+    _group = "logic"
     _attr_device_class = ValveDeviceClass.WATER
     _attr_supported_features = ValveEntityFeature.OPEN | ValveEntityFeature.CLOSE
     _attr_reports_position = False

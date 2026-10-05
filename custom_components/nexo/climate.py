@@ -62,6 +62,7 @@ class NexoThermostat(NexoResourceEntity, ClimateEntity):
     command.
     """
 
+    _group = "thermostats"
     _attr_supported_features = (
         ClimateEntityFeature.TARGET_TEMPERATURE
         | ClimateEntityFeature.TURN_ON

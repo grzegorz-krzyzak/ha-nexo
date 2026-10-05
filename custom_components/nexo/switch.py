@@ -11,6 +11,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from . import NexoConfigEntry
 from .const import OPT_SWITCHES
 from .entity import NexoSwitchedEntity
+from .nexo_client import ImportTypes
 
 
 async def async_setup_entry(
@@ -19,9 +20,13 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     coordinator = entry.runtime_data.coordinator
+    names = entry.runtime_data.options.get(OPT_SWITCHES, [])
+    # A switch is set on the screen of its resource type: lighting outputs on
+    # Lighting, outputs on Outputs - and is grouped the same way
+    lighting = set(await coordinator.hub.async_resources(ImportTypes.LIGHT)) if names else set()
     async_add_entities(
-        NexoSwitch(coordinator, "switch", name)
-        for name in entry.runtime_data.options.get(OPT_SWITCHES, [])
+        NexoSwitch(coordinator, "switch", name, "lights" if name in lighting else "outputs")
+        for name in names
     )
 
 

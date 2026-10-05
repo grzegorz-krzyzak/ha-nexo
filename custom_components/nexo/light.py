@@ -37,6 +37,7 @@ async def async_setup_entry(
 class NexoLight(NexoSwitchedEntity, LightEntity):
     """A lighting output, switched on and off."""
 
+    _group = "lights"
     _attr_color_mode = ColorMode.ONOFF
     _attr_supported_color_modes = {ColorMode.ONOFF}
 
@@ -55,6 +56,8 @@ class NexoDimmer(NexoLight):
     as from NexoVision - whatever level that means there. Only an explicit
     brightness is written as a level.
     """
+
+    _group = "dimmers"
 
     _attr_color_mode = ColorMode.BRIGHTNESS
     _attr_supported_color_modes = {ColorMode.BRIGHTNESS}
