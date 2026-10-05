@@ -426,6 +426,15 @@ does not lose its refusal. Fewer than three polls would risk reporting a
 refused command as done. Logic commands, which return what the logic answers,
 keep ten polls (0.5 s).
 
+**The connection is not encrypted.** At the start the client chooses the
+card's mode, and the integration asks for `plain`; the card's answer
+`NO uSSL` agrees to it. The LAN card also has *Enable RSA encryption* in its
+settings - the `uSSL` mode - but its handshake is not documented by Nexwell,
+so the integration does not support it: keep that option off, or the
+integration is not expected to log in (not tested). Keep the central unit
+and Home Assistant on a network of their own, such as a separate VLAN.
+Encryption comes back only with a specification from Nexwell.
+
 The LAN card closes a connection that has been silent longer than the
 tolerance for communication breaks set in the central unit's LAN card
 settings (5 s by default). With polling intervals longer than that, the
