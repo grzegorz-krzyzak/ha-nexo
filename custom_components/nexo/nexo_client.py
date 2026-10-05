@@ -782,29 +782,42 @@ class NexoClient:
                 log.warning("Unreadable thermostat entry %d: %r", index, lines)
         return result
 
-    # The central unit's reply to a wrong password (measured 2026-10-05)
+    # The central unit's replies to arming and disarming (measured 2026-10-05):
+    # it answers success too - "PARTYCJE; haslo poprawne (uzytkownik: Admin),
+    # uzbrojono:" - and a wrong password with "... haslo niepoprawne"
     WRONG_PASSWORD = "haslo niepoprawne"
+    RIGHT_PASSWORD = "haslo poprawne"
 
-    def arm(self, password: str, partition: str) -> None:
+    def _partition_command(self, verb: str, password: str, partition: str) -> str:
+        """Send 'uzbroj' or 'rozbroj' once and return the central unit's
+        reply on success; a refusal - a wrong password included - raises."""
+        shown = f"{verb} <password> {self._quote(partition)}"
+        reply = self._system(
+            "command",
+            f"{verb} {self._credential(password)} {self._quote(partition)}",
+            shown_as=shown,
+            reply_polls=self.COMMAND_REPLY_POLLS,
+            once=True,
+        )
+        if self.RIGHT_PASSWORD in reply and self.WRONG_PASSWORD not in reply:
+            log.info("%s: %s", shown, reply)
+            return reply
+        if reply:
+            raise NexoCommandError(f"Central unit refused {shown!r}: {reply}")
+        return reply
+
+    def arm(self, password: str, partition: str) -> str:
         """Arm a partition with a user password, which is kept out of logs.
 
         Sent once, never retried. A wrong password is refused with
         "PARTYCJE; proba modyfikacji stanu - haslo niepoprawne".
         """
-        self._control(
-            f"uzbroj {self._credential(password)} {self._quote(partition)}",
-            shown_as=f"uzbroj <password> {self._quote(partition)}",
-            once=True,
-        )
+        return self._partition_command("uzbroj", password, partition)
 
-    def disarm(self, password: str, partition: str) -> None:
+    def disarm(self, password: str, partition: str) -> str:
         """Disarm a partition with a user password, which is kept out of logs.
         Sent once, never retried."""
-        self._control(
-            f"rozbroj {self._credential(password)} {self._quote(partition)}",
-            shown_as=f"rozbroj <password> {self._quote(partition)}",
-            once=True,
-        )
+        return self._partition_command("rozbroj", password, partition)
 
     def resource_status(self, name: str) -> str:
         """Ask the system for a resource's state as free-form text."""

@@ -138,3 +138,22 @@ def test_wrong_password_reply(client) -> None:
             client.arm("1234", "NOCNA OBWODOWA")
     assert NexoClient.WRONG_PASSWORD in str(err.value)
     assert "1234" not in str(err.value)
+
+
+@pytest.mark.parametrize(
+    ("reply", "ok"),
+    [
+        ("PARTYCJE; haslo poprawne (uzytkownik: Admin), uzbrojono:", True),  # measured
+        ("PARTYCJE; proba modyfikacji stanu - haslo niepoprawne", False),  # measured
+        ("", True),
+    ],
+)
+def test_arming_reply(client, reply: str, ok: bool) -> None:
+    """The central unit answers success in words too - not a refusal."""
+    card = Commands([reply] if reply else None)
+    with patch.object(client, "_command_once", card), patch.object(client, "_command_retrying", card):
+        if ok:
+            client.arm("2468", "NOCNA OBWODOWA")
+        else:
+            with pytest.raises(Exception, match="niepoprawne"):
+                client.arm("2468", "NOCNA OBWODOWA")
