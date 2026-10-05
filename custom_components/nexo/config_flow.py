@@ -63,6 +63,7 @@ from .const import (
     OPT_ANALOG_SENSORS,
     OPT_ANALOG_SETTINGS,
     OPT_OUTPUT_SENSORS,
+    OPT_PARTITIONS,
     OPT_BINARY_SENSORS,
     OPT_BUTTONS,
     OPT_COVERS,
@@ -78,6 +79,10 @@ from .const import (
     OPT_THERMOSTATS,
     OPT_VALVES,
     OPT_WEATHER,
+    PARTITION_DEFAULT_MODE,
+    PARTITION_MODE,
+    PARTITION_MODES,
+    PARTITION_NAME,
     THERMOSTAT_DIRECTION,
     THERMOSTAT_DIRECTIONS,
     THERMOSTAT_HEAT,
@@ -411,8 +416,8 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             # files it, not where this house happens to use it
             menu_options=[
                 "connection", "sensors", "analog", "thermometers", "lights", "dimmers",
-                "outputs", "analog_outputs", "thermostats", "logic", "weather", "settings",
-                "save",
+                "outputs", "analog_outputs", "thermostats", "partitions", "logic", "weather",
+                "settings", "save",
             ],
             description_placeholders={
                 "address": f"{connection[CONF_HOST]}:{connection.get(CONF_PORT, DEFAULT_PORT)}",
@@ -427,6 +432,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                     sum(len(options.get(k, [])) for k in (OPT_COVERS, OPT_BUTTONS, OPT_VALVES))
                 ),
                 OPT_ANALOG_OUTPUTS: str(len(options.get(OPT_ANALOG_OUTPUTS, []))),
+                OPT_PARTITIONS: str(len(options.get(OPT_PARTITIONS, []))),
                 **{
                     key: str(len(options.get(key, [])))
                     for key in (OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES, OPT_EXCLUDED)
@@ -815,6 +821,82 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         except NexoError as err:
             return self._cannot_list(err)
         return await self._pick_step("thermometers", OPT_THERMOMETERS, names, user_input)
+
+    # ------------------------------------------------------------- partitions
+
+    async def async_step_partitions(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """The alarm partitions to import - regular and 24h alike; the type
+        comes from the central unit's lists. Nothing by default."""
+        try:
+            regular = await self._resources(ImportTypes.PARTITION)
+            always_on = await self._resources(ImportTypes.PARTITION24H)
+        except NexoError as err:
+            return self._cannot_list(err)
+        names = [*regular, *always_on]
+        if user_input is not None:
+            modes = {
+                item[PARTITION_NAME]: item.get(PARTITION_MODE, PARTITION_DEFAULT_MODE)
+                for item in self._options.get(OPT_PARTITIONS, [])
+            }
+            self._options[OPT_PARTITIONS] = [
+                {PARTITION_NAME: name, PARTITION_MODE: modes.get(name, PARTITION_DEFAULT_MODE)}
+                for name in user_input.get(OPT_PARTITIONS, [])
+                if name in names
+            ]
+            if any(item[PARTITION_NAME] in regular for item in self._options[OPT_PARTITIONS]):
+                return await self.async_step_partitions_mode()
+            return await self.async_step_menu()
+        selected = [
+            item[PARTITION_NAME]
+            for item in self._options.get(OPT_PARTITIONS, [])
+            if item[PARTITION_NAME] in names
+        ]
+        return self.async_show_form(
+            step_id="partitions",
+            data_schema=vol.Schema(
+                {vol.Optional(OPT_PARTITIONS, default=selected): _pick_many(names)}
+            ),
+        )
+
+    async def async_step_partitions_mode(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """How Home Assistant shows "armed" for each regular partition - Nexo
+        arms a partition one way; this is the label and the one button."""
+        try:
+            regular = set(await self._resources(ImportTypes.PARTITION))
+        except NexoError as err:
+            return self._cannot_list(err)
+        items = [
+            i for i in self._options.get(OPT_PARTITIONS, []) if i[PARTITION_NAME] in regular
+        ]
+        if user_input is not None:
+            for item in items:
+                item[PARTITION_MODE] = user_input.get(
+                    item[PARTITION_NAME], PARTITION_DEFAULT_MODE
+                )
+            return await self.async_step_menu()
+        mode = SelectSelector(
+            SelectSelectorConfig(
+                options=PARTITION_MODES,
+                mode=SelectSelectorMode.DROPDOWN,
+                translation_key="partition_mode",
+            )
+        )
+        return self.async_show_form(
+            step_id="partitions_mode",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        item[PARTITION_NAME],
+                        default=item.get(PARTITION_MODE, PARTITION_DEFAULT_MODE),
+                    ): mode
+                    for item in items
+                }
+            ),
+        )
 
     # ------------------------------------------------------------------ logic
 

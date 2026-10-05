@@ -70,6 +70,25 @@ THERMOSTAT_DIRECTION: Final = "direction"
 THERMOSTAT_HEAT: Final = "heat"
 THERMOSTAT_COOL: Final = "cool"
 THERMOSTAT_DIRECTIONS: Final = [THERMOSTAT_HEAT, THERMOSTAT_COOL]
+# Alarm partitions the user picked: {"name": ..., "mode": ...}. Regular
+# partitions are armed and disarmed with the user's code, asked each time and
+# never stored; 24h ones (the central unit lists them under their own type)
+# are read only. The mode is only the Home Assistant label of "armed" - Nexo
+# has one way to arm a partition. Nothing by default.
+OPT_PARTITIONS: Final = "partitions"
+PARTITION_NAME: Final = "name"
+PARTITION_MODE: Final = "mode"
+PARTITION_MODES: Final = ["armed_away", "armed_home", "armed_night", "armed_vacation"]
+PARTITION_DEFAULT_MODE: Final = "armed_away"
+# The partition's state word: bit 0 armed, bit 1 the alarm scheme running
+# (measured 2026-10-05; no value for the exit or entry delay)
+PARTITION_ARMED: Final = 0x01
+PARTITION_ALARMING: Final = 0x02
+# After arming or disarming, the partition is read every second for a while
+BOOST_PARTITION: Final = 10
+# Fired when the central unit refuses a code as wrong: {"partition", "action"}
+EVENT_WRONG_CODE: Final = "nexo_wrong_code"
+
 # Analogue outputs (0-10 V) the user picked: each a level 0-100 %. Not
 # composed with the output that powers the device - that differs per house.
 OPT_ANALOG_OUTPUTS: Final = "analog_outputs"

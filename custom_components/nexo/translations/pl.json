@@ -60,6 +60,7 @@
           "outputs": "Wyjścia",
           "analog_outputs": "Wyjścia analogowe",
           "thermostats": "Termostaty",
+          "partitions": "Partycje",
           "logic": "Logika",
           "weather": "Stacja pogodowa",
           "settings": "Ustawienia",
@@ -77,7 +78,8 @@
           "thermostats": "Termostaty: {thermostats}",
           "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
-          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany"
+          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
+          "partitions": "Alarm, uzbrajany za każdym razem Twoim kodem: {partitions}"
         },
         "description": ""
       },
@@ -93,6 +95,7 @@
           "outputs": "Wyjścia",
           "analog_outputs": "Wyjścia analogowe",
           "thermostats": "Termostaty",
+          "partitions": "Partycje",
           "logic": "Logika",
           "weather": "Stacja pogodowa",
           "settings": "Ustawienia",
@@ -110,7 +113,8 @@
           "thermostats": "Termostaty: {thermostats}",
           "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
-          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany"
+          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
+          "partitions": "Alarm, uzbrajany za każdym razem Twoim kodem: {partitions}"
         },
         "description": "{alert_open}Centrala nie odpowiada{alert_close}"
       },
@@ -126,6 +130,7 @@
           "outputs": "Wyjścia",
           "analog_outputs": "Wyjścia analogowe",
           "thermostats": "Termostaty",
+          "partitions": "Partycje",
           "logic": "Logika",
           "weather": "Stacja pogodowa",
           "settings": "Ustawienia",
@@ -143,7 +148,8 @@
           "thermostats": "Termostaty: {thermostats}",
           "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
-          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany"
+          "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
+          "partitions": "Alarm, uzbrajany za każdym razem Twoim kodem: {partitions}"
         },
         "description": "{alert_open}Zmieniono połączenie – wybierz Zapisz i zamknij, żeby je zastosować{alert_close}"
       },
@@ -295,6 +301,17 @@
       "thermostats_direction": {
         "title": "Grzanie czy chłodzenie",
         "description": "Sposób działania termostatu ustala w centrali znak jego histerezy: dodatnia (domyślna) to grzanie, ujemna to chłodzenie. Centrala tego nie podaje, więc wybierz tutaj. Przy grzaniu termostat pokazuje „grzeje”, gdy żąda ciepła - jego wyjście jest wyłączone - i „bezczynny”, gdy w pomieszczeniu jest dość ciepło, a wyjście jest załączone."
+      },
+      "partitions": {
+        "title": "Partycje",
+        "description": "Partycje alarmu do zaimportowania. Zwykłą uzbrajasz i rozbrajasz kodem, podawanym za każdym razem i nigdzie nie zapisywanym; 24h (pożar, zalanie) jest tylko do odczytu - jej się nie rozbraja. Centrala podaje: uzbrojona, rozbrojona, alarmuje; nie podaje czasu na wyjście ani na wejście.",
+        "data": {
+          "partitions": "Partycje"
+        }
+      },
+      "partitions_mode": {
+        "title": "Jak pokazać „uzbrojona”",
+        "description": "Przy każdej zwykłej partycji: nazwa stanu uzbrojenia i jej jedyny przycisk. Nexo uzbraja partycję w jeden sposób; to tylko nazwa w HA."
       },
       "analog_outputs": {
         "title": "Wyjścia analogowe",
@@ -1834,6 +1851,14 @@
         "heat": "Grzanie (histereza dodatnia)",
         "cool": "Chłodzenie (histereza ujemna)"
       }
+    },
+    "partition_mode": {
+      "options": {
+        "armed_away": "Uzbrojona poza domem",
+        "armed_home": "Uzbrojona w domu",
+        "armed_night": "Uzbrojona na noc",
+        "armed_vacation": "Uzbrojona na urlop"
+      }
     }
   },
   "entity": {
@@ -1905,6 +1930,23 @@
     "name_shared": {
       "title": "Nexo: nazwa wspólna dla dwóch zasobów",
       "description": "Te zasoby używane przez integrację mają tę samą nazwę co zasób innego typu: {resources}. Odczyt po nazwie może wtedy trafić w ten drugi - poziom 0, zły stan. Zmień nazwę jednego z nich w konfiguratorze (Panel zdalny), potem przeładuj integrację."
+    }
+  },
+  "exceptions": {
+    "wrong_code": {
+      "message": "{partition}: niepoprawny kod - centrala go odrzuciła."
+    },
+    "code_required": {
+      "message": "{partition}: podaj kod alarmu."
+    },
+    "partition_read_only": {
+      "message": "{partition} to partycja 24h: nie uzbraja się jej ani nie rozbraja z HA."
+    },
+    "partition_refused": {
+      "message": "{partition}: centrala odmówiła - {reply}"
+    },
+    "partition_not_confirmed": {
+      "message": "{partition}: centrala nie potwierdziła polecenia. Nie zostało wysłane ponownie - sprawdź stan, zanim spróbujesz jeszcze raz."
     }
   }
 }

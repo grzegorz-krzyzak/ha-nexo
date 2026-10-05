@@ -36,11 +36,13 @@ from .const import (
     OPT_DIMMERS,
     OPT_LIGHTS,
     OPT_OUTPUT_SENSORS,
+    OPT_PARTITIONS,
     OPT_SWITCHES,
     OPT_THERMOMETERS,
     OPT_THERMOSTATS,
     OPT_VALVES,
     OPT_WEATHER,
+    PARTITION_NAME,
     THERMOSTAT_NAME,
 )
 from . import weather
@@ -53,6 +55,7 @@ from .roles import resolve_roles
 from .nexo_client import NexoAuthError, NexoError
 
 PLATFORMS = [
+    Platform.ALARM_CONTROL_PANEL,
     Platform.BINARY_SENSOR,
     Platform.BUTTON,
     Platform.CLIMATE,
@@ -196,6 +199,7 @@ def _remove_deselected_entities(
         *(f"button_{item[ITEM_ID]}" for item in options.get(OPT_BUTTONS, [])),
         *(f"valve_{item[ITEM_ID]}" for item in options.get(OPT_VALVES, [])),
         *(f"analog_output_{name}" for name in options.get(OPT_ANALOG_OUTPUTS, [])),
+        *(f"partition_{p[PARTITION_NAME]}" for p in options.get(OPT_PARTITIONS, [])),
         # The weather station: its readings and conditions, by role
         *(
             f"weather_{key}"

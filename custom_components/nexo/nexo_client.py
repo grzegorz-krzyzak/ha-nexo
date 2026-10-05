@@ -481,6 +481,25 @@ class NexoClient:
             f"Command {label!r} failed after {self.retries + 1} attempts"
         ) from last
 
+    def _command_once(self, command: str, log_as: Optional[str] = None) -> str:
+        """Like _command, but never sends twice: a lost connection before the
+        command goes out is reconnected, anything after it is an error.
+
+        For arming and disarming - a retry after a timeout could repeat a
+        wrong password, and three wrong ones start the alarm scheme.
+        """
+        label = command if log_as is None else log_as
+        with self._lock:
+            if self._sock is None:
+                self.connect()
+            try:
+                return self._command(command)
+            except (NexoConnectionError, NexoTimeoutError) as exc:
+                self._close_socket()
+                raise NexoConnectionError(
+                    f"Command {label!r} not confirmed; not sent again"
+                ) from exc
+
     # ---------------------------------------------------------------- public API
 
     def ping(self) -> bool:
@@ -763,18 +782,28 @@ class NexoClient:
                 log.warning("Unreadable thermostat entry %d: %r", index, lines)
         return result
 
+    # The central unit's reply to a wrong password (measured 2026-10-05)
+    WRONG_PASSWORD = "haslo niepoprawne"
+
     def arm(self, password: str, partition: str) -> None:
-        """Arm a partition with a user password, which is kept out of logs."""
+        """Arm a partition with a user password, which is kept out of logs.
+
+        Sent once, never retried. A wrong password is refused with
+        "PARTYCJE; proba modyfikacji stanu - haslo niepoprawne".
+        """
         self._control(
             f"uzbroj {self._credential(password)} {self._quote(partition)}",
             shown_as=f"uzbroj <password> {self._quote(partition)}",
+            once=True,
         )
 
     def disarm(self, password: str, partition: str) -> None:
-        """Disarm a partition with a user password, which is kept out of logs."""
+        """Disarm a partition with a user password, which is kept out of logs.
+        Sent once, never retried."""
         self._control(
             f"rozbroj {self._credential(password)} {self._quote(partition)}",
             shown_as=f"rozbroj <password> {self._quote(partition)}",
+            once=True,
         )
 
     def resource_status(self, name: str) -> str:
@@ -820,6 +849,7 @@ class NexoClient:
         payload: str,
         shown_as: Optional[str] = None,
         reply_polls: Optional[int] = None,
+        once: bool = False,
     ) -> None:
         """
         Run a control command. The central unit stays silent when it works and
@@ -832,6 +862,7 @@ class NexoClient:
             reply_polls=(
                 self.COMMAND_REPLY_POLLS if reply_polls is None else reply_polls
             ),
+            once=once,
         )
         if failure:
             raise NexoCommandError(
@@ -844,6 +875,7 @@ class NexoClient:
         argument: str = "",
         shown_as: Optional[str] = None,
         reply_polls: int = 1,
+        once: bool = False,
     ) -> str:
         """Send 'system <subcommand> <argument>' and return the reply payload."""
         data = f"system {subcommand} {argument}".rstrip()
@@ -854,7 +886,8 @@ class NexoClient:
             )
 
         safe = None if shown_as is None else f"system {subcommand} {shown_as}"
-        ack = self._command_retrying(data, log_as=safe)
+        send = self._command_once if once else self._command_retrying
+        ack = send(data, log_as=safe)
         if ack != "CMD OK":
             raise NexoCommandError(f"Card rejected {safe or data!r}: {ack!r}")
 

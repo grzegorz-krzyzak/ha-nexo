@@ -31,11 +31,13 @@ from .const import (
     OPT_INTERVAL_OUTPUTS,
     OPT_LIGHTS,
     OPT_OUTPUT_SENSORS,
+    OPT_PARTITIONS,
     OPT_SWITCHES,
     OPT_THERMOMETERS,
     OPT_THERMOSTATS,
     OPT_VALVES,
     OPT_WEATHER,
+    PARTITION_NAME,
     POLL_TICK,
     THERMOSTAT_NAME,
     THERMOSTAT_THERMOMETER,
@@ -86,6 +88,8 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
         options = entry.options if options is None else options
         inputs = {
             *options.get(OPT_BINARY_SENSORS, []),
+            # Partitions: an alarm scheme can run for a few seconds only
+            *(p[PARTITION_NAME] for p in options.get(OPT_PARTITIONS, [])),
             *(
                 cover[COVER_REED_SENSOR]
                 for cover in options.get(OPT_COVERS, [])

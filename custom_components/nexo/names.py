@@ -23,11 +23,13 @@ from .const import (
     OPT_DIMMERS,
     OPT_LIGHTS,
     OPT_OUTPUT_SENSORS,
+    OPT_PARTITIONS,
     OPT_SWITCHES,
     OPT_THERMOMETERS,
     OPT_THERMOSTATS,
     OPT_VALVES,
     OPT_WEATHER,
+    PARTITION_NAME,
     THERMOSTAT_NAME,
     THERMOSTAT_THERMOMETER,
     VALVE_MAIN,
@@ -45,6 +47,7 @@ def used_names(options: Mapping[str, Any]) -> set[str]:
         *(c[COVER_REED_SENSOR] for c in options.get(OPT_COVERS, []) if c.get(COVER_REED_SENSOR)),
         *(s for v in options.get(OPT_VALVES, []) for s in v.get(VALVE_SECTIONS, [])),
         *(v[VALVE_MAIN] for v in options.get(OPT_VALVES, []) if v.get(VALVE_MAIN)),
+        *(p[PARTITION_NAME] for p in options.get(OPT_PARTITIONS, [])),
         *(t[k] for t in options.get(OPT_THERMOSTATS, [])
           for k in (THERMOSTAT_NAME, THERMOSTAT_THERMOMETER)),
     }

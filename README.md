@@ -22,13 +22,13 @@ connection the NexoVision app uses. Local polling, no cloud.
 | Outputs and lighting outputs, switched | `switch` | on / off, e.g. a ventilation unit |
 | Thermostats | `climate` | heat or cool (set per thermostat) / off, threshold in tenths - see *Thermostats* |
 | Analog outputs | `number` | level 0-100 % - see *Analog outputs* |
+| Alarm partitions | `alarm_control_panel` | disarmed / armed / alarming; a code each time; 24h read only - see *Alarm partitions* |
 | Weather station card | `sensor`, `binary_sensor` | temperature, daylight, wind, sun from three sides; frost, heat, twilight, sunny, calm, strong wind, rain - see *Weather station* |
 | Gates and doors driven by logic commands | `cover` | closed / not closed, from a reed switch |
 | Watering programs and other start/stop command pairs | `valve` | open while any of its sections is on |
 | Any logic command | `button` | fire and forget |
 
 Not supported:
-- **Alarm partitions** - planned.
 - **Blinds** - nothing to test them on.
 - **The central unit's lighting groups** - use Home Assistant's own; a
   group's state in the central unit depends on its history.
@@ -75,6 +75,8 @@ order of NexoVision's list - with the current settings next to each item:
 - **Thermostats** - the thermostats to import, then heating or cooling for
   each; each brings the thermometer and the range set for it in the central
   unit (see *Thermostats*).
+- **Partitions** - the alarm partitions to import, then how "armed" shows
+  for each regular one (see *Alarm partitions*).
 - **Logic** - entities driven by logic commands: **Gates and doors**,
   **Buttons** and **Programs** (started and stopped by a pair of commands,
   such as watering, with relay outputs as sections). Pick one to edit or
@@ -167,6 +169,35 @@ thermostats the options ask for each one: *Heating* (the default) or
   threshold again to apply it.
 - Thermostats are read with the *Measurements* group (60 s by default) and
   every second for a few seconds after a command.
+
+### Alarm partitions
+
+*Partitions* imports the central unit's alarm partitions as alarm panels.
+
+- **States, as the central unit reports them:** disarmed, armed, alarming.
+  It reports no exit or entry delay, so there is no "arming" or "pending".
+  *Alarming* is the partition's alarm scheme running - for a scheme that
+  only sends a message and ends, a few seconds; with a wait in it, as long as
+  the wait. Partitions are read with the *Inputs* group (5 s by default).
+- **A code each time.** Arming and disarming ask for the user's alarm code,
+  as on the wall panel; it is sent to the central unit once and never
+  stored, retried or logged. Three wrong codes start the alarm scheme in the
+  central unit, so a lost confirmation is reported - check the state - and
+  not sent again.
+- **A wrong code** is refused by the central unit in its own words; the
+  panel says so, and the integration fires `nexo_wrong_code` (`partition`,
+  `action`) for automations - a notification, say. Only codes entered in
+  Home Assistant are seen; a wrong one at the wall panel stays in the
+  central unit.
+- **Arming is refused with a sensor violated** - a window open - or faulty;
+  the central unit's reply is shown.
+- **One button.** Nexo arms a partition one way; for each regular partition
+  the options pick how "armed" shows - away (the default), home, night or
+  vacation - and the panel offers that one button.
+- **24h partitions** (fire, flood) are listed by the central unit under
+  their own type: shown read only, without buttons - they are not disarmed.
+  An alarm there is stopped with "Wyczyść alarm" on the wall panel or in
+  NexoVision.
 
 ### Analog outputs
 

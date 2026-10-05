@@ -6,7 +6,12 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from custom_components.nexo.nexo_client import ImportTypes, NexoClient, ThermostatInfo
+from custom_components.nexo.nexo_client import (
+    ImportTypes,
+    NexoClient,
+    NexoCommandError,
+    ThermostatInfo,
+)
 
 
 @pytest.fixture(autouse=True)
@@ -55,6 +60,10 @@ class FakeNexo:
             # Analogue outputs, as read: 50 % ("jest wlaczone (50%)") and 0
             "SPEED": 0x8001,
             "ROOF LEVEL": 0,
+            # Partitions: bit 0 armed, bit 1 alarming (measured 2026-10-05)
+            "HOUSE": 0,
+            "NIGHT": 1,
+            "FIRE": 1,
         }
         self.listing: dict[ImportTypes, list[str]] = {
             ImportTypes.SENSOR: ["KON DOOR", "KON GATE", "PIR HALL"],
@@ -64,6 +73,8 @@ class FakeNexo:
             ImportTypes.LIGHT: ["ZG", "L1", "GATE PULSE"],
             ImportTypes.DIMMER: ["DIM A"],
             ImportTypes.ANALOG_OUTPUT: ["SPEED", "ROOF LEVEL"],
+            ImportTypes.PARTITION: ["HOUSE", "NIGHT"],
+            ImportTypes.PARTITION24H: ["FIRE"],
             ImportTypes.WEATHER_STATION: [
                 "SP:Aura", "SP:Temperatura", "SP:Światło", "SP:Wiatr", "SP:Słońce",
             ],
@@ -73,6 +84,8 @@ class FakeNexo:
         self.turn_off = MagicMock()
         self.set_level = MagicMock()
         self.set_analog_level = MagicMock(side_effect=self._set_analog_level)
+        self.arm = MagicMock(side_effect=lambda code, name: self._partition(code, name, 1))
+        self.disarm = MagicMock(side_effect=lambda code, name: self._partition(code, name, 0))
         self.thermostats = [
             ThermostatInfo("TRS HALL", "TMP HALL", 15, 30),
             ThermostatInfo("TRS GARAGE", "TMP OUTSIDE", 10, 30),
@@ -94,6 +107,17 @@ class FakeNexo:
 
     def list_resources(self, resource_type: ImportTypes) -> list[str]:
         return list(self.listing.get(resource_type, []))
+
+    CODE = "2468"
+
+    def _partition(self, code: str, name: str, armed: int) -> None:
+        """As the central unit: a wrong code refused with its own words."""
+        if code != self.CODE:
+            raise NexoCommandError(
+                f"Central unit refused \"uzbroj <password> '{name}'\": "
+                "PARTYCJE; proba modyfikacji stanu - haslo niepoprawne"
+            )
+        self.states[name] = armed
 
     def _set_analog_level(self, name: str, level: int) -> None:
         self.states[name] = level << 8 | 1 if level else 0

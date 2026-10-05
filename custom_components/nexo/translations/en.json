@@ -60,6 +60,7 @@
           "outputs": "Outputs",
           "analog_outputs": "Analog outputs",
           "thermostats": "Thermostats",
+          "partitions": "Partitions",
           "logic": "Logic",
           "weather": "Weather station",
           "settings": "Settings",
@@ -77,7 +78,8 @@
           "thermostats": "Thermostats: {thermostats}",
           "logic": "Gates and doors, buttons, programs: {logic_items}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
-          "save": "Closing the window with ✕ discards the changes"
+          "save": "Closing the window with ✕ discards the changes",
+          "partitions": "Alarm, armed with your code each time: {partitions}"
         },
         "description": ""
       },
@@ -93,6 +95,7 @@
           "outputs": "Outputs",
           "analog_outputs": "Analog outputs",
           "thermostats": "Thermostats",
+          "partitions": "Partitions",
           "logic": "Logic",
           "weather": "Weather station",
           "settings": "Settings",
@@ -110,7 +113,8 @@
           "thermostats": "Thermostats: {thermostats}",
           "logic": "Gates and doors, buttons, programs: {logic_items}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
-          "save": "Closing the window with ✕ discards the changes"
+          "save": "Closing the window with ✕ discards the changes",
+          "partitions": "Alarm, armed with your code each time: {partitions}"
         },
         "description": "{alert_open}The central unit is not answering{alert_close}"
       },
@@ -126,6 +130,7 @@
           "outputs": "Outputs",
           "analog_outputs": "Analog outputs",
           "thermostats": "Thermostats",
+          "partitions": "Partitions",
           "logic": "Logic",
           "weather": "Weather station",
           "settings": "Settings",
@@ -143,7 +148,8 @@
           "thermostats": "Thermostats: {thermostats}",
           "logic": "Gates and doors, buttons, programs: {logic_items}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
-          "save": "Closing the window with ✕ discards the changes"
+          "save": "Closing the window with ✕ discards the changes",
+          "partitions": "Alarm, armed with your code each time: {partitions}"
         },
         "description": "{alert_open}Connection changed – choose Save and close to apply it{alert_close}"
       },
@@ -295,6 +301,17 @@
       "thermostats_direction": {
         "title": "Heating or cooling",
         "description": "How each thermostat works is set in the central unit by the sign of its hysteresis: positive (the default) is heating, negative is cooling. The central unit does not report it, so choose here. Heating shows \"heating\" while the thermostat asks for heat - its output off - and \"idle\" once the room is warm enough and the output is on."
+      },
+      "partitions": {
+        "title": "Partitions",
+        "description": "Alarm partitions to import. A regular one is armed and disarmed with your code, asked each time and never stored; a 24h one (fire, flood) is shown read only - it is not disarmed. The central unit reports armed, disarmed and alarming; it reports no exit or entry delay.",
+        "data": {
+          "partitions": "Partitions"
+        }
+      },
+      "partitions_mode": {
+        "title": "How \"armed\" shows",
+        "description": "For each regular partition, the label of its armed state and its one button. Nexo arms a partition one way; this only names it in Home Assistant."
       },
       "analog_outputs": {
         "title": "Analog outputs",
@@ -1834,6 +1851,14 @@
         "heat": "Heating (positive hysteresis)",
         "cool": "Cooling (negative hysteresis)"
       }
+    },
+    "partition_mode": {
+      "options": {
+        "armed_away": "Armed away",
+        "armed_home": "Armed home",
+        "armed_night": "Armed night",
+        "armed_vacation": "Armed vacation"
+      }
     }
   },
   "entity": {
@@ -1905,6 +1930,23 @@
     "name_shared": {
       "title": "Nexo: a name shared by two resources",
       "description": "These resources the integration uses share their name with a resource of another type: {resources}. A read by name may then get the other one - a level of 0, a wrong state. Rename one of them in the configurator (Remote panel), then reload the integration."
+    }
+  },
+  "exceptions": {
+    "wrong_code": {
+      "message": "{partition}: wrong code - the central unit refused it."
+    },
+    "code_required": {
+      "message": "{partition}: enter the alarm code."
+    },
+    "partition_read_only": {
+      "message": "{partition} is a 24h partition: it is not armed or disarmed from Home Assistant."
+    },
+    "partition_refused": {
+      "message": "{partition}: the central unit refused - {reply}"
+    },
+    "partition_not_confirmed": {
+      "message": "{partition}: the central unit did not confirm the command. It was not sent again - check the state before trying again."
     }
   }
 }

@@ -67,7 +67,7 @@ async def test_menu_summary(hass: HomeAssistant, fake_nexo) -> None:
     assert result["type"] is FlowResultType.MENU
     assert result["menu_options"] == [
         "connection", "sensors", "analog", "thermometers", "lights", "dimmers", "outputs",
-        "analog_outputs", "thermostats", "logic", "weather", "settings", "save",
+        "analog_outputs", "thermostats", "partitions", "logic", "weather", "settings", "save",
     ]
     placeholders = result["description_placeholders"]
     assert placeholders["address"] == "192.0.2.10:1024"
