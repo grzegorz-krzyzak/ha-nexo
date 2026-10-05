@@ -413,10 +413,12 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             step_id=MENU_STEPS[status],
             # By the central unit's resource types, named as in the installer's
             # manual (decision 2026-10-04): a user finds a resource where Nexo
-            # files it, not where this house happens to use it
+            # files it, not where this house happens to use it. Between
+            # connection and settings in the order of the Polish names, as
+            # NexoVision words them; one order serves every language
             menu_options=[
-                "connection", "sensors", "analog", "thermometers", "lights", "dimmers",
-                "outputs", "analog_outputs", "thermostats", "partitions", "logic", "weather",
+                "connection", "sensors", "logic", "lights", "partitions", "weather", "dimmers",
+                "thermometers", "thermostats", "analog", "outputs", "analog_outputs",
                 "settings", "save",
             ],
             description_placeholders={

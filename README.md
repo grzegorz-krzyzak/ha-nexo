@@ -56,32 +56,33 @@ and will not work. The entry is named after the address, e.g.
 you rename it.
 
 **Everything else is in the integration's options** (*Configure*), a menu by
-the central unit's resource types - the names of the installer's manual, the
-order of NexoVision's list - with the current settings next to each item:
+the central unit's resource types - the names of the installer's manual, in
+the alphabetical order of the Polish names between *Connection* and
+*Settings* - with the current settings next to each item:
 
 - **Connection** - address, port and PIN. The connection status is shown next
   to the address, and at the top of the menu when the central unit is not
   answering or the connection has unsaved changes. Also available as
   *Reconfigure* in the ⋮ menu. Entities are kept when the address changes.
 - **Sensors** - inputs: reed switches, motion detectors.
-- **Analog inputs** (NexoVision: *Analog sensor*) - the inputs to import, then
-  the type and calibration of each (see *Analog inputs*).
-- **Thermometers** - a thermostat's own thermometer is read with it anyway.
-- **Lighting** - lighting outputs, each as a light, a switch or not offered
-  (see *Lighting and outputs*).
-- **Dimmers** - with brightness.
-- **Outputs** - each as a switch, read only or not offered.
-- **Analog outputs** - see *Analog outputs*.
-- **Thermostats** - the thermostats to import, then heating or cooling for
-  each; each brings the thermometer and the range set for it in the central
-  unit (see *Thermostats*).
-- **Partitions** - the alarm partitions to import, then how "armed" shows
-  for each regular one (see *Alarm partitions*).
 - **Logic** - entities driven by logic commands: **Gates and doors**,
   **Buttons** and **Programs** (started and stopped by a pair of commands,
   such as watering, with relay outputs as sections). Pick one to edit or
   delete it. Up to 20 of each.
+- **Lighting** - lighting outputs, each as a light, a switch or not offered
+  (see *Lighting and outputs*).
+- **Partitions** - the alarm partitions to import, then how "armed" shows
+  for each regular one (see *Alarm partitions*).
 - **Weather station** - see *Weather station*.
+- **Dimmers** - with brightness.
+- **Thermometers** - a thermostat's own thermometer is read with it anyway.
+- **Thermostats** - the thermostats to import, then heating or cooling for
+  each; each brings the thermometer and the range set for it in the central
+  unit (see *Thermostats*).
+- **Analog inputs** (NexoVision: *Analog sensor*) - the inputs to import, then
+  the type and calibration of each (see *Analog inputs*).
+- **Outputs** - each as a switch, read only or not offered.
+- **Analog outputs** - see *Analog outputs*.
 - **Settings** - how often each group of resources is read (see *Polling*).
 
 Each listed resource costs one query of about 50 ms each time it is read.
