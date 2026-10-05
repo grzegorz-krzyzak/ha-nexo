@@ -87,7 +87,8 @@ the alphabetical order of the Polish names between *Connection* and
 
 **Devices follow the menu.** Each item with entities gets a device of its
 own - *Sensors*, *Lighting*, *Partitions*, *Logic* and so on - linked to the
-central unit's device, which keeps the connection sensor. Entity ids stay
+central unit's device, *Central unit*, which keeps the connection sensor.
+Entity ids stay
 `nexo_<name>`. A switch made from a lighting output sits under *Lighting*,
 one made from an output under *Outputs*. Since 0.13; an entity named by the
 integration shows its device's name in front of its own (*Partitions ALARM
@@ -302,7 +303,7 @@ groups and starts from the defaults.
 
 ### Connection status
 
-The device has a diagnostic **Connection to central unit** sensor, on while
+The *Central unit* device has a diagnostic **Connection** sensor, on while
 the central unit answers - usable in automations, with its history recorded.
 After three read rounds in a row without an answer (about 15 s with the
 default inputs interval) the integration reloads, so the integrations page

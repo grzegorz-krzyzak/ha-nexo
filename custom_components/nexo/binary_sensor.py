@@ -59,6 +59,8 @@ class NexoConnectionSensor(NexoEntity, BinarySensorEntity):
 
     def __init__(self, coordinator) -> None:
         super().__init__(coordinator, "connection")
+        # The id of 0.12 and before; the name is now short, after "Central unit"
+        self._suggest_entity_id("connection to central unit")
 
     @property
     def available(self) -> bool:

@@ -159,7 +159,7 @@ async def _async_register_device(
         identifiers={(DOMAIN, entry.entry_id)},
         manufacturer=MANUFACTURER,
         model="Nexo",
-        name="Nexo",
+        translation_key="central_unit",
         sw_version=sw_version,
     )
 

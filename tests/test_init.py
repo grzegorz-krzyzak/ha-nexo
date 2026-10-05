@@ -206,6 +206,8 @@ async def test_devices_by_resource_type(hass: HomeAssistant, fake_nexo, caplog) 
         "valve.nexo_lawn": "logic",
     }
     assert hass.states.get("binary_sensor.nexo_kon_door").name == "Sensors KON DOOR"
+    assert central.name == "Central unit"
+    assert hass.states.get("binary_sensor.nexo_connection_to_central_unit").name == "Central unit Connection"
     assert "via_device" not in caplog.text  # linked by id, as Home Assistant asks
 
 @pytest.mark.parametrize(

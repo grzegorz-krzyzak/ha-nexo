@@ -1864,7 +1864,7 @@
   "entity": {
     "binary_sensor": {
       "connection": {
-        "name": "Connection to central unit"
+        "name": "Connection"
       },
       "frost": {
         "name": "Frost"
@@ -1927,6 +1927,9 @@
     }
   },
   "device": {
+    "central_unit": {
+      "name": "Central unit"
+    },
     "weather_station": {
       "name": "Weather station"
     },

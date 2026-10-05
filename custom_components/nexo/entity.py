@@ -60,7 +60,7 @@ class NexoEntity(CoordinatorEntity[NexoCoordinator]):
                 identifiers={(DOMAIN, entry.entry_id)},
                 manufacturer=MANUFACTURER,
                 model="Nexo",
-                name="Nexo",
+                translation_key="central_unit",
             )
             return
         self._attr_device_info = DeviceInfo(
