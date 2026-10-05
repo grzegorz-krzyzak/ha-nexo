@@ -1915,6 +1915,15 @@
       "aura": {
         "name": "Kod stanów"
       }
+    },
+    "alarm_control_panel": {
+      "partition_24h": {
+        "state": {
+          "armed_away": "Czuwa (24h)",
+          "disarmed": "Nie czuwa",
+          "triggered": "Alarm"
+        }
+      }
     }
   },
   "device": {

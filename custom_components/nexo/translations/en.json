@@ -1915,6 +1915,15 @@
       "aura": {
         "name": "Conditions code"
       }
+    },
+    "alarm_control_panel": {
+      "partition_24h": {
+        "state": {
+          "armed_away": "Watching (24h)",
+          "disarmed": "Not watching",
+          "triggered": "Alarm"
+        }
+      }
     }
   },
   "device": {

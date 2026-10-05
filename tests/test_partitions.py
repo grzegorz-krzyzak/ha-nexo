@@ -8,6 +8,7 @@ import pytest
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
+from homeassistant.helpers import entity_registry as er
 
 from custom_components.nexo.nexo_client import NexoClient, NexoTimeoutError
 
@@ -41,6 +42,9 @@ async def test_one_button_and_a_code(hass: HomeAssistant, fake_nexo) -> None:
     assert house["code_format"] == "number" and house["code_arm_required"]
     assert fire["supported_features"] == 0  # 24h: no buttons, not even disarm
     assert fire["code_format"] is None
+    entry = er.async_get(hass).async_get(FIRE)
+    assert entry.translation_key == "partition_24h"  # "Czuwa (24h)", not "armed away"
+    assert er.async_get(hass).async_get(HOUSE).translation_key is None
 
 
 async def test_arm_and_disarm_with_the_code(hass: HomeAssistant, fake_nexo, freezer) -> None:

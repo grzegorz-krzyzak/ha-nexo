@@ -84,6 +84,9 @@ class NexoPartition(NexoResourceEntity, AlarmControlPanelEntity):
         if read_only:
             self._attr_supported_features = AlarmControlPanelEntityFeature(0)
             self._attr_code_format = None
+            # Home Assistant has no "24h" state: armed shows as "watching (24h)",
+            # not "armed away" - the state underneath stays armed_away
+            self._attr_translation_key = "partition_24h"
         else:
             self._attr_supported_features = feature
             self._attr_code_format = CodeFormat.NUMBER
