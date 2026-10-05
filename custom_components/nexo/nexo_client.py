@@ -90,7 +90,14 @@ class NexoProtocolError(NexoError):
 
 
 class NexoCommandError(NexoError):
-    """The central unit rejected a command (e.g. CMD WRONG)."""
+    """The central unit rejected a command (e.g. CMD WRONG).
+
+    reply holds the central unit's own words, when it gave any.
+    """
+
+    def __init__(self, message: str, reply: str = "") -> None:
+        super().__init__(message)
+        self.reply = reply
 
 
 class NexoResourceError(NexoError):
@@ -803,7 +810,7 @@ class NexoClient:
             log.info("%s: %s", shown, reply)
             return reply
         if reply:
-            raise NexoCommandError(f"Central unit refused {shown!r}: {reply}")
+            raise NexoCommandError(f"Central unit refused {shown!r}: {reply}", reply=reply)
         return reply
 
     def arm(self, password: str, partition: str) -> str:

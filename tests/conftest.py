@@ -115,7 +115,8 @@ class FakeNexo:
         if code != self.CODE:
             raise NexoCommandError(
                 f"Central unit refused \"uzbroj <password> '{name}'\": "
-                "PARTYCJE; proba modyfikacji stanu - haslo niepoprawne"
+                "PARTYCJE; proba modyfikacji stanu - haslo niepoprawne",
+                reply="PARTYCJE; proba modyfikacji stanu - haslo niepoprawne",
             )
         self.states[name] = armed
 

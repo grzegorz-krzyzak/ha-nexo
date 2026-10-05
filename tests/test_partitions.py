@@ -10,7 +10,7 @@ from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import entity_registry as er
 
-from custom_components.nexo.nexo_client import NexoClient, NexoTimeoutError
+from custom_components.nexo.nexo_client import NexoClient, NexoCommandError, NexoTimeoutError
 
 from .test_client_replies import Card
 from .test_init import OPTIONS, _setup, _tick
@@ -128,6 +128,22 @@ def test_arming_is_sent_once_and_the_code_kept_out(client, caplog) -> None:
             client.arm("2468", "NOCNA OBWODOWA")
     assert len(sent) == 1
     assert "2468" not in caplog.text
+
+
+async def test_refusal_shows_the_central_units_words(hass: HomeAssistant, fake_nexo) -> None:
+    """A violated sensor: the message carries the reply, not the command."""
+    await _setup(hass, PARTS)
+    reply = "Akcja nieudana - naruszony czujnik: KON OKNA PIETRO."  # measured
+    fake_nexo.arm.side_effect = NexoCommandError(
+        f"Central unit refused \"uzbroj <password> 'HOUSE'\": {reply}", reply=reply
+    )
+    with pytest.raises(HomeAssistantError) as err:
+        await hass.services.async_call(
+            "alarm_control_panel", "alarm_arm_away", {"entity_id": HOUSE, "code": "2468"},
+            blocking=True,
+        )
+    assert err.value.translation_key == "partition_refused"
+    assert err.value.translation_placeholders == {"partition": "HOUSE", "reply": reply}
 
 
 def test_wrong_password_reply(client) -> None:

@@ -146,7 +146,8 @@ class NexoPartition(NexoResourceEntity, AlarmControlPanelEntity):
                 ) from err
             raise HomeAssistantError(
                 translation_domain=DOMAIN, translation_key="partition_refused",
-                translation_placeholders={"partition": self.resource, "reply": str(err)},
+                # The central unit's words only - the command is in the log
+                translation_placeholders={"partition": self.resource, "reply": err.reply or str(err)},
             ) from err
         except NexoError as err:
             raise HomeAssistantError(
