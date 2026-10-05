@@ -197,7 +197,7 @@ async def test_connection_sensor(hass: HomeAssistant, fake_nexo, freezer) -> Non
     fake_nexo.get_state = down
     freezer.tick(timedelta(seconds=11))
     async_fire_time_changed(hass)
-    await hass.async_block_till_done()
+    await hass.async_block_till_done(wait_background_tasks=True)
     state = hass.states.get(entity_id)
     assert state.state == "off"  # still available, reporting the loss
     assert hass.states.get("sensor.nexo_tmp_hall").state == "unavailable"
@@ -222,7 +222,7 @@ async def test_reload_after_failed_cycles(hass: HomeAssistant, fake_nexo, freeze
         for _ in range(3):
             freezer.tick(timedelta(seconds=11))
             async_fire_time_changed(hass)
-            await hass.async_block_till_done()
+            await hass.async_block_till_done(wait_background_tasks=True)
     reload.assert_called_once_with(entry.entry_id)
 
 
@@ -302,7 +302,9 @@ async def _tick(hass: HomeAssistant, freezer, seconds: float) -> None:
 
     freezer.tick(timedelta(seconds=seconds))
     async_fire_time_changed(hass)
-    await hass.async_block_till_done()
+    # A scheduled refresh runs as a background task: without waiting for it a
+    # read in the executor could still be going when the test looks
+    await hass.async_block_till_done(wait_background_tasks=True)
 
 
 async def test_valve_state_follows_sections(hass: HomeAssistant, fake_nexo, freezer) -> None:

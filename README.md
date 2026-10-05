@@ -191,7 +191,9 @@ thermostats the options ask for each one: *Heating* (the default) or
   Home Assistant are seen; a wrong one at the wall panel stays in the
   central unit.
 - **Arming is refused with a sensor violated** - a window open - or faulty;
-  the central unit's reply is shown.
+  the central unit's reply is shown. A refusal may also mean the user has no
+  rights to the partition: regular users get the partitions the
+  administrator assigned them.
 - **One button.** Nexo arms a partition one way; for each regular partition
   the options pick how "armed" shows - away (the default), home, night or
   vacation - and the panel offers that one button.
