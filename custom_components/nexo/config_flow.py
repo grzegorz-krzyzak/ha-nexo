@@ -39,6 +39,8 @@ from .const import (
     ANALOG_KINDS,
     ANALOG_OFFSET,
     ANALOG_OFFSET_LIMIT,
+    BLIND_CLASSES,
+    BLIND_DEFAULT_CLASS,
     COVER_CLOSE_COMMAND,
     COVER_DEVICE_CLASS,
     COVER_OPEN_COMMAND,
@@ -65,6 +67,8 @@ from .const import (
     OPT_OUTPUT_SENSORS,
     OPT_PARTITIONS,
     OPT_BINARY_SENSORS,
+    OPT_BLIND_CLASSES,
+    OPT_BLINDS,
     OPT_BUTTONS,
     OPT_COVERS,
     OPT_DIMMERS,
@@ -153,6 +157,9 @@ NONE = "—"
 SELECT_ALL = "select_all"
 MENU_STEPS = {"connected": "menu", "not_answering": "menu_offline", "unsaved": "menu_unsaved"}
 ALERT_TYPES = {"connected": "success", "not_answering": "warning", "unsaved": "info"}
+# The types whose names the role fields (lights, switches, read only, never
+# offered, blinds) and the never-offered filter hold
+ROLE_TYPES = (ImportTypes.LIGHT, ImportTypes.OUTPUT, ImportTypes.DIMMER, ImportTypes.BLIND)
 
 
 def _check_login(host: str, port: int, password: str) -> None:
@@ -417,8 +424,8 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             # connection and settings in the order of the Polish names, as
             # NexoVision words them; one order serves every language
             menu_options=[
-                "connection", "sensors", "logic", "lights", "partitions", "weather", "dimmers",
-                "thermometers", "thermostats", "analog", "outputs", "analog_outputs",
+                "connection", "sensors", "logic", "lights", "partitions", "blinds", "weather",
+                "dimmers", "thermometers", "thermostats", "analog", "outputs", "analog_outputs",
                 "settings", "save",
             ],
             description_placeholders={
@@ -435,6 +442,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 ),
                 OPT_ANALOG_OUTPUTS: str(len(options.get(OPT_ANALOG_OUTPUTS, []))),
                 OPT_PARTITIONS: str(len(options.get(OPT_PARTITIONS, []))),
+                OPT_BLINDS: str(len(options.get(OPT_BLINDS, []))),
                 **{
                     key: str(len(options.get(key, [])))
                     for key in (OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES, OPT_EXCLUDED)
@@ -737,11 +745,13 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         names: list[str],
         keys: list[str],
         user_input: dict[str, Any] | None,
+        after: Callable[[], Coroutine[Any, Any, ConfigFlowResult]] | None = None,
     ) -> ConfigFlowResult:
-        """Three fields over one list of resources, top down: never offered,
-        then the safer role, then the last. Each resource in one field at
-        most; "select all" fills the last field with what the others do not
-        hold, as they are when it is ticked."""
+        """Fields over one list of resources, top down: never offered, then
+        the safer role, then the last. Each resource in one field at most;
+        "select all" fills the last field with what the others do not hold,
+        as they are when it is ticked. Saved, the form goes on to after, or
+        back to the menu."""
         mine = set(names)
         if user_input is None:
             values: dict[str, list[str]] = {}
@@ -768,15 +778,23 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                     errors={"base": "role_conflict"}, placeholders={"resource": clash},
                 )
             seen |= set(values[key])
+        # Only here, on a save from the menu, never at setup: a name the
+        # central unit no longer has is dropped from these fields - kept, it
+        # could not be unticked, as the lists show only what exists. A list
+        # that cannot be read aborts the form and drops nothing.
+        try:
+            existing = {n for t in ROLE_TYPES for n in await self._resources(t)}
+        except NexoError as err:
+            return self._cannot_list(err)
         for key in keys:
             # Keep the other types' part of the key, in its order
             old = self._options.get(key, [])
             chosen = set(values[key])
             self._options[key] = [
-                *(n for n in old if n not in mine or n in chosen),
+                *(n for n in old if (n not in mine and n in existing) or n in chosen),
                 *(n for n in values[key] if n not in old),
             ]
-        return await self.async_step_menu()
+        return await (after or self.async_step_menu)()
 
     async def async_step_lights(
         self, user_input: dict[str, Any] | None = None
@@ -896,6 +914,54 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                         default=item.get(PARTITION_MODE, PARTITION_DEFAULT_MODE),
                     ): mode
                     for item in items
+                }
+            ),
+        )
+
+    # ---------------------------------------------------------------- blinds
+
+    async def async_step_blinds(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Blind outputs: blinds, never offered. Nothing by default."""
+        try:
+            names = await self._resources(ImportTypes.BLIND)
+        except NexoError as err:
+            return self._cannot_list(err)
+        return await self._roles_step(
+            "blinds", names, [OPT_EXCLUDED, OPT_BLINDS], user_input,
+            after=self.async_step_blinds_class,
+        )
+
+    async def async_step_blinds_class(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """What each blind shows as - a roller shutter unless told."""
+        blinds = self._options.get(OPT_BLINDS, [])
+        old = self._options.get(OPT_BLIND_CLASSES, {})
+        if user_input is not None or not blinds:
+            chosen = user_input or {}
+            # Only the blinds picked, and only what differs from the default
+            self._options[OPT_BLIND_CLASSES] = {
+                name: cls
+                for name in blinds
+                if (cls := chosen.get(name, old.get(name, BLIND_DEFAULT_CLASS)))
+                != BLIND_DEFAULT_CLASS
+            }
+            return await self.async_step_menu()
+        device_class = SelectSelector(
+            SelectSelectorConfig(
+                options=BLIND_CLASSES,
+                mode=SelectSelectorMode.DROPDOWN,
+                translation_key="blind_class",
+            )
+        )
+        return self.async_show_form(
+            step_id="blinds_class",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(name, default=old.get(name, BLIND_DEFAULT_CLASS)): device_class
+                    for name in blinds
                 }
             ),
         )

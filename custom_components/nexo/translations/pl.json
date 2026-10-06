@@ -61,6 +61,7 @@
           "analog_outputs": "Wyjścia analogowe",
           "thermostats": "Termostaty",
           "partitions": "Partycje",
+          "blinds": "Rolety",
           "logic": "Logika",
           "weather": "Stacja pogodowa",
           "settings": "Ustawienia",
@@ -79,7 +80,8 @@
           "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
-          "partitions": "Alarm, uzbrajany za każdym razem Twoim kodem: {partitions}"
+          "partitions": "Alarm, uzbrajany za każdym razem Twoim kodem: {partitions}",
+          "blinds": "Rolet: {blinds}"
         },
         "description": ""
       },
@@ -96,6 +98,7 @@
           "analog_outputs": "Wyjścia analogowe",
           "thermostats": "Termostaty",
           "partitions": "Partycje",
+          "blinds": "Rolety",
           "logic": "Logika",
           "weather": "Stacja pogodowa",
           "settings": "Ustawienia",
@@ -114,7 +117,8 @@
           "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
-          "partitions": "Alarm, uzbrajany za każdym razem Twoim kodem: {partitions}"
+          "partitions": "Alarm, uzbrajany za każdym razem Twoim kodem: {partitions}",
+          "blinds": "Rolet: {blinds}"
         },
         "description": "{alert_open}Centrala nie odpowiada{alert_close}"
       },
@@ -131,6 +135,7 @@
           "analog_outputs": "Wyjścia analogowe",
           "thermostats": "Termostaty",
           "partitions": "Partycje",
+          "blinds": "Rolety",
           "logic": "Logika",
           "weather": "Stacja pogodowa",
           "settings": "Ustawienia",
@@ -149,7 +154,8 @@
           "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
-          "partitions": "Alarm, uzbrajany za każdym razem Twoim kodem: {partitions}"
+          "partitions": "Alarm, uzbrajany za każdym razem Twoim kodem: {partitions}",
+          "blinds": "Rolet: {blinds}"
         },
         "description": "{alert_open}Zmieniono połączenie – wybierz Zapisz i zamknij, żeby je zastosować{alert_close}"
       },
@@ -312,6 +318,24 @@
       "partitions_mode": {
         "title": "Jak pokazać „uzbrojona”",
         "description": "Przy każdej zwykłej partycji: nazwa stanu uzbrojenia i jej jedyny przycisk. Nexo uzbraja partycję w jeden sposób; to tylko nazwa w HA."
+      },
+      "blinds": {
+        "title": "Rolety",
+        "description": "Wyjścia rolet centrali (moduły rolet), od góry: nie pokazuj do wyboru, rolety - druga lista bez tego, co zaznaczone w pierwszej. HA podnosi, opuszcza i zatrzymuje roletę; Nexo nie zna położenia, więc stan widać tylko, gdy moduł trzyma przekaźnik - przez czas ustawiony w wyjściu w centrali.",
+        "data": {
+          "excluded": "Nie pokazuj do wyboru",
+          "blinds": "Rolety",
+          "select_all": "Zaznacz wszystkie"
+        },
+        "data_description": {
+          "excluded": "Wyjścia, którymi HA nie ma sterować - brama na wyjściu rolety, której logika ma warunek bezpieczeństwa (otwórz tylko zamkniętą), idzie przez Logika → Bramy i drzwi; zapis w wyjście ominąłby warunek.",
+          "blinds": "Podnoszenie i opuszczanie widać tak długo, jak moduł trzyma przekaźnik - przy urządzeniu uruchamianym impulsem, np. napędzie bramy, tylko przez chwilę: ruch bierz wtedy z innego czujnika.",
+          "select_all": "Wypełnia pole Rolety wszystkim, czego nie ma w polu Nie pokazuj do wyboru, żeby odznaczyć kilka pozycji."
+        }
+      },
+      "blinds_class": {
+        "title": "Rodzaj urządzenia",
+        "description": "Jak każda roleta wygląda w HA - ikona i opis stanu. Nexo steruje wszystkimi tak samo."
       },
       "analog_outputs": {
         "title": "Wyjścia analogowe",
@@ -1859,6 +1883,14 @@
         "armed_night": "Uzbrojona na noc",
         "armed_vacation": "Uzbrojona na urlop"
       }
+    },
+    "blind_class": {
+      "options": {
+        "shutter": "Roleta",
+        "awning": "Markiza",
+        "blind": "Żaluzja",
+        "gate": "Brama"
+      }
     }
   },
   "entity": {
@@ -1959,6 +1991,9 @@
     },
     "partitions": {
       "name": "Partycje"
+    },
+    "blinds": {
+      "name": "Rolety"
     },
     "logic": {
       "name": "Logika"

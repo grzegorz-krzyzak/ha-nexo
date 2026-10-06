@@ -12,13 +12,20 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from .const import OPT_DIMMERS, OPT_EXCLUDED, OPT_LIGHTS, OPT_OUTPUT_SENSORS, OPT_SWITCHES
+from .const import (
+    OPT_BLINDS,
+    OPT_DIMMERS,
+    OPT_EXCLUDED,
+    OPT_LIGHTS,
+    OPT_OUTPUT_SENSORS,
+    OPT_SWITCHES,
+)
 
 # "Never offer" keeps a resource from being controlled - reading it stays
 # fine: the sleep-mode output, say, excluded and read as a sensor. So a
 # conflict is only a controlled role next to any other; of the controlled
 # roles, the first listed wins.
-CONTROLLED = (OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES)
+CONTROLLED = (OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES, OPT_BLINDS)
 NOT_CONTROLLED = (OPT_EXCLUDED, OPT_OUTPUT_SENSORS)
 
 

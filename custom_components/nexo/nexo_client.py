@@ -715,6 +715,33 @@ class NexoClient:
                 f"Central unit refused level {level} for {name!r}: {failure}"
             )
 
+    # A blind output's state word, and the values that drive it (measured
+    # 2026-10-06): the word shows the relay - lowering or raising while the
+    # module holds it for the time configured in the output, then stopped.
+    BLIND_STOPPED = 0
+    BLIND_LOWERING = 1
+    BLIND_RAISING = 2
+
+    def move_blind(self, name: str, value: int) -> None:
+        """Raise (2), lower (1) or stop (0) a blind output.
+
+        Measured: the numeric command takes the state word's own values; 0
+        releases the relay before its time, the only stop there is - the text
+        commands 'podnies' and 'opusc' have no stop and no reply to check.
+        """
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, int)
+            or value not in (self.BLIND_STOPPED, self.BLIND_LOWERING, self.BLIND_RAISING)
+        ):
+            raise ValueError(f"blind value must be 0, 1 or 2, got {value!r}")
+        reply = self._system_c(name, str(value), reply_polls=self.CONTROL_REPLY_POLLS)
+        failure = self._strip_prefix(reply)
+        if failure:
+            raise NexoCommandError(
+                f"Central unit refused {value} for blind {name!r}: {failure}"
+            )
+
     def blind_up(self, name: str) -> None:
         self._control(f"podnies {self._quote(name)}")
 

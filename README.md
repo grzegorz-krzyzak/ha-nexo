@@ -22,6 +22,7 @@ connection the NexoVision app uses. Local polling, no cloud.
 | Outputs and lighting outputs, switched | `switch` | on / off, e.g. a ventilation unit |
 | Thermostats | `climate` | heat or cool (set per thermostat) / off, threshold in tenths - see *Thermostats* |
 | Analog outputs | `number` | level 0-100 % - see *Analog outputs* |
+| Blind outputs (roller-shutter modules) | `cover` | raise / lower / stop; raising or lowering while the relay is held, no position - see *Blinds* |
 | Alarm partitions | `alarm_control_panel` | disarmed / armed / alarming; a code each time; 24h read only - see *Alarm partitions* |
 | Weather station card | `sensor`, `binary_sensor` | temperature, daylight, wind, sun from three sides; frost, heat, twilight, sunny, calm, strong wind, rain - see *Weather station* |
 | Gates and doors driven by logic commands | `cover` | closed / not closed, from a reed switch |
@@ -29,7 +30,7 @@ connection the NexoVision app uses. Local polling, no cloud.
 | Any logic command | `button` | fire and forget |
 
 Not supported:
-- **Blinds** - nothing to test them on.
+- **Blind groups** - none to test them on.
 - **The central unit's lighting groups** - use Home Assistant's own; a
   group's state in the central unit depends on its history.
 - **"Ventilation (0-10V)" resources** - overlays in the configurator that
@@ -73,6 +74,8 @@ the alphabetical order of the Polish names between *Connection* and
   (see *Lighting and outputs*).
 - **Partitions** - the alarm partitions to import, then how "armed" shows
   for each regular one (see *Alarm partitions*).
+- **Blinds** - blind outputs, each as a blind or not offered, then the
+  device type of each (see *Blinds*).
 - **Weather station** - see *Weather station*.
 - **Dimmers** - with brightness.
 - **Thermometers** - a thermostat's own thermometer is read with it anyway.
@@ -124,6 +127,12 @@ already uses as sections are not listed on these screens.
 
 Options saved before 0.11.1 could hold an output both read only and never
 offered; the *Outputs* screen shows it read only and saving settles it there.
+**A resource deleted in the central unit** drops out of these fields - and of
+*Don't offer* - the next time one of these screens (or *Blinds*) is saved;
+the lists show only what exists, so it could not be unticked. Only a save
+does it, never setup: a list that cannot be read stops the form, and
+nothing is dropped. Since 0.14.
+
 If the stored options
 still give a resource a controlled role next to another one - edited by hand,
 restored from an old backup - setup keeps the safer role (not offered or
@@ -210,6 +219,32 @@ thermostats the options ask for each one: *Heating* (the default) or
   their own type: shown read only, without buttons - they are not disarmed.
   An alarm there is stopped with "Wyczyść alarm" on the wall panel or in
   NexoVision.
+
+### Blinds
+
+The options' *Blinds* imports the outputs of roller-shutter modules - two
+relays each, raise and lower, held for the time set in the output in the
+configurator.
+
+- **Raise, lower, stop.** Written as the central unit's own state values
+  (2, 1, 0); a refusal is shown. Stop releases the relay before its time.
+- **Raising or lowering lasts as long as the relay is held** - the time set
+  in the output in Nexo. For a blind set to its travel time that is the
+  motion; **for a device started by an impulse - a gate drive, an awning
+  on a pulse - only a moment**: take its motion from another sensor, such
+  as a reed switch. Nexo knows nothing more, and the integration shows
+  nothing it does not know.
+- **No position, no open or closed.** Stopped, a blind reads as unknown,
+  and both directions stay usable. No travel time is kept in Home Assistant:
+  like the logic, the time stays in the central unit.
+- **Device type** per blind - roller shutter (the default), awning, venetian
+  blind or gate; only the icon and wording change.
+- **A gate whose logic carries a safety condition** - open only when closed
+  - belongs under *Logic → Gates and doors*, driven by its logic commands,
+  with the blind output under *Don't offer*: writing the output would skip
+  the condition.
+- Read with the *Outputs* group (10 s by default) and every second for a
+  minute after a command.
 
 ### Analog outputs
 

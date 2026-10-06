@@ -1,4 +1,4 @@
-"""Gates and doors driven by Nexo logic commands."""
+"""Gates and doors driven by Nexo logic commands, and blind outputs."""
 
 from __future__ import annotations
 
@@ -17,6 +17,8 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import NexoConfigEntry
 from .const import (
+    BLIND_DEFAULT_CLASS,
+    BOOST_BLIND,
     BOOST_GATE_DEFAULT,
     COVER_CLOSE_COMMAND,
     COVER_DEVICE_CLASS,
@@ -26,12 +28,14 @@ from .const import (
     COVER_TRAVEL_TIME,
     ITEM_ID,
     ITEM_NAME,
+    OPT_BLIND_CLASSES,
+    OPT_BLINDS,
     OPT_COVERS,
     SENSOR_INTACT,
     SENSOR_VIOLATED,
 )
 from .coordinator import NexoCoordinator
-from .entity import NexoEntity
+from .entity import NexoEntity, NexoResourceEntity
 from .motion import Motion, step
 from .nexo_client import NexoClient, NexoError
 
@@ -47,6 +51,11 @@ async def async_setup_entry(
     async_add_entities(
         NexoLogicCover(data.coordinator, item, data.motions.get(item[ITEM_ID]))
         for item in entry.options.get(OPT_COVERS, [])
+    )
+    classes = entry.options.get(OPT_BLIND_CLASSES, {})
+    async_add_entities(
+        NexoBlind(data.coordinator, name, classes.get(name, BLIND_DEFAULT_CLASS))
+        for name in data.options.get(OPT_BLINDS, [])
     )
 
 
@@ -187,3 +196,58 @@ async def async_boost_reed(coordinator: NexoCoordinator, item: dict[str, Any]) -
         await coordinator.async_boost([reed_sensor], seconds)
     else:
         await coordinator.async_request_refresh()
+
+
+class NexoBlind(NexoResourceEntity, CoverEntity):
+    """A blind output of a roller-shutter module: raise, lower, stop.
+
+    The state word shows the relay, not the blind: raising or lowering while
+    the module holds the relay for the time set in the output, then stopped.
+    For a blind whose time covers its travel that is the motion; for a device
+    started by an impulse (a gate drive) it lasts only the impulse - Nexo has
+    nothing more to tell. No position, so both directions always stay usable.
+    """
+
+    _group = "blinds"
+    _attr_supported_features = (
+        CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.STOP
+    )
+    _attr_assumed_state = True
+
+    def __init__(self, coordinator: NexoCoordinator, name: str, device_class: str) -> None:
+        super().__init__(coordinator, "blind", name)
+        self._attr_device_class = CoverDeviceClass(device_class)
+
+    @property
+    def is_closed(self) -> bool | None:
+        return None
+
+    @property
+    def is_opening(self) -> bool:
+        return self.raw_state == NexoClient.BLIND_RAISING
+
+    @property
+    def is_closing(self) -> bool:
+        return self.raw_state == NexoClient.BLIND_LOWERING
+
+    async def async_open_cover(self, **kwargs: Any) -> None:
+        await self._async_move(NexoClient.BLIND_RAISING)
+
+    async def async_close_cover(self, **kwargs: Any) -> None:
+        await self._async_move(NexoClient.BLIND_LOWERING)
+
+    async def async_stop_cover(self, **kwargs: Any) -> None:
+        await self._async_move(NexoClient.BLIND_STOPPED)
+
+    async def _async_move(self, value: int) -> None:
+        hub = self.coordinator.hub
+        try:
+            await hub.async_call(hub.client.move_blind, self.resource, value)
+        except NexoError as err:
+            raise HomeAssistantError(
+                f"{self.name}: the central unit did not accept the command: {err}"
+            ) from err
+        finally:
+            # Read back even after an error: a command may have worked
+            # although its reply was lost.
+            await self.coordinator.async_boost([self.resource], BOOST_BLIND)

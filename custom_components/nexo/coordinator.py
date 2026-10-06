@@ -22,6 +22,7 @@ from .const import (
     FAILED_CYCLES_BEFORE_RELOAD,
     OPT_ANALOG_OUTPUTS,
     OPT_ANALOG_SENSORS,
+    OPT_BLINDS,
     OPT_BINARY_SENSORS,
     OPT_COVERS,
     OPT_DIMMERS,
@@ -98,6 +99,8 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
         }
         outputs = {
             *options.get(OPT_OUTPUT_SENSORS, []),
+            # A blind moves on command, from the logic or its local buttons
+            *options.get(OPT_BLINDS, []),
             *(
                 section
                 for valve in options.get(OPT_VALVES, [])

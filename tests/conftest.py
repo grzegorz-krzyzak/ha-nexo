@@ -64,6 +64,9 @@ class FakeNexo:
             "HOUSE": 0,
             "NIGHT": 1,
             "FIRE": 1,
+            # Blind outputs: stopped (0); 1 lowering, 2 raising (measured)
+            "SHUTTER": 0,
+            "AWNING": 0,
         }
         self.listing: dict[ImportTypes, list[str]] = {
             ImportTypes.SENSOR: ["KON DOOR", "KON GATE", "PIR HALL"],
@@ -75,6 +78,7 @@ class FakeNexo:
             ImportTypes.ANALOG_OUTPUT: ["SPEED", "ROOF LEVEL"],
             ImportTypes.PARTITION: ["HOUSE", "NIGHT"],
             ImportTypes.PARTITION24H: ["FIRE"],
+            ImportTypes.BLIND: ["SHUTTER", "AWNING"],
             ImportTypes.WEATHER_STATION: [
                 "SP:Aura", "SP:Temperatura", "SP:Światło", "SP:Wiatr", "SP:Słońce",
             ],
@@ -84,6 +88,8 @@ class FakeNexo:
         self.turn_off = MagicMock()
         self.set_level = MagicMock()
         self.set_analog_level = MagicMock(side_effect=self._set_analog_level)
+        # The relay held until the next command here - the module's time runs out on its own
+        self.move_blind = MagicMock(side_effect=self.states.__setitem__)
         self.arm = MagicMock(side_effect=lambda code, name: self._partition(code, name, 1))
         self.disarm = MagicMock(side_effect=lambda code, name: self._partition(code, name, 0))
         self.thermostats = [

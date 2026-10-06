@@ -92,6 +92,17 @@ EVENT_WRONG_CODE: Final = "nexo_wrong_code"
 # Analogue outputs (0-10 V) the user picked: each a level 0-100 %. Not
 # composed with the output that powers the device - that differs per house.
 OPT_ANALOG_OUTPUTS: Final = "analog_outputs"
+# Blind outputs (roller-shutter modules) the user picked, and per blind the
+# device class it shows as: {name: class}, absent for the default. Nexo knows
+# no position and no travel time - the module holds its relay for the time
+# set in the output - so neither is kept here. Nothing by default.
+OPT_BLINDS: Final = "blinds"
+OPT_BLIND_CLASSES: Final = "blind_classes"
+BLIND_CLASSES: Final = ["shutter", "awning", "blind", "gate"]
+BLIND_DEFAULT_CLASS: Final = "shutter"
+# After a command a blind is read every second this long: its word shows
+# the relay, held for as long as the output is set to run
+BOOST_BLIND: Final = 60
 # The weather station card's five resources, in card order (weather.py), when
 # the user imports it; absent or empty, not imported. Nothing by default.
 OPT_WEATHER: Final = "weather_station"

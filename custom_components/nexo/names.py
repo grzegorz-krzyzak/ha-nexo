@@ -19,6 +19,7 @@ from .const import (
     OPT_ANALOG_OUTPUTS,
     OPT_ANALOG_SENSORS,
     OPT_BINARY_SENSORS,
+    OPT_BLINDS,
     OPT_COVERS,
     OPT_DIMMERS,
     OPT_LIGHTS,
@@ -42,7 +43,7 @@ def used_names(options: Mapping[str, Any]) -> set[str]:
     return {
         *(n for key in (
             OPT_BINARY_SENSORS, OPT_THERMOMETERS, OPT_ANALOG_SENSORS, OPT_OUTPUT_SENSORS,
-            OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES, OPT_ANALOG_OUTPUTS, OPT_WEATHER,
+            OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES, OPT_ANALOG_OUTPUTS, OPT_WEATHER, OPT_BLINDS,
         ) for n in options.get(key, [])),
         *(c[COVER_REED_SENSOR] for c in options.get(OPT_COVERS, []) if c.get(COVER_REED_SENSOR)),
         *(s for v in options.get(OPT_VALVES, []) for s in v.get(VALVE_SECTIONS, [])),

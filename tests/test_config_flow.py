@@ -66,8 +66,9 @@ async def test_menu_summary(hass: HomeAssistant, fake_nexo) -> None:
     result = await hass.config_entries.options.async_init(entry.entry_id)
     assert result["type"] is FlowResultType.MENU
     assert result["menu_options"] == [
-        "connection", "sensors", "logic", "lights", "partitions", "weather", "dimmers",
-        "thermometers", "thermostats", "analog", "outputs", "analog_outputs", "settings", "save",
+        "connection", "sensors", "logic", "lights", "partitions", "blinds", "weather",
+        "dimmers", "thermometers", "thermostats", "analog", "outputs", "analog_outputs",
+        "settings", "save",
     ]
     placeholders = result["description_placeholders"]
     assert placeholders["address"] == "192.0.2.10:1024"

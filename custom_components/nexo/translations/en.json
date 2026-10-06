@@ -61,6 +61,7 @@
           "analog_outputs": "Analog outputs",
           "thermostats": "Thermostats",
           "partitions": "Partitions",
+          "blinds": "Blinds",
           "logic": "Logic",
           "weather": "Weather station",
           "settings": "Settings",
@@ -79,7 +80,8 @@
           "logic": "Gates and doors, buttons, programs: {logic_items}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
-          "partitions": "Alarm, armed with your code each time: {partitions}"
+          "partitions": "Alarm, armed with your code each time: {partitions}",
+          "blinds": "Blinds: {blinds}"
         },
         "description": ""
       },
@@ -96,6 +98,7 @@
           "analog_outputs": "Analog outputs",
           "thermostats": "Thermostats",
           "partitions": "Partitions",
+          "blinds": "Blinds",
           "logic": "Logic",
           "weather": "Weather station",
           "settings": "Settings",
@@ -114,7 +117,8 @@
           "logic": "Gates and doors, buttons, programs: {logic_items}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
-          "partitions": "Alarm, armed with your code each time: {partitions}"
+          "partitions": "Alarm, armed with your code each time: {partitions}",
+          "blinds": "Blinds: {blinds}"
         },
         "description": "{alert_open}The central unit is not answering{alert_close}"
       },
@@ -131,6 +135,7 @@
           "analog_outputs": "Analog outputs",
           "thermostats": "Thermostats",
           "partitions": "Partitions",
+          "blinds": "Blinds",
           "logic": "Logic",
           "weather": "Weather station",
           "settings": "Settings",
@@ -149,7 +154,8 @@
           "logic": "Gates and doors, buttons, programs: {logic_items}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
-          "partitions": "Alarm, armed with your code each time: {partitions}"
+          "partitions": "Alarm, armed with your code each time: {partitions}",
+          "blinds": "Blinds: {blinds}"
         },
         "description": "{alert_open}Connection changed – choose Save and close to apply it{alert_close}"
       },
@@ -312,6 +318,24 @@
       "partitions_mode": {
         "title": "How \"armed\" shows",
         "description": "For each regular partition, the label of its armed state and its one button. Nexo arms a partition one way; this only names it in Home Assistant."
+      },
+      "blinds": {
+        "title": "Blinds",
+        "description": "The central unit's blind outputs (roller-shutter modules), top down: don't offer, blinds - the second list without what the first holds. Home Assistant raises, lowers and stops a blind; Nexo knows no position, so the state shows only while the module holds the relay - for as long as the output's time in the central unit.",
+        "data": {
+          "excluded": "Don't offer",
+          "blinds": "Blinds",
+          "select_all": "Select all"
+        },
+        "data_description": {
+          "excluded": "Outputs Home Assistant must not drive - a gate on a blind output whose logic carries a safety condition (open only when closed) is driven through Logic → Gates and doors; writing the output would skip the condition.",
+          "blinds": "Raising or lowering shows for as long as the relay is held - for a device started by an impulse, such as a gate drive, only a moment: take its motion from another sensor.",
+          "select_all": "Fills Blinds with everything Don't offer does not hold, to untick a few."
+        }
+      },
+      "blinds_class": {
+        "title": "Device type",
+        "description": "How each blind shows in Home Assistant - its icon and wording. Nexo drives them all alike."
       },
       "analog_outputs": {
         "title": "Analog outputs",
@@ -1859,6 +1883,14 @@
         "armed_night": "Armed night",
         "armed_vacation": "Armed vacation"
       }
+    },
+    "blind_class": {
+      "options": {
+        "shutter": "Roller shutter",
+        "awning": "Awning",
+        "blind": "Venetian blind",
+        "gate": "Gate"
+      }
     }
   },
   "entity": {
@@ -1959,6 +1991,9 @@
     },
     "partitions": {
       "name": "Partitions"
+    },
+    "blinds": {
+      "name": "Blinds"
     },
     "logic": {
       "name": "Logic"

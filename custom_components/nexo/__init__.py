@@ -31,6 +31,7 @@ from .const import (
     OPT_ANALOG_OUTPUTS,
     OPT_ANALOG_SENSORS,
     OPT_BINARY_SENSORS,
+    OPT_BLINDS,
     OPT_BUTTONS,
     OPT_COVERS,
     OPT_DIMMERS,
@@ -199,6 +200,7 @@ def _remove_deselected_entities(
         *(f"button_{item[ITEM_ID]}" for item in options.get(OPT_BUTTONS, [])),
         *(f"valve_{item[ITEM_ID]}" for item in options.get(OPT_VALVES, [])),
         *(f"analog_output_{name}" for name in options.get(OPT_ANALOG_OUTPUTS, [])),
+        *(f"blind_{name}" for name in options.get(OPT_BLINDS, [])),
         *(f"partition_{p[PARTITION_NAME]}" for p in options.get(OPT_PARTITIONS, [])),
         # The weather station: its readings and conditions, by role
         *(
