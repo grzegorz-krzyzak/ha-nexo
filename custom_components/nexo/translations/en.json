@@ -72,16 +72,16 @@
           "sensors": "Inputs: {binary_sensors}",
           "analog": "Nexo type: Analog sensor · inputs: {analog_sensors}",
           "thermometers": "Thermometers: {thermometers}",
-          "lights": "Light, switch or don't offer · lights: {lights}",
+          "lights": "Lights: {lights} · switches: {lights_switches} · don't offer: {lights_excluded}",
           "dimmers": "Dimmers: {dimmers}",
-          "outputs": "Switch, read only or don't offer · read only: {output_sensors}",
+          "outputs": "Switches: {outputs_switches} · read only: {output_sensors} · don't offer: {outputs_excluded}",
           "analog_outputs": "Outputs: {analog_outputs}",
           "thermostats": "Thermostats: {thermostats}",
           "logic": "Gates and doors, buttons, programs: {logic_items}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
           "partitions": "Alarm, armed with your code each time: {partitions}",
-          "blinds": "Blinds: {blinds}"
+          "blinds": "Blinds: {blinds} · don't offer: {blinds_excluded}"
         },
         "description": ""
       },
@@ -109,16 +109,16 @@
           "sensors": "Inputs: {binary_sensors}",
           "analog": "Nexo type: Analog sensor · inputs: {analog_sensors}",
           "thermometers": "Thermometers: {thermometers}",
-          "lights": "Light, switch or don't offer · lights: {lights}",
+          "lights": "Lights: {lights} · switches: {lights_switches} · don't offer: {lights_excluded}",
           "dimmers": "Dimmers: {dimmers}",
-          "outputs": "Switch, read only or don't offer · read only: {output_sensors}",
+          "outputs": "Switches: {outputs_switches} · read only: {output_sensors} · don't offer: {outputs_excluded}",
           "analog_outputs": "Outputs: {analog_outputs}",
           "thermostats": "Thermostats: {thermostats}",
           "logic": "Gates and doors, buttons, programs: {logic_items}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
           "partitions": "Alarm, armed with your code each time: {partitions}",
-          "blinds": "Blinds: {blinds}"
+          "blinds": "Blinds: {blinds} · don't offer: {blinds_excluded}"
         },
         "description": "{alert_open}The central unit is not answering{alert_close}"
       },
@@ -146,16 +146,16 @@
           "sensors": "Inputs: {binary_sensors}",
           "analog": "Nexo type: Analog sensor · inputs: {analog_sensors}",
           "thermometers": "Thermometers: {thermometers}",
-          "lights": "Light, switch or don't offer · lights: {lights}",
+          "lights": "Lights: {lights} · switches: {lights_switches} · don't offer: {lights_excluded}",
           "dimmers": "Dimmers: {dimmers}",
-          "outputs": "Switch, read only or don't offer · read only: {output_sensors}",
+          "outputs": "Switches: {outputs_switches} · read only: {output_sensors} · don't offer: {outputs_excluded}",
           "analog_outputs": "Outputs: {analog_outputs}",
           "thermostats": "Thermostats: {thermostats}",
           "logic": "Gates and doors, buttons, programs: {logic_items}",
           "settings": "Polling: inputs every {interval_inputs} s, outputs {interval_outputs} s, lights {interval_lights} s, measurements {interval_measurements} s",
           "save": "Closing the window with ✕ discards the changes",
           "partitions": "Alarm, armed with your code each time: {partitions}",
-          "blinds": "Blinds: {blinds}"
+          "blinds": "Blinds: {blinds} · don't offer: {blinds_excluded}"
         },
         "description": "{alert_open}Connection changed – choose Save and close to apply it{alert_close}"
       },

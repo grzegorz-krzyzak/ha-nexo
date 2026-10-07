@@ -78,6 +78,11 @@ class NexoHub:
             return
         await self.async_call(self._client.ping)
 
+    def cached_resources(self, resource_type: ImportTypes) -> list[str] | None:
+        """The names of one type if already read, without asking the central
+        unit; None if not read yet."""
+        return self._resources.get(resource_type)
+
     async def async_resources(self, resource_type: ImportTypes) -> list[str]:
         """Return the resource names of one type, read once and cached."""
         if resource_type not in self._resources:

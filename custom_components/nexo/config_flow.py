@@ -160,6 +160,16 @@ ALERT_TYPES = {"connected": "success", "not_answering": "warning", "unsaved": "i
 # The types whose names the role fields (lights, switches, read only, never
 # offered, blinds) and the never-offered filter hold
 ROLE_TYPES = (ImportTypes.LIGHT, ImportTypes.OUTPUT, ImportTypes.DIMMER, ImportTypes.BLIND)
+# The menu items with a "don't offer" field, with their type and the fields
+# counted next to them. Switches and "don't offer" hold names of several
+# types, so each item counts by its own list - the one the name check reads
+# after setup, never asked for by the menu; a list not read yet shows a dash.
+# An item without the field shows no count: nothing of its type is excluded.
+ROLE_COUNTS = {
+    "lights": (ImportTypes.LIGHT, (OPT_SWITCHES, OPT_EXCLUDED)),
+    "outputs": (ImportTypes.OUTPUT, (OPT_SWITCHES, OPT_EXCLUDED)),
+    "blinds": (ImportTypes.BLIND, (OPT_EXCLUDED,)),
+}
 
 
 def _check_login(host: str, port: int, password: str) -> None:
@@ -267,6 +277,20 @@ def _analog_placeholders(index: int, item: dict[str, Any]) -> dict[str, str]:
         f"analog_{index}_unit": "—" if kind == ANALOG_KIND_RAW else "%",
         f"analog_{index}_offset": f"{int(item.get(ANALOG_OFFSET, 0)):+d}",
     }
+
+
+def _role_counts(
+    options: Mapping[str, Any], cached: Callable[[ImportTypes], list[str] | None]
+) -> dict[str, str]:
+    """Placeholders <item>_<field>: how many of the item's type the field holds."""
+    counts = {}
+    for item, (resource_type, keys) in ROLE_COUNTS.items():
+        names = cached(resource_type)
+        for key in keys:
+            counts[f"{item}_{key}"] = (
+                NONE if names is None else str(len(set(options.get(key, [])) & set(names)))
+            )
+    return counts
 
 
 def _cover_summary(item: dict[str, Any]) -> str:
@@ -443,6 +467,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 OPT_ANALOG_OUTPUTS: str(len(options.get(OPT_ANALOG_OUTPUTS, []))),
                 OPT_PARTITIONS: str(len(options.get(OPT_PARTITIONS, []))),
                 OPT_BLINDS: str(len(options.get(OPT_BLINDS, []))),
+                **_role_counts(options, self.config_entry.runtime_data.hub.cached_resources),
                 **{
                     key: str(len(options.get(key, [])))
                     for key in (OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES, OPT_EXCLUDED)

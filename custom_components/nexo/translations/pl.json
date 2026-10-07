@@ -72,16 +72,16 @@
           "sensors": "Wejść: {binary_sensors}",
           "analog": "Typ Nexo: Czujnik analogowy · wejść: {analog_sensors}",
           "thermometers": "Termometrów: {thermometers}",
-          "lights": "Światło, przełącznik albo nie pokazuj do wyboru · świateł: {lights}",
+          "lights": "Świateł: {lights} · przełączników: {lights_switches} · nie pokazuj: {lights_excluded}",
           "dimmers": "Ściemniaczy: {dimmers}",
-          "outputs": "Przełącznik, tylko odczyt albo nie pokazuj do wyboru · tylko odczyt: {output_sensors}",
+          "outputs": "Przełączników: {outputs_switches} · tylko odczyt: {output_sensors} · nie pokazuj: {outputs_excluded}",
           "analog_outputs": "Wyjść: {analog_outputs}",
           "thermostats": "Termostaty: {thermostats}",
           "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
           "partitions": "Alarm, uzbrajany za każdym razem Twoim kodem: {partitions}",
-          "blinds": "Rolet: {blinds}"
+          "blinds": "Rolet: {blinds} · nie pokazuj: {blinds_excluded}"
         },
         "description": ""
       },
@@ -109,16 +109,16 @@
           "sensors": "Wejść: {binary_sensors}",
           "analog": "Typ Nexo: Czujnik analogowy · wejść: {analog_sensors}",
           "thermometers": "Termometrów: {thermometers}",
-          "lights": "Światło, przełącznik albo nie pokazuj do wyboru · świateł: {lights}",
+          "lights": "Świateł: {lights} · przełączników: {lights_switches} · nie pokazuj: {lights_excluded}",
           "dimmers": "Ściemniaczy: {dimmers}",
-          "outputs": "Przełącznik, tylko odczyt albo nie pokazuj do wyboru · tylko odczyt: {output_sensors}",
+          "outputs": "Przełączników: {outputs_switches} · tylko odczyt: {output_sensors} · nie pokazuj: {outputs_excluded}",
           "analog_outputs": "Wyjść: {analog_outputs}",
           "thermostats": "Termostaty: {thermostats}",
           "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
           "partitions": "Alarm, uzbrajany za każdym razem Twoim kodem: {partitions}",
-          "blinds": "Rolet: {blinds}"
+          "blinds": "Rolet: {blinds} · nie pokazuj: {blinds_excluded}"
         },
         "description": "{alert_open}Centrala nie odpowiada{alert_close}"
       },
@@ -146,16 +146,16 @@
           "sensors": "Wejść: {binary_sensors}",
           "analog": "Typ Nexo: Czujnik analogowy · wejść: {analog_sensors}",
           "thermometers": "Termometrów: {thermometers}",
-          "lights": "Światło, przełącznik albo nie pokazuj do wyboru · świateł: {lights}",
+          "lights": "Świateł: {lights} · przełączników: {lights_switches} · nie pokazuj: {lights_excluded}",
           "dimmers": "Ściemniaczy: {dimmers}",
-          "outputs": "Przełącznik, tylko odczyt albo nie pokazuj do wyboru · tylko odczyt: {output_sensors}",
+          "outputs": "Przełączników: {outputs_switches} · tylko odczyt: {output_sensors} · nie pokazuj: {outputs_excluded}",
           "analog_outputs": "Wyjść: {analog_outputs}",
           "thermostats": "Termostaty: {thermostats}",
           "logic": "Bramy i drzwi, przyciski, programy: {logic_items}",
           "settings": "Odpytywanie: wejścia co {interval_inputs} s, wyjścia co {interval_outputs} s, światła co {interval_lights} s, pomiary co {interval_measurements} s",
           "save": "Zamknięcie okna krzyżykiem odrzuca zmiany",
           "partitions": "Alarm, uzbrajany za każdym razem Twoim kodem: {partitions}",
-          "blinds": "Rolet: {blinds}"
+          "blinds": "Rolet: {blinds} · nie pokazuj: {blinds_excluded}"
         },
         "description": "{alert_open}Zmieniono połączenie – wybierz Zapisz i zamknij, żeby je zastosować{alert_close}"
       },

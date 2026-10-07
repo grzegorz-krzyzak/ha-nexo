@@ -88,6 +88,11 @@ the alphabetical order of the Polish names between *Connection* and
 - **Analog outputs** - see *Analog outputs*.
 - **Settings** - how often each group of resources is read (see *Polling*).
 
+*Lighting*, *Outputs* and *Blinds* - the items with a *Don't offer* field -
+also count what is not offered, per type: *Lights: 34 · switches: 0 · don't
+offer: 12*. An item without the field shows no such count. A dash means the
+type's list has not been read yet.
+
 **Devices follow the menu.** Each item with entities gets a device of its
 own - *Sensors*, *Lighting*, *Partitions*, *Logic* and so on - linked to the
 central unit's device, *Central unit*, which keeps the connection sensor.

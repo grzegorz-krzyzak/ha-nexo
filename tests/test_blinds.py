@@ -173,3 +173,33 @@ def test_blind_wire_format(client) -> None:
 def test_blind_value_out_of_range(client, value) -> None:
     with pytest.raises(ValueError):
         client.move_blind("X", value)
+
+
+# ------------------------------------------------- counts in the options menu
+
+
+async def test_menu_counts_each_type_apart(hass: HomeAssistant, fake_nexo) -> None:
+    """Switches and "don't offer" hold several types; each item counts its own."""
+    entry = await _setup(hass, {
+        **OPTIONS, "valves": [], "switches": ["ZG", "VENT"],
+        "excluded": ["GATE PULSE", "L1", "S7", "AWNING"], "blinds": ["SHUTTER"],
+    })
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    placeholders = result["description_placeholders"]
+    assert placeholders["lights_switches"] == "1"  # ZG
+    assert placeholders["lights_excluded"] == "2"  # GATE PULSE, L1
+    assert placeholders["outputs_switches"] == "1"  # VENT
+    assert placeholders["outputs_excluded"] == "1"  # S7
+    assert placeholders["blinds"] == "1"
+    assert placeholders["blinds_excluded"] == "1"  # AWNING
+
+
+async def test_menu_does_not_ask_for_a_list(hass: HomeAssistant, fake_nexo) -> None:
+    """A list not read yet shows a dash; the menu never waits for one."""
+    entry = await _setup(hass, {**OPTIONS, "excluded": ["S7"]})
+    entry.runtime_data.hub._resources.clear()
+    with patch.object(fake_nexo, "list_resources", side_effect=AssertionError("asked")):
+        result = await hass.config_entries.options.async_init(entry.entry_id)
+    placeholders = result["description_placeholders"]
+    assert placeholders["outputs_excluded"] == "—"
+    assert placeholders["blinds_excluded"] == "—"
