@@ -194,6 +194,20 @@ async def test_menu_counts_each_type_apart(hass: HomeAssistant, fake_nexo) -> No
     assert placeholders["blinds_excluded"] == "1"  # AWNING
 
 
+async def test_menu_counts_what_the_screens_list(hass: HomeAssistant, fake_nexo) -> None:
+    """A program's sections and main valve are not on the screens, so not in
+    the counts either (in the house: 18 counted, 10 listed, 2026-10-07)."""
+    entry = await _setup(hass, {**OPTIONS, "excluded": ["S1", "S2", "S7", "ZG", "GATE PULSE"]})
+    lawn = next(v for v in entry.options["valves"] if set(v["sections"]) == {"S1", "S2"})
+    assert lawn["main_valve"] == "ZG"
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    placeholders = result["description_placeholders"]
+    assert placeholders["outputs_excluded"] == "1"  # S7
+    assert placeholders["lights_excluded"] == "1"  # GATE PULSE
+    result = await _pick(hass, result["flow_id"], "outputs")
+    assert next(f for f in result["data_schema"].schema if str(f) == "excluded").default() == ["S7"]
+
+
 async def test_menu_does_not_ask_for_a_list(hass: HomeAssistant, fake_nexo) -> None:
     """A list not read yet shows a dash; the menu never waits for one."""
     entry = await _setup(hass, {**OPTIONS, "excluded": ["S7"]})

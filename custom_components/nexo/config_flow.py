@@ -165,6 +165,7 @@ ROLE_TYPES = (ImportTypes.LIGHT, ImportTypes.OUTPUT, ImportTypes.DIMMER, ImportT
 # types, so each item counts by its own list - the one the name check reads
 # after setup, never asked for by the menu; a list not read yet shows a dash.
 # An item without the field shows no count: nothing of its type is excluded.
+# Outputs a program uses are left out, as the screens leave them out.
 ROLE_COUNTS = {
     "lights": (ImportTypes.LIGHT, (OPT_SWITCHES, OPT_EXCLUDED)),
     "outputs": (ImportTypes.OUTPUT, (OPT_SWITCHES, OPT_EXCLUDED)),
@@ -280,15 +281,19 @@ def _analog_placeholders(index: int, item: dict[str, Any]) -> dict[str, str]:
 
 
 def _role_counts(
-    options: Mapping[str, Any], cached: Callable[[ImportTypes], list[str] | None]
+    options: Mapping[str, Any],
+    cached: Callable[[ImportTypes], list[str] | None],
+    in_use: set[str],
 ) -> dict[str, str]:
-    """Placeholders <item>_<field>: how many of the item's type the field holds."""
+    """Placeholders <item>_<field>: how many of what the item's screen lists
+    the field holds."""
     counts = {}
     for item, (resource_type, keys) in ROLE_COUNTS.items():
         names = cached(resource_type)
+        shown = None if names is None else set(names) - in_use
         for key in keys:
             counts[f"{item}_{key}"] = (
-                NONE if names is None else str(len(set(options.get(key, [])) & set(names)))
+                NONE if shown is None else str(len(set(options.get(key, [])) & shown))
             )
     return counts
 
@@ -467,7 +472,9 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 OPT_ANALOG_OUTPUTS: str(len(options.get(OPT_ANALOG_OUTPUTS, []))),
                 OPT_PARTITIONS: str(len(options.get(OPT_PARTITIONS, []))),
                 OPT_BLINDS: str(len(options.get(OPT_BLINDS, []))),
-                **_role_counts(options, self.config_entry.runtime_data.hub.cached_resources),
+                **_role_counts(
+                    options, self.config_entry.runtime_data.hub.cached_resources, self._in_use()
+                ),
                 **{
                     key: str(len(options.get(key, [])))
                     for key in (OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES, OPT_EXCLUDED)
