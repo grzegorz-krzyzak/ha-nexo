@@ -6,7 +6,8 @@ from unittest.mock import patch
 
 import pytest
 
-from custom_components.nexo.nexo_client import NexoClient, NexoCommandError
+from custom_components.nexo.motion import Motion, step
+from custom_components.nexo.nexo_client import NexoClient, NexoCommandError, NexoProtocolError
 
 EMPTY = NexoClient.RESPONSE_PREFIX
 
@@ -80,3 +81,52 @@ def test_refusal_stops_polling(client):
     ):
         client.turn_off("L9")
     assert card.gets == 1
+
+
+class RecordingCard(Card):
+    """A Card that also keeps every command sent, 'get' polls left out."""
+
+    def __init__(self, replies: list[str] | None = None) -> None:
+        super().__init__(replies)
+        self.sent: list[str] = []
+
+    def __call__(self, data: str, log_as: str | None = None) -> str:
+        if data != "get":
+            self.sent.append(data)
+        return super().__call__(data, log_as)
+
+
+# Another client's query answered on this session (2026-10-11 at home: a test script
+# polled BRAMA GARAZ while a Step press asked for the reed switch)
+FOREIGN = EMPTY + "BRAMA GARAZ 0"
+
+
+def test_a_foreign_reply_is_asked_again_once(client):
+    card = RecordingCard([FOREIGN, EMPTY + "KON BRAMA GARAZ 101"])
+    with patch.object(client, "_command_retrying", card), patch.object(client, "_drain_queue"):
+        assert client.get_state("KON BRAMA GARAZ") == 101
+    assert card.sent == ["system C 'KON BRAMA GARAZ' ?"] * 2
+    assert client.reply_mismatches == 1
+
+
+def test_two_foreign_replies_in_a_row_fail_as_before(client):
+    card = RecordingCard([FOREIGN, FOREIGN])
+    with (
+        patch.object(client, "_command_retrying", card),
+        patch.object(client, "_drain_queue"),
+        pytest.raises(NexoProtocolError, match="BRAMA GARAZ 0"),
+    ):
+        client.get_state("KON BRAMA GARAZ")
+    assert len(card.sent) == 2  # asked twice, never a third time
+
+
+def test_step_sends_the_right_command_after_a_foreign_reply(client):
+    """The press lost at home: the reed read collided; now it is asked again and
+    the closed gate opens."""
+    card = RecordingCard([FOREIGN, EMPTY + "KON BRAMA GARAZ 101"])
+    with patch.object(client, "_command_retrying", card), patch.object(client, "_drain_queue"):
+        assert step(client, Motion(travel_time=25), "KON BRAMA GARAZ", "BGO", "BGZ") == "up"
+    reads, command = card.sent[:2], card.sent[2:]
+    assert reads == ["system C 'KON BRAMA GARAZ' ?"] * 2
+    assert len(command) == 1 and "BGO" in command[0]  # the command went once
+

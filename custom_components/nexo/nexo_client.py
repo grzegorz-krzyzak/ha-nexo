@@ -89,6 +89,10 @@ class NexoProtocolError(NexoError):
     """The central unit replied with something unexpected - protocol mismatch."""
 
 
+class _ReplyMismatch(NexoProtocolError):
+    """A reply naming another resource than the one asked for."""
+
+
 class NexoCommandError(NexoError):
     """The central unit rejected a command (e.g. CMD WRONG).
 
@@ -265,6 +269,9 @@ class NexoClient:
         self._buffer = bytearray()
         self._lock = RLock()
         self._authenticated = False
+        # Replies that named another resource, asked again (get_state); a counter
+        # for the debug log, to see how often it happens at home
+        self.reply_mismatches = 0
 
         if auto_connect:
             self.connect()
@@ -520,12 +527,25 @@ class NexoClient:
         """
         Return the current state of the named resource.
 
+        A reply naming another resource is asked again once: the card seems to
+        answer every session from one queue, so another client's query (a
+        script polling, an app on a phone) can take this one's place
+        (2026-10-11, one Step press in about 25). A read changes nothing, so
+        asking again is safe; commands are never sent twice.
+
         :raises NexoResourceError: if the resource is unknown or the state is unreadable
-        :raises NexoProtocolError: if the reply belongs to an earlier command
+        :raises NexoProtocolError: if the reply belongs to another query twice in a row
         """
         if not name:
             raise ValueError("resource name must not be empty")
+        try:
+            return self._get_state_once(name)
+        except _ReplyMismatch as exc:
+            self.reply_mismatches += 1
+            log.debug("%s - asking once more (%d so far)", exc, self.reply_mismatches)
+        return self._get_state_once(name)
 
+    def _get_state_once(self, name: str) -> int:
         response = self._system_c(name, "?", reply_polls=self.QUERY_REPLY_POLLS)
         body = self._strip_prefix(response)
 
@@ -542,7 +562,7 @@ class NexoClient:
         # rather than hand back another resource's state.
         if not body.startswith(name):
             self._drain_queue()
-            raise NexoProtocolError(
+            raise _ReplyMismatch(
                 f"Asked for {name!r} but the card replied {body!r}. The reply "
                 f"queue was out of step and has been resynchronised."
             )
