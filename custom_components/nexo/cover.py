@@ -144,7 +144,7 @@ class NexoLogicCover(NexoEntity, CoverEntity):
                 f"{self.name} was not opened: {err}"
             ) from err
         if self._motion:
-            self._motion.record("up", time.monotonic())
+            self._motion.record("up", time.monotonic(), self.is_closed is True)
         await async_boost_reed(self.coordinator, self._item)
 
     async def async_close_cover(self, **kwargs: Any) -> None:

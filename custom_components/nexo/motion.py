@@ -45,9 +45,13 @@ class Motion:
             and now - self.started < self.travel_time
         )
 
-    def record(self, direction: Direction, now: float) -> None:
+    def record(self, direction: Direction, now: float, closed: bool = False) -> None:
         """A command was sent: either it stops the current motion, or it
-        starts a new one."""
+        starts a new one. A gate that reads closed has finished moving down,
+        even within the travel time (it closed from part-way), so an up
+        command then starts a motion instead of stopping that one."""
+        if closed and self.direction == "down":
+            self.stopped = True
         if self.moving(now) and direction != self.direction:
             self.stopped = True
         else:
@@ -85,5 +89,5 @@ def step(
     now = monotonic()
     direction = motion.next_step(reed_state, now)
     client.trigger_logic(open_command if direction == "up" else close_command)
-    motion.record(direction, now)
+    motion.record(direction, now, reed_state == SENSOR_INTACT)
     return direction
