@@ -245,3 +245,16 @@ def test_list_resources_still_returns_names(client) -> None:
     card = Commands([EMPTY + "~T 17 0 TRS GARAZ\nTMP GARAZ\n10\n30", EMPTY + "~T 17 1"])
     with patch.object(client, "_command_retrying", card):
         assert client.list_resources("THERMOSTAT") == ["TRS GARAZ"]
+
+
+async def test_options_offer_thermostat_added_after_setup(hass: HomeAssistant, fake_nexo) -> None:
+    entry = await _setup(hass, OPTIONS)
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    await hass.config_entries.options.async_configure(flow_id, {"next_step_id": "thermostats"})
+    fake_nexo.thermostats = [*fake_nexo.thermostats, ThermostatInfo("TRS NEW", "TMP HALL", 15, 30)]
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    result = await hass.config_entries.options.async_configure(
+        flow_id, {"next_step_id": "thermostats"}
+    )
+    field = next(f for f in result["data_schema"].schema if str(f) == "thermostats")
+    assert "TRS NEW" in result["data_schema"].schema[field].config["options"]

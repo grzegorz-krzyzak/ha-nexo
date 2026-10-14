@@ -100,7 +100,13 @@ from .const import (
     entry_title,
     is_default_title,
 )
-from .nexo_client import ImportTypes, NexoAuthError, NexoClient, NexoError
+from .nexo_client import (
+    ImportTypes,
+    NexoAuthError,
+    NexoClient,
+    NexoError,
+    ThermostatInfo,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -412,9 +418,23 @@ class NexoOptionsFlow(OptionsFlowWithReload):
     def __init__(self) -> None:
         self._options: dict[str, Any] = {}
         self._connection: dict[str, Any] | None = None
+        # Types read from the central unit in this flow: the first screen of a
+        # type reads it again, so a resource added since setup is offered
+        self._listed: set[ImportTypes | str] = set()
 
     async def _resources(self, resource_type: ImportTypes) -> list[str]:
-        return await self.config_entry.runtime_data.hub.async_resources(resource_type)
+        names = await self.config_entry.runtime_data.hub.async_resources(
+            resource_type, refresh=resource_type not in self._listed
+        )
+        self._listed.add(resource_type)
+        return names
+
+    async def _thermostats(self) -> list[ThermostatInfo]:
+        thermostats = await self.config_entry.runtime_data.hub.async_thermostats(
+            refresh="thermostats" not in self._listed
+        )
+        self._listed.add("thermostats")
+        return thermostats
 
     def _cannot_list(self, err: NexoError) -> ConfigFlowResult:
         _LOGGER.warning("Cannot read the resource list from the central unit: %s", err)
@@ -1022,8 +1042,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
         """The thermostats to import. Each keeps what its list entry carries -
         its thermometer and range - so nothing is typed in. Nothing by default."""
         try:
-            hub = self.config_entry.runtime_data.hub
-            available = {t.name: t for t in await hub.async_thermostats()}
+            available = {t.name: t for t in await self._thermostats()}
         except NexoError as err:
             return self._cannot_list(err)
         if user_input is not None:

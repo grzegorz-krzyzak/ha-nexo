@@ -103,7 +103,9 @@ integration shows its device's name in front of its own (*Partitions ALARM
 DOM*), so give it a name of your own if you prefer it without.
 
 Each listed resource costs one query of about 50 ms each time it is read.
-Nothing is stored until **Save and close**; closing the dialog discards the
+Each screen reads its list from the central unit when first opened in the
+dialog, so a resource added in the central unit since is offered without a
+reload. Nothing is stored until **Save and close**; closing the dialog discards the
 changes. Home Assistant forms have no back button: submitting a form without
 changes - or an empty *add* form - goes back to the menu.
 

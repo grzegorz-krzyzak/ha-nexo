@@ -83,17 +83,21 @@ class NexoHub:
         unit; None if not read yet."""
         return self._resources.get(resource_type)
 
-    async def async_resources(self, resource_type: ImportTypes) -> list[str]:
-        """Return the resource names of one type, read once and cached."""
-        if resource_type not in self._resources:
+    async def async_resources(
+        self, resource_type: ImportTypes, refresh: bool = False
+    ) -> list[str]:
+        """Return the resource names of one type, read once and cached; with
+        refresh, read again - a resource added in the central unit since."""
+        if refresh or resource_type not in self._resources:
             self._resources[resource_type] = await self.async_call(
                 self.client.list_resources, resource_type
             )
         return self._resources[resource_type]
 
-    async def async_thermostats(self) -> list[ThermostatInfo]:
-        """Return every thermostat with its thermometer and range, read once and cached."""
-        if self._thermostats is None:
+    async def async_thermostats(self, refresh: bool = False) -> list[ThermostatInfo]:
+        """Return every thermostat with its thermometer and range, read once and
+        cached; with refresh, read again."""
+        if refresh or self._thermostats is None:
             self._thermostats = await self.async_call(self.client.list_thermostats)
         return self._thermostats
 

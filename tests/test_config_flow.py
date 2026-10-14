@@ -576,3 +576,25 @@ async def test_each_field_lists_what_is_not_above(hass: HomeAssistant, fake_nexo
     await _submit(hass, flow_id, {"excluded": [], "output_sensors": ["S7"], "switches": []})
     result = await _pick(hass, flow_id, "lights")
     assert sorted(_choices(result, "lights")) == ["GATE PULSE", "L1"]  # ZG is a switch above
+
+
+async def test_resource_added_after_setup_is_offered(hass: HomeAssistant, fake_nexo) -> None:
+    """Options read each type from the central unit again once per flow: an input
+    wired in after setup is offered without reloading the integration."""
+    from custom_components.nexo.nexo_client import ImportTypes
+
+    entry = await _setup(hass, options={})
+    fake_nexo.listing[ImportTypes.SENSOR] = [*fake_nexo.listing[ImportTypes.SENSOR], "REED NEW"]
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    result = await _pick(hass, flow_id, "sensors")
+    assert "REED NEW" in _choices(result, "binary_sensors")
+    # Within one flow the type is read once: back to the menu and in again
+    fake_nexo.listing[ImportTypes.SENSOR] = [*fake_nexo.listing[ImportTypes.SENSOR], "REED LATER"]
+    await _submit(hass, flow_id, {"binary_sensors": []})
+    result = await _pick(hass, flow_id, "sensors")
+    assert "REED LATER" not in _choices(result, "binary_sensors")
+    # ...and a new flow reads it again
+    await _submit(hass, flow_id, {"binary_sensors": []})
+    flow_id = (await hass.config_entries.options.async_init(entry.entry_id))["flow_id"]
+    result = await _pick(hass, flow_id, "sensors")
+    assert "REED LATER" in _choices(result, "binary_sensors")
