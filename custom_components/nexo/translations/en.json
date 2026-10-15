@@ -650,12 +650,14 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "travel_time": "Travel time (Step button)"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -669,6 +671,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -676,6 +679,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -689,6 +693,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -696,6 +701,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -709,6 +715,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -716,6 +723,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -729,6 +737,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -736,6 +745,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -749,6 +759,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -756,6 +767,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -769,6 +781,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -776,6 +789,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -789,6 +803,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -796,6 +811,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -809,6 +825,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -816,6 +833,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -829,6 +847,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -836,6 +855,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -849,6 +869,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -856,6 +877,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -869,6 +891,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -876,6 +899,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -889,6 +913,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -896,6 +921,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -909,6 +935,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -916,6 +943,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -929,6 +957,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -936,6 +965,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -949,6 +979,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -956,6 +987,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -969,6 +1001,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -976,6 +1009,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -989,6 +1023,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -996,6 +1031,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -1009,6 +1045,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -1016,6 +1053,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -1029,6 +1067,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -1036,6 +1075,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -1049,6 +1089,7 @@
           "open_command": "Open command",
           "close_command": "Close command",
           "reed_sensor": "Reed switch",
+          "run_sensor": "Run signal",
           "open_only_when_closed": "Open only when confirmed closed",
           "delete": "Delete this gate or door",
           "travel_time": "Travel time (Step button)"
@@ -1056,6 +1097,7 @@
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
           "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
           "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
         }
@@ -1847,7 +1889,8 @@
       "main_valve_is_a_section": "The main valve cannot also be one of the sections.",
       "unknown_resource": "No such resource in the central unit.",
       "no_weather_station": "This central unit has no weather station card.",
-      "role_conflict": "\"{resource}\" is picked in two fields - each resource takes one role."
+      "role_conflict": "\"{resource}\" is picked in two fields - each resource takes one role.",
+      "run_sensor_is_reed": "The run signal must be another input than the reed switch."
     },
     "abort": {
       "cannot_list": "Cannot read the resource list from the central unit.",

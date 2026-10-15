@@ -46,6 +46,7 @@ from .const import (
     COVER_OPEN_COMMAND,
     COVER_OPEN_ONLY_WHEN_CLOSED,
     COVER_REED_SENSOR,
+    COVER_RUN_SENSOR,
     COVER_TRAVEL_TIME,
     DEFAULT_PORT,
     DEFAULT_INTERVAL_INPUTS,
@@ -308,6 +309,8 @@ def _cover_summary(item: dict[str, Any]) -> str:
     parts = [f"{item[COVER_OPEN_COMMAND]} / {item[COVER_CLOSE_COMMAND]}"]
     if item.get(COVER_REED_SENSOR):
         parts.append(item[COVER_REED_SENSOR])
+    if item.get(COVER_RUN_SENSOR):
+        parts.append(item[COVER_RUN_SENSOR])
     if item.get(COVER_TRAVEL_TIME):
         parts.append(f"{item[COVER_TRAVEL_TIME]:g} s")
     return " · ".join(parts)
@@ -1225,6 +1228,11 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             reed = user_input.get(COVER_REED_SENSOR)
             if reed and reed not in sensors:
                 errors[COVER_REED_SENSOR] = "unknown_resource"
+            run = user_input.get(COVER_RUN_SENSOR)
+            if run and run not in sensors:
+                errors[COVER_RUN_SENSOR] = "unknown_resource"
+            elif run and run == reed:
+                errors[COVER_RUN_SENSOR] = "run_sensor_is_reed"
             if user_input[COVER_OPEN_ONLY_WHEN_CLOSED] and not user_input.get(
                 COVER_REED_SENSOR
             ):
@@ -1256,6 +1264,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             vol.Optional(COVER_OPEN_COMMAND): TextSelector(),
             vol.Optional(COVER_CLOSE_COMMAND): TextSelector(),
             vol.Optional(COVER_REED_SENSOR): _pick_one(sensors),
+            vol.Optional(COVER_RUN_SENSOR): _pick_one(sensors),
             vol.Required(COVER_OPEN_ONLY_WHEN_CLOSED, default=False): BooleanSelector(),
             vol.Optional(COVER_TRAVEL_TIME): NumberSelector(
                 NumberSelectorConfig(

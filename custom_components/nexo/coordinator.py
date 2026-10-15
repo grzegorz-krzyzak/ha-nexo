@@ -14,6 +14,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 
 from .const import (
     COVER_REED_SENSOR,
+    COVER_RUN_SENSOR,
     DEFAULT_INTERVAL_INPUTS,
     DEFAULT_INTERVAL_LIGHTS,
     DEFAULT_INTERVAL_MEASUREMENTS,
@@ -92,9 +93,10 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
             # Partitions: an alarm scheme can run for a few seconds only
             *(p[PARTITION_NAME] for p in options.get(OPT_PARTITIONS, [])),
             *(
-                cover[COVER_REED_SENSOR]
+                cover[key]
                 for cover in options.get(OPT_COVERS, [])
-                if cover.get(COVER_REED_SENSOR)
+                for key in (COVER_REED_SENSOR, COVER_RUN_SENSOR)
+                if cover.get(key)
             ),
         }
         outputs = {

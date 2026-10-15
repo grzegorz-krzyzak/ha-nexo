@@ -134,6 +134,13 @@ COVER_DEVICE_CLASS: Final = "device_class"
 COVER_OPEN_COMMAND: Final = "open_command"
 COVER_CLOSE_COMMAND: Final = "close_command"
 COVER_REED_SENSOR: Final = "reed_sensor"
+# Optional input on while the drive runs (e.g. a relay on the controller's lock output)
+COVER_RUN_SENSOR: Final = "run_sensor"
+# With a run signal, how long to wait for the drive to start after a command,
+# for a running drive to show it ignored the command, and how often to look
+CONFIRM_START: Final = 8.0
+CONFIRM_MOVING: Final = 3.0
+CONFIRM_POLL: Final = 0.5
 COVER_OPEN_ONLY_WHEN_CLOSED: Final = "open_only_when_closed"
 # Full travel time plus a margin, in seconds; set, it enables the Step button
 COVER_TRAVEL_TIME: Final = "travel_time"

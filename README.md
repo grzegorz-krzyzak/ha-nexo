@@ -382,10 +382,60 @@ Things worth knowing:
   moves, check the spelling in the configurator. Commands are at most 7
   characters.
 - **A reed switch only knows closed and not closed.** There is no opening,
-  closing or position state, and none is guessed.
+  closing or position state from it, and none is guessed from a timer - but
+  see *Run signal* below.
 - **The open command's own reply confirms nothing.** Only the reed switch
   changing does - within a few seconds for opening, after the full travel time
   for closing.
+
+### Run signal
+
+If the drive's controller has an output that is on while the drive runs -
+on many sliding-gate controllers the electric lock output, set to *active
+while running* - wire it through a relay to a central-unit input and pick
+that input as the gate's **run signal**. Then:
+
+| Run signal | Reed switch | State |
+|---|---|---|
+| still | closed | closed |
+| still | not closed | open (also stopped halfway - not told apart) |
+| running | - | opening or closing |
+
+The direction is taken once, as the drive starts, from the reed switch as
+read just before: closed means opening, anything else closing. It is kept
+for the whole run, since an opening gate reads not closed half-way. If the
+gate reaches closed while taken for opening, it shows closing: this assumes
+the run was a close after a stop too short to be read (the stop between two
+remote presses can fall between two reads of the inputs group). With a
+faster read that is not an error either - the gate did reach closed. After a restart in the
+middle of a run the start was not seen: a gate still reading closed shows
+opening, otherwise closing.
+
+**Open and Close are confirmed by the drive starting.** The central unit
+acknowledges a logic command the same way whether a rule carried it out or
+not, and never says why not. With a run signal the integration reads it and
+the reed switch just before the command and then watches the drive for a few
+seconds (8 s to start; 3 s for a drive already running) - when opening from
+closed, the reed switch leaving closed counts as the start too, since it may
+move before the run signal comes on. If the drive does not
+start, the command ends with an error that says what the gate was doing: *it
+is moving*, *it is not closed*, or - all of those ruled out - *the central unit
+did not carry out the command, check the rule*. A command that halts a moving
+gate is reported too: the rule then lacks a "not running" condition. Closing a
+gate that already reads closed is not waited for. The conditions themselves
+stay in the central unit's rules; Home Assistant only checks the result, so a
+rule changed in the configurator needs nothing changed here. If the run
+signal cannot be read before a command, the command goes unconfirmed. Step is
+not confirmed - stopping the gate is its job. The state follows the inputs
+group's interval (5 s by default), and every 1 s after a command from Home
+Assistant; a run started by a remote shows up to one interval late.
+
+*Open only when confirmed closed* stays useful with a run signal, even when
+the rule in the central unit carries the same condition: it is a condition on
+what Home Assistant knows, not on the gate - a reed switch that cannot be read
+blocks opening, which the central unit cannot do since it does not know that
+Home Assistant failed to read it. It also refuses at once, with no command
+sent, instead of a few seconds later.
 
 ### Step button
 
