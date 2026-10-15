@@ -25,8 +25,8 @@ MAX_INTERVAL: Final = 300
 # The coordinator wakes this often and reads what is due.
 POLL_TICK: Final = 1
 # After a command, the resources that show its effect are read on every tick
-# for this long: a gate's reed switch for its travel time (or the default),
-# a valve's sections and main valve for the valve time.
+# for this long: a gate's sensors for a gate's travel, a valve's sections
+# and main valve for the valve time.
 BOOST_GATE_DEFAULT: Final = 60
 BOOST_VALVE: Final = 30
 # A light or switch answers its command within a second or two
@@ -133,23 +133,18 @@ ITEM_COMMAND: Final = "command"
 COVER_DEVICE_CLASS: Final = "device_class"
 COVER_OPEN_COMMAND: Final = "open_command"
 COVER_CLOSE_COMMAND: Final = "close_command"
-COVER_REED_SENSOR: Final = "reed_sensor"
-# Optional input on while the drive runs (e.g. a relay on the controller's lock output)
+# A gate's sensors, each optional: what is wired to it, nothing more. The
+# closed sensor keeps its first key, from when it was the only one.
+COVER_CLOSED_SENSOR: Final = "reed_sensor"
+COVER_OPEN_SENSOR: Final = "open_sensor"
+# An input on while the drive runs (e.g. a relay on the controller's lock output)
 COVER_RUN_SENSOR: Final = "run_sensor"
-# With a run signal, how long to wait for the drive to start after a command,
-# for a running drive to show it ignored the command, and how often to look
-CONFIRM_START: Final = 8.0
-CONFIRM_MOVING: Final = 3.0
-CONFIRM_POLL: Final = 0.5
-COVER_OPEN_ONLY_WHEN_CLOSED: Final = "open_only_when_closed"
-# Full travel time plus a margin, in seconds; set, it enables the Step button
-COVER_TRAVEL_TIME: Final = "travel_time"
+COVER_SENSORS: Final = (COVER_CLOSED_SENSOR, COVER_OPEN_SENSOR, COVER_RUN_SENSOR)
 
 # Keys of a configured valve; its commands use COVER_OPEN_COMMAND and
 # COVER_CLOSE_COMMAND like a gate's.
 VALVE_SECTIONS: Final = "sections"
 VALVE_MAIN: Final = "main_valve"
-VALVE_AUTO_CLOSE: Final = "auto_close"  # minutes
 
 # A reed switch (SENSOR) reads 101 when intact - for a door or gate, closed -
 # and 102 when violated. Nothing else is distinguishable: open, ajar and in

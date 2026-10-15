@@ -23,7 +23,6 @@ from .const import (
     DEFAULT_PORT,
     DOMAIN,
     KEEPALIVE_CHECK,
-    COVER_TRAVEL_TIME,
     ITEM_ID,
     MANUFACTURER,
     entry_title,
@@ -48,7 +47,6 @@ from .const import (
 )
 from . import weather
 from .coordinator import NexoCoordinator
-from .motion import Motion
 from .hub import NexoHub
 from .names import shared_names, used_names
 from .nexo_client import ImportTypes
@@ -73,8 +71,6 @@ PLATFORMS = [
 class NexoData:
     hub: NexoHub
     coordinator: NexoCoordinator
-    # Per gate with a travel time: shared by its cover and its Step button
-    motions: dict[str, Motion]
     # The options with every resource in one role (roles.py) - what the
     # platforms build their entities from
     options: dict[str, Any]
@@ -108,12 +104,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: NexoConfigEntry) -> bool
         await hub.async_disconnect()
         raise
 
-    motions = {
-        item[ITEM_ID]: Motion(travel_time=item[COVER_TRAVEL_TIME])
-        for item in entry.options.get(OPT_COVERS, [])
-        if item.get(COVER_TRAVEL_TIME)
-    }
-    entry.runtime_data = NexoData(hub, coordinator, motions, options)
+    entry.runtime_data = NexoData(hub, coordinator, options)
     await _async_register_device(hass, entry, hub)
     _remove_deselected_entities(hass, entry, options)
 
@@ -131,6 +122,29 @@ async def async_setup_entry(hass: HomeAssistant, entry: NexoConfigEntry) -> bool
     entry.async_create_background_task(
         hass, _async_check_names(hass, entry, hub, options), "nexo shared names"
     )
+    return True
+
+
+# Options of 0.15 and earlier that 0.16 dropped: decisions the integration
+# made itself - refusing to open a gate not read closed, the remote-style Step
+# with its travel time, closing a valve after a timer. Conditions belong in
+# the central unit's rules, anything more in Home Assistant automations.
+_DROPPED_COVER_KEYS = ("open_only_when_closed", "travel_time")
+_DROPPED_VALVE_KEYS = ("auto_close",)
+
+
+async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    if entry.version > 1:
+        return False  # from a newer version: nothing to do it with
+    if entry.minor_version < 2:
+        options = dict(entry.options)
+        for key, dropped in ((OPT_COVERS, _DROPPED_COVER_KEYS), (OPT_VALVES, _DROPPED_VALVE_KEYS)):
+            if key in options:
+                options[key] = [
+                    {k: v for k, v in item.items() if k not in dropped}
+                    for item in options[key]
+                ]
+        hass.config_entries.async_update_entry(entry, options=options, minor_version=2)
     return True
 
 
@@ -192,11 +206,6 @@ def _remove_deselected_entities(
         *(f"switch_{name}" for name in options.get(OPT_SWITCHES, [])),
         *(f"thermostat_{item[THERMOSTAT_NAME]}" for item in options.get(OPT_THERMOSTATS, [])),
         *(f"cover_{item[ITEM_ID]}" for item in options.get(OPT_COVERS, [])),
-        *(
-            f"step_{item[ITEM_ID]}"
-            for item in options.get(OPT_COVERS, [])
-            if item.get(COVER_TRAVEL_TIME)
-        ),
         *(f"button_{item[ITEM_ID]}" for item in options.get(OPT_BUTTONS, [])),
         *(f"valve_{item[ITEM_ID]}" for item in options.get(OPT_VALVES, [])),
         *(f"analog_output_{name}" for name in options.get(OPT_ANALOG_OUTPUTS, [])),

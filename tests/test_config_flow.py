@@ -51,7 +51,6 @@ GATE = {
     "open_command": "GO",
     "close_command": "GC",
     "reed_sensor": "KON GATE",
-    "open_only_when_closed": True,
 }
 
 
@@ -93,11 +92,6 @@ async def test_add_edit_and_delete_cover(hass: HomeAssistant, fake_nexo) -> None
     assert result["errors"] == {"reed_sensor": "unknown_resource"}
     result = await _submit(hass, flow_id, {**GATE, "open_command": "TOOLONG1"})
     assert result["errors"] == {"open_command": "command_too_long"}
-    no_reed = {k: v for k, v in GATE.items() if k != "reed_sensor"}
-    result = await _submit(hass, flow_id, no_reed)
-    assert result["errors"] == {"open_only_when_closed": "guard_needs_reed_sensor"}
-    result = await _submit(hass, flow_id, {**GATE, "travel_time": 27})
-    assert result["errors"] == {"travel_time": "step_needs_unguarded"}
     result = await _submit(hass, flow_id, GATE)
     assert result["type"] is FlowResultType.MENU
     assert result["menu_options"] == ["cover_0", "add_cover", "logic"]
@@ -248,7 +242,7 @@ async def test_forms_lead_back(hass: HomeAssistant, fake_nexo) -> None:
     await _pick(hass, flow_id, "logic")
     await _pick(hass, flow_id, "covers")
     await _pick(hass, flow_id, "add_cover")
-    result = await _submit(hass, flow_id, {"device_class": "gate", "open_only_when_closed": False})
+    result = await _submit(hass, flow_id, {"device_class": "gate"})
     assert result["step_id"] == "covers"
     assert result["menu_options"] == ["add_cover", "logic"]
 
@@ -304,12 +298,12 @@ async def test_add_and_edit_valve(hass: HomeAssistant, fake_nexo) -> None:
     }
     result = await _pick(hass, flow_id, "valve_0")
     assert result["step_id"] == "valve_0"
-    await _submit(hass, flow_id, {**lawn, "main_valve": "ZG", "auto_close": 20})
+    await _submit(hass, flow_id, {**lawn, "main_valve": "ZG", "sections": ["S1"]})
     await _pick(hass, flow_id, "logic")
     await _pick(hass, flow_id, "back")
     await _pick(hass, flow_id, "save")
     await hass.async_block_till_done()
-    assert entry.options["valves"][0]["auto_close"] == 20
+    assert entry.options["valves"][0]["sections"] == ["S1"]
     assert hass.states.get("valve.nexo_lawn").state == "closed"
 
 

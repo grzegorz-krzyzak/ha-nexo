@@ -6,7 +6,6 @@ from unittest.mock import patch
 
 import pytest
 
-from custom_components.nexo.motion import Motion, step
 from custom_components.nexo.nexo_client import NexoClient, NexoCommandError, NexoProtocolError
 
 EMPTY = NexoClient.RESPONSE_PREFIX
@@ -118,15 +117,3 @@ def test_two_foreign_replies_in_a_row_fail_as_before(client):
     ):
         client.get_state("KON BRAMA GARAZ")
     assert len(card.sent) == 2  # asked twice, never a third time
-
-
-def test_step_sends_the_right_command_after_a_foreign_reply(client):
-    """The press lost at home: the reed read collided; now it is asked again and
-    the closed gate opens."""
-    card = RecordingCard([FOREIGN, EMPTY + "KON BRAMA GARAZ 101"])
-    with patch.object(client, "_command_retrying", card), patch.object(client, "_drain_queue"):
-        assert step(client, Motion(travel_time=25), "KON BRAMA GARAZ", "BGO", "BGZ") == "up"
-    reads, command = card.sent[:2], card.sent[2:]
-    assert reads == ["system C 'KON BRAMA GARAZ' ?"] * 2
-    assert len(command) == 1 and "BGO" in command[0]  # the command went once
-

@@ -44,10 +44,10 @@ from .const import (
     COVER_CLOSE_COMMAND,
     COVER_DEVICE_CLASS,
     COVER_OPEN_COMMAND,
-    COVER_OPEN_ONLY_WHEN_CLOSED,
-    COVER_REED_SENSOR,
+    COVER_CLOSED_SENSOR,
+    COVER_OPEN_SENSOR,
     COVER_RUN_SENSOR,
-    COVER_TRAVEL_TIME,
+    COVER_SENSORS,
     DEFAULT_PORT,
     DEFAULT_INTERVAL_INPUTS,
     DEFAULT_INTERVAL_LIGHTS,
@@ -95,7 +95,6 @@ from .const import (
     THERMOSTAT_MIN,
     THERMOSTAT_NAME,
     THERMOSTAT_THERMOMETER,
-    VALVE_AUTO_CLOSE,
     VALVE_MAIN,
     VALVE_SECTIONS,
     entry_title,
@@ -307,12 +306,7 @@ def _role_counts(
 
 def _cover_summary(item: dict[str, Any]) -> str:
     parts = [f"{item[COVER_OPEN_COMMAND]} / {item[COVER_CLOSE_COMMAND]}"]
-    if item.get(COVER_REED_SENSOR):
-        parts.append(item[COVER_REED_SENSOR])
-    if item.get(COVER_RUN_SENSOR):
-        parts.append(item[COVER_RUN_SENSOR])
-    if item.get(COVER_TRAVEL_TIME):
-        parts.append(f"{item[COVER_TRAVEL_TIME]:g} s")
+    parts.extend(item[key] for key in COVER_SENSORS if item.get(key))
     return " · ".join(parts)
 
 
@@ -320,6 +314,7 @@ class NexoConfigFlow(ConfigFlow, domain=DOMAIN):
     """Connect to a central unit through its LAN card."""
 
     VERSION = 1
+    MINOR_VERSION = 2
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -1225,24 +1220,17 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 user_input[key] = user_input.get(key, "").strip()
                 if error := _check_command(user_input[key]):
                     errors[key] = error
-            reed = user_input.get(COVER_REED_SENSOR)
-            if reed and reed not in sensors:
-                errors[COVER_REED_SENSOR] = "unknown_resource"
-            run = user_input.get(COVER_RUN_SENSOR)
-            if run and run not in sensors:
-                errors[COVER_RUN_SENSOR] = "unknown_resource"
-            elif run and run == reed:
-                errors[COVER_RUN_SENSOR] = "run_sensor_is_reed"
-            if user_input[COVER_OPEN_ONLY_WHEN_CLOSED] and not user_input.get(
-                COVER_REED_SENSOR
-            ):
-                errors[COVER_OPEN_ONLY_WHEN_CLOSED] = "guard_needs_reed_sensor"
-            if not user_input.get(COVER_TRAVEL_TIME):
-                user_input.pop(COVER_TRAVEL_TIME, None)
-            elif user_input[COVER_OPEN_ONLY_WHEN_CLOSED]:
-                # Stepping stops a moving gate with the opposite command,
-                # which the guard would refuse on the way down.
-                errors[COVER_TRAVEL_TIME] = "step_needs_unguarded"
+            seen: set[str] = set()
+            for key in COVER_SENSORS:
+                name = user_input.get(key)
+                if not name:
+                    user_input.pop(key, None)
+                elif name not in sensors:
+                    errors[key] = "unknown_resource"
+                elif name in seen:
+                    errors[key] = "sensor_used_twice"
+                else:
+                    seen.add(name)
             if not errors:
                 if index is None:
                     covers.append({ITEM_ID: uuid.uuid4().hex, **user_input})
@@ -1263,15 +1251,9 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             ),
             vol.Optional(COVER_OPEN_COMMAND): TextSelector(),
             vol.Optional(COVER_CLOSE_COMMAND): TextSelector(),
-            vol.Optional(COVER_REED_SENSOR): _pick_one(sensors),
+            vol.Optional(COVER_CLOSED_SENSOR): _pick_one(sensors),
+            vol.Optional(COVER_OPEN_SENSOR): _pick_one(sensors),
             vol.Optional(COVER_RUN_SENSOR): _pick_one(sensors),
-            vol.Required(COVER_OPEN_ONLY_WHEN_CLOSED, default=False): BooleanSelector(),
-            vol.Optional(COVER_TRAVEL_TIME): NumberSelector(
-                NumberSelectorConfig(
-                    min=1, max=600, step=1, unit_of_measurement="s",
-                    mode=NumberSelectorMode.BOX,
-                )
-            ),
         }
         if index is not None:
             fields[vol.Optional("delete", default=False)] = BooleanSelector()
@@ -1337,7 +1319,7 @@ class NexoOptionsFlow(OptionsFlowWithReload):
                 errors[VALVE_MAIN] = "unknown_resource"
             elif user_input.get(VALVE_MAIN) in user_input.get(VALVE_SECTIONS, []):
                 errors[VALVE_MAIN] = "main_valve_is_a_section"
-            for key in (VALVE_SECTIONS, VALVE_MAIN, VALVE_AUTO_CLOSE):
+            for key in (VALVE_SECTIONS, VALVE_MAIN):
                 if not user_input.get(key):
                     user_input.pop(key, None)
             if not errors:
@@ -1355,12 +1337,6 @@ class NexoOptionsFlow(OptionsFlowWithReload):
             vol.Optional(COVER_CLOSE_COMMAND): TextSelector(),
             vol.Optional(VALVE_SECTIONS): _pick_many(outputs),
             vol.Optional(VALVE_MAIN): _pick_one(outputs),
-            vol.Optional(VALVE_AUTO_CLOSE): NumberSelector(
-                NumberSelectorConfig(
-                    min=1, max=720, step=1, unit_of_measurement="min",
-                    mode=NumberSelectorMode.BOX,
-                )
-            ),
         }
         if index is not None:
             fields[vol.Optional("delete", default=False)] = BooleanSelector()

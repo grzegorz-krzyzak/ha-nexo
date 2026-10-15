@@ -25,7 +25,7 @@ connection the NexoVision app uses. Local polling, no cloud.
 | Blind outputs (roller-shutter modules) | `cover` | raise / lower / stop; raising or lowering while the relay is held, no position - see *Blinds* |
 | Alarm partitions | `alarm_control_panel` | disarmed / armed / alarming; a code each time; 24h read only - see *Alarm partitions* |
 | Weather station card | `sensor`, `binary_sensor` | temperature, daylight, wind, sun from three sides; frost, heat, twilight, sunny, calm, strong wind, rain - see *Weather station* |
-| Gates and doors driven by logic commands | `cover` | closed / not closed, from a reed switch |
+| Gates and doors driven by logic commands | `cover` | closed / open, and opening / closing with a run sensor - from the sensors wired to the gate |
 | Watering programs and other start/stop command pairs | `valve` | open while any of its sections is on |
 | Any logic command | `button` | fire and forget |
 
@@ -249,7 +249,7 @@ configurator.
 - **A gate whose logic carries a safety condition** - open only when closed
   - belongs under *Logic → Gates and doors*, driven by its logic commands,
   with the blind output under *Don't offer*: writing the output would skip
-  the condition.
+  the rule.
 - Read with the *Outputs* group (10 s by default) and every second for a
   minute after a command.
 
@@ -326,15 +326,14 @@ Resources are read in groups, each at its own interval:
 
 | Group | What | Default |
 |---|---|---|
-| Inputs | reed switches and motion sensors, including the gates' reed switches | 5 s |
+| Inputs | reed switches and motion sensors, including the gates' sensors | 5 s |
 | Outputs | watering sections, the main valve, outputs read as sensors | 10 s |
 | Lights | lights, dimmers, switches and analog outputs | 10 s |
 | Measurements | thermometers, analog inputs, thermostats, the weather station | 60 s |
 
 After a command, what shows its effect is read every second for a while:
-a gate's reed switch for its travel time (60 s without one), a valve's
-sections and main valve for 30 s. So an opened gate shows as open within
-about a second, whatever the interval.
+a gate's sensors for 60 s, a valve's sections and main valve for 30 s. So
+an opened gate shows as open within about a second, whatever the interval.
 
 The central unit answers one read at a time, about 20 a second, however many
 connections ask. So each second's reads go in order of urgency: what a
@@ -355,6 +354,16 @@ back. The central unit's firmware version is shown in the device info.
 
 ## Gates and doors
 
+**What the integration does and does not do.** It shows the central unit's
+resources and sends its commands, like NexoVision. For a gate it also works
+out the state from the sensors wired to it. It sends commands without
+conditions: what a gate may do - open only when closed, not while running -
+is decided by the central unit's rules. Anything more - a remote-style step,
+a notification, a timer - is a Home Assistant automation. One exception, not
+about the device: an alarm partition set read only, or arming without a code,
+is refused in Home Assistant - a permission of this client, as
+`code_arm_required` is in Home Assistant's own alarm panels.
+
 The integration does not pulse outputs itself. A gate is driven by **logic
 commands**: rules in the central unit whose condition is an external
 command, triggered with one atomic `system logic <command>`. The sequence runs
@@ -362,103 +371,60 @@ inside the central unit, so a client dying mid-command cannot leave an output
 energised.
 
 Create the rules in the Nexo configurator first, then add the gate here with
-its open command, close command and - optionally - its reed switch. Without
-one the gate still works, but its state shows as unknown and nothing can
-confirm that it moved.
+its open command, close command and the sensors wired to it - each optional:
 
-**Open only when confirmed closed** needs the reed switch: it reads it
-immediately before opening and refuses - visibly, as an error - if the gate is
-not closed. On a
-gate whose drive treats a second command during travel as *stop*, this
-prevents an accidental halt. Leave it off where stopping part-way is exactly
-what you want, such as a garage door you often leave half-open. Closing is
-always unconditional: it is harmless on a closed gate and works even when the
-reed switch cannot be read.
+| Sensor | Reads intact (`101`) |
+|---|---|
+| Closed sensor | at the closed position - usually a reed switch |
+| Open sensor | at the open position - a limit switch |
+| Run sensor | while the drive is still; violated (`102`) while it runs |
 
-Things worth knowing:
+After a command the gate's sensors are read every second for a minute, so
+the result shows within about a second; otherwise they go with the inputs
+group (5 s by default).
 
-- **A mistyped command fails silently.** The central unit acknowledges any
-  logic command the same way, whether a rule matches it or not. If nothing
-  moves, check the spelling in the configurator. Commands are at most 7
-  characters.
-- **A reed switch only knows closed and not closed.** There is no opening,
-  closing or position state from it, and none is guessed from a timer - but
-  see *Run signal* below.
-- **The open command's own reply confirms nothing.** Only the reed switch
-  changing does - within a few seconds for opening, after the full travel time
-  for closing.
+**Commands are not checked.** Open and Close go out as they are and return
+once the central unit has taken them. A rule that refuses to run does so
+silently, and a mistyped command is acknowledged exactly like a real one
+(commands are at most 7 characters) - the sensors show whether the gate
+moved. Both commands stay usable in every state: on many drives a second
+command mid-travel is how the gate is stopped part-way.
 
-### Run signal
+**Updating from 0.15 or earlier.** *Open only when confirmed closed*,
+*Travel time* with its **Step** button, and the valves' *Close automatically
+after* are gone - each was a decision made by the integration. They are
+removed from the options at the first start, and a Step button's entity with
+them. Put the condition in the rule in the central unit, and a step or a
+timer in a Home Assistant automation or script. The *Reed switch* is now the
+*Closed sensor*, kept as it was.
 
-If the drive's controller has an output that is on while the drive runs -
-on many sliding-gate controllers the electric lock output, set to *active
-while running* - wire it through a relay to a central-unit input and pick
-that input as the gate's **run signal**. Then:
+### State
 
-| Run signal | Reed switch | State |
-|---|---|---|
-| still | closed | closed |
-| still | not closed | open (also stopped halfway - not told apart) |
-| running | - | opening or closing |
+| Sensors | State |
+|---|---|
+| closed sensor intact | closed |
+| open sensor intact | open |
+| closed sensor violated, nothing else known | open (also stopped part-way - not told apart) |
+| run sensor violated | opening or closing |
+| none of them, or none readable | unknown |
 
-The direction is taken once, as the drive starts, from the reed switch as
-read just before: closed means opening, anything else closing. It is kept
-for the whole run, since an opening gate reads not closed half-way. If the
-gate reaches closed while taken for opening, it shows closing: this assumes
-the run was a close after a stop too short to be read (the stop between two
-remote presses can fall between two reads of the inputs group). With a
-faster read that is not an error either - the gate did reach closed. After a restart in the
-middle of a run the start was not seen: a gate still reading closed shows
-opening, otherwise closing.
+Without a run sensor there is no opening or closing, and none is guessed from
+a timer. With one, the **direction comes from where the gate started**: from
+closed it opens, from open it closes; without an open sensor, from anywhere
+not closed it closes. A gate stopped part-way with both end sensors has no
+direction for its next run - it shows open until it reaches an end. The
+start is the end position read last, so a reed switch that leaves closed a
+moment before the run sensor comes on still counts as a start from closed.
 
-**Open and Close are confirmed by the drive starting.** The central unit
-acknowledges a logic command the same way whether a rule carried it out or
-not, and never says why not. With a run signal the integration reads it and
-the reed switch just before the command and then watches the drive for a few
-seconds (8 s to start; 3 s for a drive already running) - when opening from
-closed, the reed switch leaving closed counts as the start too, since it may
-move before the run signal comes on. If the drive does not
-start, the command ends with an error that says what the gate was doing: *it
-is moving*, *it is not closed*, or - all of those ruled out - *the central unit
-did not carry out the command, check the rule*. A command that halts a moving
-gate is reported too: the rule then lacks a "not running" condition. Closing a
-gate that already reads closed is not waited for. The conditions themselves
-stay in the central unit's rules; Home Assistant only checks the result, so a
-rule changed in the configurator needs nothing changed here. If the run
-signal cannot be read before a command, the command goes unconfirmed. Step is
-not confirmed - stopping the gate is its job. The state follows the inputs
-group's interval (5 s by default), and every 1 s after a command from Home
-Assistant; a run started by a remote shows up to one interval late.
+Two assumptions, worth knowing when the state looks odd:
 
-*Open only when confirmed closed* stays useful with a run signal, even when
-the rule in the central unit carries the same condition: it is a condition on
-what Home Assistant knows, not on the gate - a reed switch that cannot be read
-blocks opening, which the central unit cannot do since it does not know that
-Home Assistant failed to read it. It also refuses at once, with no command
-sent, instead of a few seconds later.
-
-### Step button
-
-A drive with separate up and down inputs stops when it gets the opposite
-command while moving - that is how a remote does *up, stop, down, stop*. Home
-Assistant's toggle cannot do that: it always closes a gate that is not closed,
-and dashboard or car widgets often just alternate open and close.
-
-Set a **travel time** on the gate - its full travel time plus a margin for
-communication - and it gets a **Step** button that works like the remote,
-and its toggle does the same. The integration remembers the direction and
-start of the last movement; after the travel time it assumes the gate has
-stopped, and the reed switch reading closed resets the cycle. A remote or
-another app used in between is not seen, so one press may fall out of step;
-the next closed reading puts it right. Not available together with *Open only
-when confirmed closed*, which would refuse the stop on the way down.
-
-A button's state is always the time of its last press, so the button shows
-the gate's state in its **icon**, from the reed switch: closed, not closed,
-or unreadable (for example `mdi:garage`, `mdi:garage-open`,
-`mdi:garage-alert`). Useful where a car widget shows only the button. Nothing
-in between is guessed from the travel time. An icon set by hand on the entity
-overrides it.
+- **A gate taken for opening that reaches closed shows closing** - and
+  taken for closing, reaching open, shows opening. The run was the other way
+  after a stop too short to be read: the stop between two remote presses can
+  fall between two reads of the inputs group.
+- **A run whose start was not seen has no direction** - Home Assistant
+  started while the gate was moving. The state comes from the end sensors
+  alone until the run ends.
 
 A door strike behind a logic rule is best added as a **button**: the strike
 pulse is over before the command returns, and the reed switch does not change
@@ -482,10 +448,8 @@ Only outputs are observed, not commands, so a program started from the Nexo
 app, a remote or the central unit's own schedule shows up the same way.
 Closing the main valve ends every run.
 
-**Close automatically after** sends the stop command after the given time -
-a convenience for programs the central unit does not end on its own. The timer
-lives in Home Assistant and is lost on a restart: if watering must end, give
-the rule its own duration in the central unit.
+A program that must end after a time carries its own duration in the
+central unit; in Home Assistant, an automation can close the valve.
 
 ## Protocol notes
 

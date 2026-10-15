@@ -19,10 +19,10 @@ _T = TypeVar("_T")
 class NexoHub:
     """Serialises every call to the blocking client and runs it off the loop.
 
-    The client locks the socket per command, but several operations are more
-    than one command - a guarded gate open is a read followed by a trigger -
-    and must not have a poll interleaved between them. So every call goes
-    through one asyncio lock here.
+    The client locks the socket per command, but some operations are more
+    than one command - a listing is a query per resource - and must not have
+    a poll interleaved between them. So every call goes through one asyncio
+    lock here.
     """
 
     def __init__(self, hass: HomeAssistant, host: str, port: int, password: str) -> None:

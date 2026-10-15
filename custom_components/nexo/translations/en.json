@@ -643,23 +643,21 @@
       },
       "add_cover": {
         "title": "Gate or door",
-        "description": "Driven by logic commands: rules in the central unit with an external command condition. Submit an empty form to go back.",
+        "description": "Driven by logic commands: rules in the central unit with an external command condition. Commands go out as they are - what the gate may do is decided by the rules, and the sensors show what it did. Submit an empty form to go back.",
         "data": {
           "name": "Name",
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_0": {
@@ -670,18 +668,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_1": {
@@ -692,18 +688,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_2": {
@@ -714,18 +708,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_3": {
@@ -736,18 +728,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_4": {
@@ -758,18 +748,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_5": {
@@ -780,18 +768,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_6": {
@@ -802,18 +788,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_7": {
@@ -824,18 +808,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_8": {
@@ -846,18 +828,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_9": {
@@ -868,18 +848,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_10": {
@@ -890,18 +868,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_11": {
@@ -912,18 +888,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_12": {
@@ -934,18 +908,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_13": {
@@ -956,18 +928,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_14": {
@@ -978,18 +948,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_15": {
@@ -1000,18 +968,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_16": {
@@ -1022,18 +988,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_17": {
@@ -1044,18 +1008,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_18": {
@@ -1066,18 +1028,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "cover_19": {
@@ -1088,18 +1048,16 @@
           "device_class": "Type",
           "open_command": "Open command",
           "close_command": "Close command",
-          "reed_sensor": "Reed switch",
-          "run_sensor": "Run signal",
-          "open_only_when_closed": "Open only when confirmed closed",
-          "delete": "Delete this gate or door",
-          "travel_time": "Travel time (Step button)"
+          "reed_sensor": "Closed sensor",
+          "open_sensor": "Open sensor",
+          "run_sensor": "Run sensor",
+          "delete": "Delete this gate or door"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
-          "reed_sensor": "Optional. Reads closed or not closed - the only thing that confirms the gate moved. Without it the state is unknown.",
-          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, and confirms each Open and Close: if the drive does not start, the command shows an error saying what the gate was doing (moving, not closed) - the central unit itself never says why a rule did not run. Step is not checked.",
-          "open_only_when_closed": "Reads the reed switch right before opening and refuses otherwise. Stops a second open command from halting a gate in motion. Leave it off where stopping part-way is wanted.",
-          "travel_time": "Optional. The full travel time plus a margin for communication. Adds a Step button that works like the remote - up, stop, down, stop - and makes toggle do the same. Leave empty to disable."
+          "reed_sensor": "Optional. An input that reads intact at the closed position - usually a reed switch. Without any sensor the state is unknown.",
+          "open_sensor": "Optional. An input that reads intact at the open position, such as a limit switch.",
+          "run_sensor": "Optional. An input on while the drive runs - for example a relay on the controller's lock output. Adds opening and closing to the state, the direction taken from where the gate started."
         }
       },
       "add_button": {
@@ -1426,14 +1384,12 @@
           "open_command": "Open (start) command",
           "close_command": "Close (stop) command",
           "sections": "Sections",
-          "main_valve": "Main valve",
-          "auto_close": "Close automatically after"
+          "main_valve": "Main valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_0": {
@@ -1445,14 +1401,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_1": {
@@ -1464,14 +1418,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_2": {
@@ -1483,14 +1435,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_3": {
@@ -1502,14 +1452,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_4": {
@@ -1521,14 +1469,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_5": {
@@ -1540,14 +1486,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_6": {
@@ -1559,14 +1503,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_7": {
@@ -1578,14 +1520,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_8": {
@@ -1597,14 +1537,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_9": {
@@ -1616,14 +1554,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_10": {
@@ -1635,14 +1571,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_11": {
@@ -1654,14 +1588,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_12": {
@@ -1673,14 +1605,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_13": {
@@ -1692,14 +1622,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_14": {
@@ -1711,14 +1639,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_15": {
@@ -1730,14 +1656,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_16": {
@@ -1749,14 +1673,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_17": {
@@ -1768,14 +1690,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_18": {
@@ -1787,14 +1707,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "valve_19": {
@@ -1806,14 +1724,12 @@
           "close_command": "Close (stop) command",
           "sections": "Sections",
           "main_valve": "Main valve",
-          "auto_close": "Close automatically after",
           "delete": "Delete this valve"
         },
         "data_description": {
           "open_command": "At most 7 characters. A mistyped command is accepted by the central unit and silently does nothing.",
           "sections": "Optional. The outputs this program switches; the valve is open while any of them is on. Without sections the state is unknown.",
-          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running.",
-          "auto_close": "Optional. Sends the close command after this time. Runs in Home Assistant and is lost on a restart - if watering must end, give the rule its own duration in the central unit."
+          "main_valve": "Optional. An output that stays on for the whole run: in the pauses between sections the program still counts as running."
         }
       },
       "analog_pick": {
@@ -1883,14 +1799,12 @@
       "already_configured": "Another entry already uses this address.",
       "command_empty": "The command must not be empty.",
       "command_too_long": "Logic commands are at most 7 characters.",
-      "guard_needs_reed_sensor": "Needs a reed switch to check.",
       "required": "Required.",
-      "step_needs_unguarded": "The Step button needs \"Open only when confirmed closed\" off: it stops a moving gate with the opposite command.",
       "main_valve_is_a_section": "The main valve cannot also be one of the sections.",
       "unknown_resource": "No such resource in the central unit.",
       "no_weather_station": "This central unit has no weather station card.",
       "role_conflict": "\"{resource}\" is picked in two fields - each resource takes one role.",
-      "run_sensor_is_reed": "The run signal must be another input than the reed switch."
+      "sensor_used_twice": "Each sensor must be a different input."
     },
     "abort": {
       "cannot_list": "Cannot read the resource list from the central unit.",
@@ -1961,11 +1875,6 @@
       },
       "rain": {
         "name": "Rain"
-      }
-    },
-    "button": {
-      "step": {
-        "name": "{name} step"
       }
     },
     "sensor": {

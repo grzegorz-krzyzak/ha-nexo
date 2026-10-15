@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
-import logging
 from typing import Any
 
 from homeassistant.components.valve import (
@@ -11,10 +9,9 @@ from homeassistant.components.valve import (
     ValveEntity,
     ValveEntityFeature,
 )
-from homeassistant.core import CALLBACK_TYPE, HomeAssistant, callback
+from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.event import async_call_later
 
 from . import NexoConfigEntry
 from .const import (
@@ -24,15 +21,12 @@ from .const import (
     ITEM_ID,
     ITEM_NAME,
     OPT_VALVES,
-    VALVE_AUTO_CLOSE,
     VALVE_MAIN,
     VALVE_SECTIONS,
 )
 from .coordinator import NexoCoordinator
 from .entity import NexoEntity
 from .nexo_client import NexoError
-
-_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
@@ -63,9 +57,6 @@ class NexoLogicValve(NexoEntity, ValveEntity):
         # Without sections there is no state, so both commands stay available
         self._attr_assumed_state = not item.get(VALVE_SECTIONS)
         self._watched = [*item.get(VALVE_SECTIONS, []), *filter(None, [item.get(VALVE_MAIN)])]
-        minutes = item.get(VALVE_AUTO_CLOSE)
-        self._auto_close = timedelta(minutes=minutes) if minutes else None
-        self._cancel_auto_close: CALLBACK_TYPE | None = None
 
     @property
     def is_closed(self) -> bool | None:
@@ -74,10 +65,8 @@ class NexoLogicValve(NexoEntity, ValveEntity):
 
     async def async_open_valve(self) -> None:
         await self._send(self._open_command, "opened")
-        self._schedule_auto_close()
 
     async def async_close_valve(self) -> None:
-        self._cancel_timer()
         await self._send(self._close_command, "closed")
 
     async def _send(self, command: str, done: str) -> None:
@@ -88,44 +77,3 @@ class NexoLogicValve(NexoEntity, ValveEntity):
             raise HomeAssistantError(f"{self.name} was not {done}: {err}") from err
         # Watch the sections closely while the program starts or stops
         await self.coordinator.async_boost(self._watched, BOOST_VALVE)
-
-    # ------------------------------------------------------------ auto close
-    #
-    # A safety net for programs the central unit does not end on its own.
-    # The timer lives in Home Assistant: a restart during watering loses it,
-    # so a rule that must end should carry its own duration in the central
-    # unit. It also starts when watering is seen starting elsewhere.
-
-    @callback
-    def _handle_coordinator_update(self) -> None:
-        if self._auto_close:
-            if self.is_closed is False and self._cancel_auto_close is None:
-                self._schedule_auto_close()
-            elif self.is_closed is True:
-                self._cancel_timer()
-        super()._handle_coordinator_update()
-
-    def _schedule_auto_close(self) -> None:
-        if not self._auto_close:
-            return
-        self._cancel_timer()
-        self._cancel_auto_close = async_call_later(
-            self.hass, self._auto_close, self._async_auto_close
-        )
-
-    async def _async_auto_close(self, _now: Any) -> None:
-        self._cancel_auto_close = None
-        _LOGGER.info("%s: auto close after %s", self.name, self._auto_close)
-        try:
-            await self.async_close_valve()
-        except HomeAssistantError as err:
-            _LOGGER.warning("%s: auto close failed: %s", self.name, err)
-
-    def _cancel_timer(self) -> None:
-        if self._cancel_auto_close:
-            self._cancel_auto_close()
-            self._cancel_auto_close = None
-
-    async def async_will_remove_from_hass(self) -> None:
-        self._cancel_timer()
-        await super().async_will_remove_from_hass()

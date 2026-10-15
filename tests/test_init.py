@@ -1,6 +1,8 @@
-"""Entities, commands and the gate guard, against a fake central unit."""
+"""Entities and commands, against a fake central unit."""
 
 from __future__ import annotations
+
+import copy
 
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -25,7 +27,6 @@ OPTIONS = {
             "open_command": "GO",
             "close_command": "GC",
             "reed_sensor": "KON GATE",
-            "open_only_when_closed": True,
         },
         {
             "id": "garage",
@@ -34,8 +35,6 @@ OPTIONS = {
             "open_command": "GGO",
             "close_command": "GGC",
             "reed_sensor": "KON DOOR",
-            "open_only_when_closed": False,
-            "travel_time": 27,
         },
         {
             "id": "shed",
@@ -43,7 +42,6 @@ OPTIONS = {
             "device_class": "door",
             "open_command": "SO",
             "close_command": "SC",
-            "open_only_when_closed": False,
         },
     ],
     "buttons": [{"id": "wicket", "name": "Wicket", "command": "WK"}],
@@ -55,16 +53,16 @@ OPTIONS = {
             "close_command": "PPR",
             "sections": ["S1", "S2"],
             "main_valve": "ZG",
-            "auto_close": 30,
         },
         {"id": "pump", "name": "Pump", "open_command": "PO", "close_command": "PC"},
     ],
 }
 
 
-async def _setup(hass: HomeAssistant, options=OPTIONS) -> MockConfigEntry:
+async def _setup(hass: HomeAssistant, options=OPTIONS, minor_version: int = 2) -> MockConfigEntry:
     entry = MockConfigEntry(
         domain=DOMAIN,
+        minor_version=minor_version,
         unique_id="192.0.2.10",
         title="Nexo 192.0.2.10",  # the 0.1.x default, migrated at setup
         data={CONF_HOST: "192.0.2.10", CONF_PORT: 1024, CONF_PASSWORD: "pw"},
@@ -96,18 +94,7 @@ async def test_guarded_open_when_closed(hass: HomeAssistant, fake_nexo) -> None:
     fake_nexo.trigger_logic.assert_called_once_with("GO")
 
 
-async def test_guarded_open_refused_when_not_closed(hass: HomeAssistant, fake_nexo) -> None:
-    await _setup(hass)
-    # Moved by a remote since the last poll: the guard must read it fresh.
-    fake_nexo.states["KON GATE"] = 102
-    with pytest.raises(HomeAssistantError, match="not confirmed closed"):
-        await hass.services.async_call(
-            "cover", "open_cover", {"entity_id": "cover.nexo_entry_gate"}, blocking=True
-        )
-    fake_nexo.trigger_logic.assert_not_called()
-
-
-async def test_unguarded_open_while_open(hass: HomeAssistant, fake_nexo) -> None:
+async def test_open_while_open(hass: HomeAssistant, fake_nexo) -> None:
     await _setup(hass)
     fake_nexo.states["KON DOOR"] = 102
     await hass.services.async_call(
@@ -188,7 +175,6 @@ async def test_devices_by_resource_type(hass: HomeAssistant, fake_nexo, caplog) 
             "switch.nexo_zg",
             "switch.nexo_vent",
             "cover.nexo_garage",
-            "button.nexo_garage_step",
             "button.nexo_wicket",
             "valve.nexo_lawn",
         )
@@ -201,7 +187,6 @@ async def test_devices_by_resource_type(hass: HomeAssistant, fake_nexo, caplog) 
         "switch.nexo_zg": "lights",  # a lighting output, set on Lighting
         "switch.nexo_vent": "outputs",
         "cover.nexo_garage": "logic",
-        "button.nexo_garage_step": "logic",
         "button.nexo_wicket": "logic",
         "valve.nexo_lawn": "logic",
     }
@@ -275,52 +260,25 @@ async def test_reload_after_failed_cycles(hass: HomeAssistant, fake_nexo, freeze
     reload.assert_called_once_with(entry.entry_id)
 
 
-async def test_step_button_cycles_like_a_remote(hass: HomeAssistant, fake_nexo) -> None:
-    from unittest.mock import patch
+async def test_options_of_0_15_migrated(hass: HomeAssistant, fake_nexo) -> None:
+    """0.16 dropped the gate guard, the Step button with its travel time and
+    the valves' auto close; an entry saved before loses those keys."""
+    old = copy.deepcopy(OPTIONS)
+    old["covers"][0]["open_only_when_closed"] = True
+    old["covers"][1].update(open_only_when_closed=False, travel_time=27)
+    old["valves"][0]["auto_close"] = 30
+    entry = await _setup(hass, old, minor_version=1)
+    assert entry.minor_version == 2
+    assert entry.options["covers"] == OPTIONS["covers"]
+    assert entry.options["valves"] == OPTIONS["valves"]
+    assert hass.states.get("button.nexo_garage_step") is None
 
+
+async def test_no_step_button(hass: HomeAssistant, fake_nexo) -> None:
+    """A remote-style step is an automation in Home Assistant now."""
     await _setup(hass)
-    clock = iter([0.0, 10.0, 15.0, 20.0])
-    entity_id = "button.nexo_garage_step"
-    assert hass.states.get(entity_id)
-    with patch("custom_components.nexo.motion.monotonic", side_effect=lambda: next(clock)):
-        for expected, reed in (("GGO", 101), ("GGC", 102), ("GGC", 102), ("GGO", 102)):
-            fake_nexo.states["KON DOOR"] = reed
-            await hass.services.async_call("button", "press", {"entity_id": entity_id}, blocking=True)
-            assert fake_nexo.trigger_logic.call_args.args == (expected,)
-
-
-async def test_toggle_steps_when_travel_time_is_set(hass: HomeAssistant, fake_nexo) -> None:
-    await _setup(hass)
-    fake_nexo.states["KON DOOR"] = 101
-    await hass.services.async_call("cover", "toggle", {"entity_id": "cover.nexo_garage"}, blocking=True)
-    fake_nexo.trigger_logic.assert_called_with("GGO")
-    fake_nexo.states["KON DOOR"] = 102
-    await hass.services.async_call("cover", "toggle", {"entity_id": "cover.nexo_garage"}, blocking=True)
-    fake_nexo.trigger_logic.assert_called_with("GGC")  # stop
-    await hass.services.async_call("cover", "toggle", {"entity_id": "cover.nexo_garage"}, blocking=True)
-    fake_nexo.trigger_logic.assert_called_with("GGC")  # down
-
-
-async def test_no_step_button_without_travel_time(hass: HomeAssistant, fake_nexo) -> None:
-    await _setup(hass)
-    assert hass.states.get("button.nexo_entry_gate_step") is None
-
-
-async def test_step_button_icon_follows_reed_switch(hass: HomeAssistant, fake_nexo, freezer) -> None:
-    await _setup(hass)
-    entity_id = "button.nexo_garage_step"
-    assert hass.states.get(entity_id).attributes["icon"] == "mdi:garage"
-    for reed, icon in ((102, "mdi:garage-open"), (0, "mdi:garage-alert"), (101, "mdi:garage")):
-        fake_nexo.states["KON DOOR"] = reed
-        await _tick(hass, freezer, 11)
-        assert hass.states.get(entity_id).attributes["icon"] == icon
-
-
-async def test_step_button_icon_without_reed_switch(hass: HomeAssistant, fake_nexo) -> None:
-    covers = [dict(OPTIONS["covers"][1])]
-    del covers[0]["reed_sensor"]
-    await _setup(hass, {**OPTIONS, "covers": covers})
-    assert "icon" not in hass.states.get("button.nexo_garage_step").attributes
+    assert hass.states.get("cover.nexo_garage")
+    assert not [s for s in hass.states.async_entity_ids("button") if s.endswith("_step")]
 
 
 async def test_keepalive_pings_only_a_quiet_connection(hass: HomeAssistant, fake_nexo, freezer) -> None:
@@ -377,27 +335,6 @@ async def test_valve_commands(hass: HomeAssistant, fake_nexo) -> None:
     for service, command in (("open_valve", "PO"), ("close_valve", "PC")):
         await hass.services.async_call("valve", service, {"entity_id": "valve.nexo_pump"}, blocking=True)
         fake_nexo.trigger_logic.assert_called_with(command)
-
-
-async def test_valve_auto_close(hass: HomeAssistant, fake_nexo, freezer) -> None:
-    await _setup(hass)
-    await hass.services.async_call("valve", "open_valve", {"entity_id": "valve.nexo_lawn"}, blocking=True)
-    fake_nexo.trigger_logic.assert_called_with("PST")
-    fake_nexo.states.update(ZG=1, S1=1)
-    await _tick(hass, freezer, 29 * 60)
-    fake_nexo.trigger_logic.assert_called_with("PST")  # not yet
-    await _tick(hass, freezer, 2 * 60)
-    fake_nexo.trigger_logic.assert_called_with("PPR")
-
-
-async def test_valve_auto_close_cancelled_when_it_ends(hass: HomeAssistant, fake_nexo, freezer) -> None:
-    await _setup(hass)
-    fake_nexo.states.update(ZG=1, S1=1)  # started elsewhere
-    await _tick(hass, freezer, 11)
-    fake_nexo.states.update(ZG=0, S1=0)  # the central unit ended it
-    await _tick(hass, freezer, 11)
-    await _tick(hass, freezer, 31 * 60)
-    fake_nexo.trigger_logic.assert_not_called()
 
 
 def _count_reads(fake_nexo) -> list[str]:
@@ -475,7 +412,7 @@ async def test_gate_command_boosts_its_reed_switch(hass: HomeAssistant, fake_nex
         await _tick(hass, freezer, 1)
     assert reads.count("KON DOOR") == 3  # every tick, not every 5 s
     assert "KON GATE" not in reads  # the other gate keeps its interval
-    for _ in range(30):  # past the 27 s travel time
+    for _ in range(60):  # past the boost
         await _tick(hass, freezer, 1)
     reads.clear()
     for _ in range(4):

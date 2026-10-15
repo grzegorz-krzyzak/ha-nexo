@@ -15,8 +15,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from .const import (
-    COVER_REED_SENSOR,
-    COVER_RUN_SENSOR,
+    COVER_SENSORS,
     OPT_ANALOG_OUTPUTS,
     OPT_ANALOG_SENSORS,
     OPT_BINARY_SENSORS,
@@ -47,7 +46,7 @@ def used_names(options: Mapping[str, Any]) -> set[str]:
             OPT_LIGHTS, OPT_DIMMERS, OPT_SWITCHES, OPT_ANALOG_OUTPUTS, OPT_WEATHER, OPT_BLINDS,
         ) for n in options.get(key, [])),
         *(c[k] for c in options.get(OPT_COVERS, [])
-          for k in (COVER_REED_SENSOR, COVER_RUN_SENSOR) if c.get(k)),
+          for k in COVER_SENSORS if c.get(k)),
         *(s for v in options.get(OPT_VALVES, []) for s in v.get(VALVE_SECTIONS, [])),
         *(v[VALVE_MAIN] for v in options.get(OPT_VALVES, []) if v.get(VALVE_MAIN)),
         *(p[PARTITION_NAME] for p in options.get(OPT_PARTITIONS, [])),

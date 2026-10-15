@@ -643,23 +643,21 @@
       },
       "add_cover": {
         "title": "Brama lub drzwi",
-        "description": "Sterowane komendami logiki: regułami w centrali z warunkiem „Komenda zewnętrzna”. Zatwierdź pusty formularz, żeby wrócić.",
+        "description": "Sterowane komendami logiki: regułami w centrali z warunkiem „Komenda zewnętrzna”. Komendy idą bez warunków - co brama może zrobić, decydują reguły, a czujniki pokazują, co zrobiła. Zatwierdź pusty formularz, żeby wrócić.",
         "data": {
           "name": "Nazwa",
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
-          "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
+          "run_sensor": "Czujnik biegu"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_0": {
@@ -670,18 +668,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_1": {
@@ -692,18 +688,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_2": {
@@ -714,18 +708,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_3": {
@@ -736,18 +728,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_4": {
@@ -758,18 +748,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_5": {
@@ -780,18 +768,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_6": {
@@ -802,18 +788,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_7": {
@@ -824,18 +808,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_8": {
@@ -846,18 +828,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_9": {
@@ -868,18 +848,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_10": {
@@ -890,18 +868,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_11": {
@@ -912,18 +888,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_12": {
@@ -934,18 +908,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_13": {
@@ -956,18 +928,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_14": {
@@ -978,18 +948,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_15": {
@@ -1000,18 +968,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_16": {
@@ -1022,18 +988,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_17": {
@@ -1044,18 +1008,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_18": {
@@ -1066,18 +1028,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "cover_19": {
@@ -1088,18 +1048,16 @@
           "device_class": "Rodzaj",
           "open_command": "Komenda otwarcia",
           "close_command": "Komenda zamknięcia",
-          "reed_sensor": "Kontaktron",
+          "reed_sensor": "Czujnik zamknięcia",
+          "open_sensor": "Czujnik otwarcia",
           "run_sensor": "Czujnik biegu",
-          "open_only_when_closed": "Otwieraj tylko przy potwierdzonym zamknięciu",
-          "delete": "Usuń tę bramę lub drzwi",
-          "travel_time": "Czas przejazdu (przycisk Krok)"
+          "delete": "Usuń tę bramę lub drzwi"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
-          "reed_sensor": "Opcjonalny. Rozróżnia zamknięta / nie zamknięta - jedyne potwierdzenie, że brama się ruszyła. Bez niego stan jest nieznany.",
-          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się oraz potwierdza każde Otwórz i Zamknij: jeśli napęd nie ruszy, komenda kończy się błędem z tym, co brama w tej chwili robiła (jechała, nie była zamknięta) - centrala sama nigdy nie mówi, czemu reguła się nie wykonała. Krok nie jest sprawdzany.",
-          "open_only_when_closed": "Tuż przed otwarciem czyta kontaktron i odmawia, jeśli brama nie jest zamknięta. Chroni przed zatrzymaniem jadącej bramy drugą komendą. Zostaw wyłączone tam, gdzie zatrzymywanie w połowie jest pożądane.",
-          "travel_time": "Opcjonalny. Pełny czas przejazdu plus zapas na opóźnienia komunikacji. Dodaje przycisk Krok działający jak pilot - góra, stop, dół, stop - i tak samo zmienia działanie przełącznika. Zostaw puste, żeby wyłączyć."
+          "reed_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest zamknięta - zwykle kontaktron. Bez żadnego czujnika stan jest nieznany.",
+          "open_sensor": "Opcjonalny. Wejście w spoczynku, gdy brama jest otwarta - np. krańcówka.",
+          "run_sensor": "Opcjonalny. Wejście włączone, gdy napęd pracuje - np. przekaźnik na wyjściu zamka sterownika. Dodaje do stanu otwiera się i zamyka się; kierunek wynika z miejsca, z którego brama ruszyła."
         }
       },
       "add_button": {
@@ -1426,14 +1384,12 @@
           "open_command": "Komenda otwarcia (start)",
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
-          "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po"
+          "main_valve": "Zawór główny"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_0": {
@@ -1445,14 +1401,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_1": {
@@ -1464,14 +1418,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_2": {
@@ -1483,14 +1435,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_3": {
@@ -1502,14 +1452,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_4": {
@@ -1521,14 +1469,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_5": {
@@ -1540,14 +1486,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_6": {
@@ -1559,14 +1503,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_7": {
@@ -1578,14 +1520,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_8": {
@@ -1597,14 +1537,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_9": {
@@ -1616,14 +1554,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_10": {
@@ -1635,14 +1571,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_11": {
@@ -1654,14 +1588,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_12": {
@@ -1673,14 +1605,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_13": {
@@ -1692,14 +1622,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_14": {
@@ -1711,14 +1639,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_15": {
@@ -1730,14 +1656,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_16": {
@@ -1749,14 +1673,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_17": {
@@ -1768,14 +1690,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_18": {
@@ -1787,14 +1707,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "valve_19": {
@@ -1806,14 +1724,12 @@
           "close_command": "Komenda zamknięcia (stop)",
           "sections": "Sekcje",
           "main_valve": "Zawór główny",
-          "auto_close": "Zamknij automatycznie po",
           "delete": "Usuń ten zawór"
         },
         "data_description": {
           "open_command": "Najwyżej 7 znaków. Komendę z literówką centrala przyjmie i po cichu nic nie zrobi.",
           "sections": "Opcjonalne. Wyjścia, które włącza ten program; zawór jest otwarty, gdy którekolwiek z nich jest włączone. Bez sekcji stan jest nieznany.",
-          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający.",
-          "auto_close": "Opcjonalne. Po tym czasie wysyła komendę zamknięcia. Działa w Home Assistant i przepada przy restarcie - jeśli podlewanie musi się skończyć, ustaw czas w regule w centrali."
+          "main_valve": "Opcjonalny. Wyjście włączone przez cały program: w przerwach między sekcjami program nadal uznawany jest za trwający."
         }
       },
       "analog_pick": {
@@ -1883,14 +1799,12 @@
       "already_configured": "Ten adres jest już używany przez inny wpis.",
       "command_empty": "Komenda nie może być pusta.",
       "command_too_long": "Komendy logiki mają najwyżej 7 znaków.",
-      "guard_needs_reed_sensor": "Wymaga kontaktronu, żeby było co sprawdzić.",
       "required": "Pole wymagane.",
-      "step_needs_unguarded": "Przycisk Krok wymaga wyłączenia „Otwieraj tylko przy potwierdzonym zamknięciu”: zatrzymuje jadącą bramę przeciwną komendą.",
       "main_valve_is_a_section": "Zawór główny nie może być jednocześnie sekcją.",
       "unknown_resource": "Nie ma takiego zasobu w centrali.",
       "no_weather_station": "Ta centrala nie ma karty stacji pogodowej.",
       "role_conflict": "„{resource}” jest wybrany w dwóch polach - każdy zasób może mieć tylko jedną rolę.",
-      "run_sensor_is_reed": "Czujnik biegu musi być innym wejściem niż kontaktron."
+      "sensor_used_twice": "Każdy czujnik musi być innym wejściem."
     },
     "abort": {
       "cannot_list": "Nie można pobrać listy zasobów z centrali.",
@@ -1961,11 +1875,6 @@
       },
       "rain": {
         "name": "Deszcz"
-      }
-    },
-    "button": {
-      "step": {
-        "name": "{name} – krok"
       }
     },
     "sensor": {

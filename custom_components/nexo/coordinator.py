@@ -13,8 +13,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import (
-    COVER_REED_SENSOR,
-    COVER_RUN_SENSOR,
+    COVER_SENSORS,
     DEFAULT_INTERVAL_INPUTS,
     DEFAULT_INTERVAL_LIGHTS,
     DEFAULT_INTERVAL_MEASUREMENTS,
@@ -95,7 +94,7 @@ class NexoCoordinator(DataUpdateCoordinator[dict[str, int]]):
             *(
                 cover[key]
                 for cover in options.get(OPT_COVERS, [])
-                for key in (COVER_REED_SENSOR, COVER_RUN_SENSOR)
+                for key in COVER_SENSORS
                 if cover.get(key)
             ),
         }
