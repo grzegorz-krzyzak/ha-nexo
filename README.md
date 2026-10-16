@@ -415,6 +415,11 @@ not closed it closes. A gate stopped part-way with both end sensors has no
 direction for its next run - it shows open until it reaches an end. The
 start is the end position read last, so a reed switch that leaves closed a
 moment before the run sensor comes on still counts as a start from closed.
+Until the run sensor is read, that moment shows as **open**: under a second
+after a command from Home Assistant (0.3-0.9 s on the author's gate), and
+usually not at all after a remote, when both sensors change between two
+reads. Opening is not inferred from the closed sensor alone - a gate pushed
+by hand would show opening with the drive still.
 
 Two assumptions, worth knowing when the state looks odd:
 
