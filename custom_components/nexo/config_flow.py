@@ -257,7 +257,7 @@ def _pick_one(names: list[str]) -> SelectSelector:
 
 
 def _sections_summary(sections: list[str]) -> str:
-    """'NAWODNIENIE S1 … S6' rather than six full names, without words that
+    """'IRRIGATION S1 … S6' rather than six full names, without words that
     would need translating."""
     if len(sections) <= 1:
         return "".join(sections)

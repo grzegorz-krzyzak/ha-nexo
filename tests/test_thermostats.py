@@ -30,7 +30,7 @@ HALL, GARAGE = "climate.nexo_trs_hall", "climate.nexo_trs_garage"
 
 
 def test_state_unpacks_as_measured() -> None:
-    # TRS GARAZ, 2026-10-03: threshold 30 active output off; 10 with output on; off
+    # TRS ATTIC, 2026-10-03: threshold 30 active output off; 10 with output on; off
     assert ThermostatState.unpack(0x012C0100) == ThermostatState(30.0, True, False)
     assert ThermostatState.unpack(0x00640101) == ThermostatState(10.0, True, True)
     assert ThermostatState.unpack(0x012C0000) == ThermostatState(30.0, False, False)
@@ -204,9 +204,9 @@ class Commands(Card):
 @pytest.mark.parametrize(
     ("call", "wire"),
     [
-        (lambda c: c.set_thermostat(29, "TRS GARAZ"), "system command ustaw 29 'TRS GARAZ'"),
-        (lambda c: c.thermostat_on("TRS GARAZ"), "system command ustaw + 'TRS GARAZ'"),
-        (lambda c: c.thermostat_off("TRS GARAZ"), "system command ustaw - 'TRS GARAZ'"),
+        (lambda c: c.set_thermostat(29, "TRS ATTIC"), "system command ustaw 29 'TRS ATTIC'"),
+        (lambda c: c.thermostat_on("TRS ATTIC"), "system command ustaw + 'TRS ATTIC'"),
+        (lambda c: c.thermostat_off("TRS ATTIC"), "system command ustaw - 'TRS ATTIC'"),
     ],
 )
 def test_thermostat_commands(client, call, wire) -> None:
@@ -219,32 +219,32 @@ def test_thermostat_commands(client, call, wire) -> None:
 
 
 def test_thermostat_written_in_tenths_with_the_active_flag(client) -> None:
-    """Captured from NexoVision: 18.4 went as system C 'TRS GARAZ' 47105 (0xB801)."""
+    """Captured from NexoVision: 18.4 went as system C 'TRS ATTIC' 47105 (0xB801)."""
     card = Commands()
     with patch.object(client, "_command_retrying", card):
-        client.write_thermostat("TRS GARAZ", 18.4, True)
-        client.write_thermostat("TRS GARAZ", 18.5, False)
-    assert card.sent == ["system C 'TRS GARAZ' 47105", "system C 'TRS GARAZ' 47360"]
+        client.write_thermostat("TRS ATTIC", 18.4, True)
+        client.write_thermostat("TRS ATTIC", 18.5, False)
+    assert card.sent == ["system C 'TRS ATTIC' 47105", "system C 'TRS ATTIC' 47360"]
 
 
 def test_thermostat_list_entries(client) -> None:
     card = Commands([
-        EMPTY + "~T 17 0 TRS LAZ PARTER\nTMP LAZ PARTER\n15\n30",
-        EMPTY + "~T 17 1 TRS GARAZ\nTMP GARAZ\n10\n30",
+        EMPTY + "~T 17 0 TRS OFFICE\nTMP OFFICE\n15\n30",
+        EMPTY + "~T 17 1 TRS ATTIC\nTMP ATTIC\n10\n30",
         EMPTY + "~T 17 2",
     ])
     with patch.object(client, "_command_retrying", card):
         assert client.list_thermostats() == [
-            ThermostatInfo("TRS LAZ PARTER", "TMP LAZ PARTER", 15, 30),
-            ThermostatInfo("TRS GARAZ", "TMP GARAZ", 10, 30),
+            ThermostatInfo("TRS OFFICE", "TMP OFFICE", 15, 30),
+            ThermostatInfo("TRS ATTIC", "TMP ATTIC", 10, 30),
         ]
     assert card.sent == [f"system T 17 {i} ?" for i in range(3)]
 
 
 def test_list_resources_still_returns_names(client) -> None:
-    card = Commands([EMPTY + "~T 17 0 TRS GARAZ\nTMP GARAZ\n10\n30", EMPTY + "~T 17 1"])
+    card = Commands([EMPTY + "~T 17 0 TRS ATTIC\nTMP ATTIC\n10\n30", EMPTY + "~T 17 1"])
     with patch.object(client, "_command_retrying", card):
-        assert client.list_resources("THERMOSTAT") == ["TRS GARAZ"]
+        assert client.list_resources("THERMOSTAT") == ["TRS ATTIC"]
 
 
 async def test_options_offer_thermostat_added_after_setup(hass: HomeAssistant, fake_nexo) -> None:

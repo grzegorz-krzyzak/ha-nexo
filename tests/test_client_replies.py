@@ -96,15 +96,15 @@ class RecordingCard(Card):
 
 
 # Another client's query answered on this session (2026-10-11 at home: a test script
-# polled BRAMA GARAZ while a Step press asked for the reed switch)
-FOREIGN = EMPTY + "BRAMA GARAZ 0"
+# polled GARAGE DOOR while a Step press asked for the reed switch)
+FOREIGN = EMPTY + "GARAGE DOOR 0"
 
 
 def test_a_foreign_reply_is_asked_again_once(client):
-    card = RecordingCard([FOREIGN, EMPTY + "KON BRAMA GARAZ 101"])
+    card = RecordingCard([FOREIGN, EMPTY + "KON GARAGE DOOR 101"])
     with patch.object(client, "_command_retrying", card), patch.object(client, "_drain_queue"):
-        assert client.get_state("KON BRAMA GARAZ") == 101
-    assert card.sent == ["system C 'KON BRAMA GARAZ' ?"] * 2
+        assert client.get_state("KON GARAGE DOOR") == 101
+    assert card.sent == ["system C 'KON GARAGE DOOR' ?"] * 2
     assert client.reply_mismatches == 1
 
 
@@ -113,7 +113,7 @@ def test_two_foreign_replies_in_a_row_fail_as_before(client):
     with (
         patch.object(client, "_command_retrying", card),
         patch.object(client, "_drain_queue"),
-        pytest.raises(NexoProtocolError, match="BRAMA GARAZ 0"),
+        pytest.raises(NexoProtocolError, match="GARAGE DOOR 0"),
     ):
-        client.get_state("KON BRAMA GARAZ")
+        client.get_state("KON GARAGE DOOR")
     assert len(card.sent) == 2  # asked twice, never a third time

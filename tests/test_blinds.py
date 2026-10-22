@@ -1,5 +1,5 @@
 """Blind outputs: raise, lower and stop with 'system C' 2 / 1 / 0, the motion
-from the state word (measured on BRAMA WJ, 2026-10-06)."""
+from the state word (measured on a gate on the blind module, 2026-10-06)."""
 
 from __future__ import annotations
 
@@ -161,11 +161,11 @@ def client():
 def test_blind_wire_format(client) -> None:
     card = Commands()
     with patch.object(client, "_command_retrying", card):
-        client.move_blind("BRAMA WJ", 2)
-        client.move_blind("BRAMA WJ", 1)
-        client.move_blind("BRAMA WJ", 0)
+        client.move_blind("GATE BLIND", 2)
+        client.move_blind("GATE BLIND", 1)
+        client.move_blind("GATE BLIND", 0)
     assert card.sent == [
-        "system C 'BRAMA WJ' 2", "system C 'BRAMA WJ' 1", "system C 'BRAMA WJ' 0",
+        "system C 'GATE BLIND' 2", "system C 'GATE BLIND' 1", "system C 'GATE BLIND' 0",
     ]
 
 

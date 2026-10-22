@@ -310,9 +310,9 @@ async def test_add_and_edit_valve(hass: HomeAssistant, fake_nexo) -> None:
 def test_sections_summary() -> None:
     from custom_components.nexo.config_flow import _sections_summary
 
-    six = [f"NAWODNIENIE S{i}" for i in range(1, 7)]
-    assert _sections_summary(six) == "NAWODNIENIE S1 … S6"
-    assert _sections_summary(["NAWODNIENIE S7", "NAWODNIENIE S8"]) == "NAWODNIENIE S7, S8"
+    six = [f"IRRIGATION S{i}" for i in range(1, 7)]
+    assert _sections_summary(six) == "IRRIGATION S1 … S6"
+    assert _sections_summary(["IRRIGATION S7", "IRRIGATION S8"]) == "IRRIGATION S7, S8"
     assert _sections_summary(["PUMP"]) == "PUMP"
     assert _sections_summary(["A 1", "B 2", "C 3"]) == "A 1 … C 3"
 

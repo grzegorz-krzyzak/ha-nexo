@@ -125,7 +125,7 @@ def test_arming_is_sent_once_and_the_code_kept_out(client, caplog) -> None:
     client._sock = object()
     with patch.object(client, "_command", command), patch.object(client, "_close_socket"):
         with pytest.raises(Exception, match="not sent again"):
-            client.arm("2468", "NOCNA OBWODOWA")
+            client.arm("2468", "PERIMETER")
     assert len(sent) == 1
     assert "2468" not in caplog.text
 
@@ -151,7 +151,7 @@ def test_wrong_password_reply(client) -> None:
     # The command goes once; the reply is then polled with "get"
     with patch.object(client, "_command_once", card), patch.object(client, "_command_retrying", card):
         with pytest.raises(Exception) as err:
-            client.arm("1234", "NOCNA OBWODOWA")
+            client.arm("1234", "PERIMETER")
     assert NexoClient.WRONG_PASSWORD in str(err.value)
     assert "1234" not in str(err.value)
 
@@ -169,7 +169,7 @@ def test_arming_reply(client, reply: str, ok: bool) -> None:
     card = Commands([reply] if reply else None)
     with patch.object(client, "_command_once", card), patch.object(client, "_command_retrying", card):
         if ok:
-            client.arm("2468", "NOCNA OBWODOWA")
+            client.arm("2468", "PERIMETER")
         else:
             with pytest.raises(Exception, match="niepoprawne"):
-                client.arm("2468", "NOCNA OBWODOWA")
+                client.arm("2468", "PERIMETER")

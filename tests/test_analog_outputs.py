@@ -104,9 +104,9 @@ def client():
 def test_analog_level_wire_format(client) -> None:
     card = Commands()
     with patch.object(client, "_command_retrying", card):
-        client.set_analog_level("JAS ZADASZ TARAS", 64)
-        client.set_analog_level("JAS ZADASZ TARAS", 0)
-    assert card.sent == ["system C 'JAS ZADASZ TARAS' 16385", "system C 'JAS ZADASZ TARAS' 0"]
+        client.set_analog_level("DIM PERGOLA", 64)
+        client.set_analog_level("DIM PERGOLA", 0)
+    assert card.sent == ["system C 'DIM PERGOLA' 16385", "system C 'DIM PERGOLA' 0"]
 
 
 @pytest.mark.parametrize("level", [-1, 256, True, 1.5])

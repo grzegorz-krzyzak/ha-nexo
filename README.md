@@ -4,10 +4,11 @@ A Home Assistant integration for the Nexwell Nexo home
 automation system, talking to the central unit over its LAN card - the same
 connection the NexoVision app uses. Local polling, no cloud.
 
-> **Unofficial.** This project is not affiliated with, endorsed by or supported
-> by Nexwell Engineering. Please do not contact Nexwell Engineering support
-> about it - open an issue here instead. Nexwell and Nexo are trademarks of
-> their respective owner.
+> **Unofficial, personal project.** I wrote this integration on my own,
+> independently of Nexwell Engineering. It is not affiliated with, endorsed by
+> or supported by Nexwell Engineering. Please do not contact Nexwell
+> Engineering support about it - open an issue here instead. Nexwell and Nexo
+> are trademarks of their respective owner.
 
 ## What it provides
 
@@ -53,7 +54,7 @@ and restart.
 **Connection:** the LAN card's IP address, port `1024` and the NexoVision
 password (PIN). Port `1025` serves the remote panel with a different protocol
 and will not work. The entry is named after the address, e.g.
-*Nexo · 192.168.0.100:1024*, and follows it when the address changes - unless
+*Nexo · 192.0.2.10:1024*, and follows it when the address changes - unless
 you rename it.
 
 **Everything else is in the integration's options** (*Configure*), a menu by
@@ -99,8 +100,8 @@ central unit's device, *Central unit*, which keeps the connection sensor.
 Entity ids stay
 `nexo_<name>`. A switch made from a lighting output sits under *Lighting*,
 one made from an output under *Outputs*. Since 0.13; an entity named by the
-integration shows its device's name in front of its own (*Partitions ALARM
-DOM*), so give it a name of your own if you prefer it without.
+integration shows its device's name in front of its own (*Partitions
+HOUSE*), so give it a name of your own if you prefer it without.
 
 Each listed resource costs one query of about 50 ms each time it is read.
 Each screen reads its list from the central unit when first opened in the
