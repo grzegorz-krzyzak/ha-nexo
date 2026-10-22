@@ -50,13 +50,13 @@ async def test_one_button_and_a_code(hass: HomeAssistant, fake_nexo) -> None:
 async def test_arm_and_disarm_with_the_code(hass: HomeAssistant, fake_nexo, freezer) -> None:
     await _setup(hass, PARTS)
     await hass.services.async_call(
-        "alarm_control_panel", "alarm_arm_away", {"entity_id": HOUSE, "code": "2468"}, blocking=True
+        "alarm_control_panel", "alarm_arm_away", {"entity_id": HOUSE, "code": "4321"}, blocking=True
     )
-    fake_nexo.arm.assert_called_once_with("2468", "HOUSE")
+    fake_nexo.arm.assert_called_once_with("4321", "HOUSE")
     await _tick(hass, freezer, 1)
     assert hass.states.get(HOUSE).state == "armed_away"
     await hass.services.async_call(
-        "alarm_control_panel", "alarm_disarm", {"entity_id": HOUSE, "code": "2468"}, blocking=True
+        "alarm_control_panel", "alarm_disarm", {"entity_id": HOUSE, "code": "4321"}, blocking=True
     )
     await _tick(hass, freezer, 1)
     assert hass.states.get(HOUSE).state == "disarmed"
@@ -82,7 +82,7 @@ async def test_24h_partition_is_not_disarmed(hass: HomeAssistant, fake_nexo) -> 
     await _setup(hass, PARTS)
     with pytest.raises((HomeAssistantError, ServiceValidationError)):
         await hass.services.async_call(
-            "alarm_control_panel", "alarm_disarm", {"entity_id": FIRE, "code": "2468"},
+            "alarm_control_panel", "alarm_disarm", {"entity_id": FIRE, "code": "4321"},
             blocking=True,
         )
     fake_nexo.disarm.assert_not_called()
@@ -125,9 +125,9 @@ def test_arming_is_sent_once_and_the_code_kept_out(client, caplog) -> None:
     client._sock = object()
     with patch.object(client, "_command", command), patch.object(client, "_close_socket"):
         with pytest.raises(Exception, match="not sent again"):
-            client.arm("2468", "PERIMETER")
+            client.arm("4321", "PERIMETER")
     assert len(sent) == 1
-    assert "2468" not in caplog.text
+    assert "4321" not in caplog.text
 
 
 async def test_refusal_shows_the_central_units_words(hass: HomeAssistant, fake_nexo) -> None:
@@ -139,7 +139,7 @@ async def test_refusal_shows_the_central_units_words(hass: HomeAssistant, fake_n
     )
     with pytest.raises(HomeAssistantError) as err:
         await hass.services.async_call(
-            "alarm_control_panel", "alarm_arm_away", {"entity_id": HOUSE, "code": "2468"},
+            "alarm_control_panel", "alarm_arm_away", {"entity_id": HOUSE, "code": "4321"},
             blocking=True,
         )
     assert err.value.translation_key == "partition_refused"
@@ -169,7 +169,7 @@ def test_arming_reply(client, reply: str, ok: bool) -> None:
     card = Commands([reply] if reply else None)
     with patch.object(client, "_command_once", card), patch.object(client, "_command_retrying", card):
         if ok:
-            client.arm("2468", "PERIMETER")
+            client.arm("4321", "PERIMETER")
         else:
             with pytest.raises(Exception, match="niepoprawne"):
-                client.arm("2468", "PERIMETER")
+                client.arm("4321", "PERIMETER")

@@ -114,7 +114,7 @@ class FakeNexo:
     def list_resources(self, resource_type: ImportTypes) -> list[str]:
         return list(self.listing.get(resource_type, []))
 
-    CODE = "2468"
+    CODE = "4321"
 
     def _partition(self, code: str, name: str, armed: int) -> None:
         """As the central unit: a wrong code refused with its own words."""
